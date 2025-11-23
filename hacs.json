@@ -1,6 +1,4 @@
 {
   "name": "PWS",
-  "render_readme": true,
-  "domains": ["nom_du_composant"],
   "content_in_root": false
 }
