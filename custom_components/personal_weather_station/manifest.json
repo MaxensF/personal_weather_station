@@ -1,0 +1,11 @@
+{
+  "codeowners": ["MaxensF"],
+  "config_flow": true,
+  "dependencies": ["http"],
+  "documentation": "https://github.com/MaxensF/personal_weather_station",
+  "domain": "personal_weather_station",
+  "name": "Personal Weather Station",
+  "requirements": ["aiohttp"],
+  "version": "1.0.0",
+  "integration_type": "hub"
+}
