@@ -1,5 +1,9 @@
 # Personal Weather Station (PWS) Integration for Home Assistant
 
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration) 
+
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=MaxensF&repository=personal_weather_station)
+
 ![License](https://img.shields.io/badge/license-Public%20Domain-blue)
 
 This custom Home Assistant integration allows you to receive real-time data from your **Personal Weather Station** and expose it as sensors inside Home Assistant. It uses an HTTP endpoint to receive sensor updates and automatically creates or updates sensors for temperature, humidity, pressure, and more.
@@ -12,7 +16,7 @@ This custom Home Assistant integration allows you to receive real-time data from
 - Automatically create new sensors for any supported data key.
 - Update existing sensors in real-time.
 - Fully compatible with Home Assistant sensor platform.
-- No authentication required (optional to add in `MeteoView` if desired).
+- No authentication required (optional to add in `PwsView` if desired).
 
 ---
 
@@ -51,12 +55,20 @@ Feel free to try your own weather station and see if it works, and consider cont
 2. Create the folder `custom_components/personal_weather_station`.
 3. Copy all integration files into this folder (`__init__.py`, `sensor.py`, `manifest.json`, etc.).
 4. Restart Home Assistant.
+5. Add the integration from  **Settings → Devices & Services → Add Integration**
 
 
 ### HACS Installation
 
-Currently, this integration is **not yet available in HACS**, but once added, it will allow users to install and update it directly through HACS with a single click.  
-For now, manual installation as described above is fully supported.
+This integration is compatible with HACS as a **custom repository** and can be added manually in a few steps:
+
+1. Open HACS in Home Assistant
+2. Click the menu (three dots) → **Custom repositories**
+3. Add the URL of this GitHub repository
+4. Choose **Integration** as the category
+5. Click **Add**, then install the integration from HACS
+6. Restart Home Assistant.
+7. Add the integration from  **Settings → Devices & Services → Add Integration**
 
 ---
 
