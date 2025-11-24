@@ -4,7 +4,7 @@
   "dependencies": ["http"],
   "documentation": "https://github.com/MaxensF/personal_weather_station",
   "domain": "personal_weather_station",
-  "issue_tracker": "https://github.com/MaxensF/personal_weather_station/issues"
+  "issue_tracker": "https://github.com/MaxensF/personal_weather_station/issues",
   "name": "Personal Weather Station",
   "requirements": ["aiohttp"],
   "version": "1.0.0",
