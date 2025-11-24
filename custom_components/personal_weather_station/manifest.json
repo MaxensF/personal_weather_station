@@ -1,13 +1,13 @@
 {
+  "domain": "personal_weather_station",
+  "name": "Personal Weather Station",
   "codeowners": ["@MaxensF"],
   "config_flow": true,
   "dependencies": ["http"],
   "documentation": "https://github.com/MaxensF/personal_weather_station",
-  "domain": "personal_weather_station",
   "integration_type": "hub",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/MaxensF/personal_weather_station/issues",
-  "name": "Personal Weather Station",
   "requirements": ["aiohttp"],
   "version": "1.0.0"
 }
