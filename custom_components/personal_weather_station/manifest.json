@@ -9,5 +9,5 @@
   "issue_tracker": "https://github.com/MaxensF/personal_weather_station/issues",
   "name": "Personal Weather Station",
   "requirements": ["aiohttp"],
-  "version": "1.0.0",
+  "version": "1.0.0"
 }
