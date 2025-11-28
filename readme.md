@@ -1,11 +1,15 @@
-# Personal Weather Station (PWS) Integration for Home Assistant
+
+
+<image src="https://raw.githubusercontent.com/home-assistant/brands/refs/heads/master/custom_integrations/personal_weather_station/icon%402x.png" align="right" style="margin-top:-2em;width:177px;margin-right:2em;display:inline-block;float:right;"></image>
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration) 
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=MaxensF&repository=personal_weather_station&category=integration)
 
 
-![License](https://img.shields.io/badge/license-Public%20Domain-blue)
+
+
+# Personal Weather Station (PWS)
 
 This custom Home Assistant integration allows you to receive real-time data from your **Personal Weather Station** and expose it as sensors inside Home Assistant. It uses an HTTP endpoint to receive sensor updates and automatically creates or updates sensors for temperature, humidity, pressure, and more.
 
@@ -161,6 +165,9 @@ Contributions are welcome! Please open issues or pull requests on GitHub.
 ---
 
 ## License
-
+![License](https://img.shields.io/badge/license-Public%20Domain-blue)
+<br>
 This software is released into the **public domain** under the [Unlicense](https://unlicense.org):
+
+
 
