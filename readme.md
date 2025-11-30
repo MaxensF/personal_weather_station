@@ -1,6 +1,6 @@
 
 
-<image src="https://raw.githubusercontent.com/home-assistant/brands/refs/heads/master/custom_integrations/personal_weather_station/icon%402x.png" align="right" style="margin-top:-2em;width:177px;margin-right:2em;display:inline-block;float:right;"></image>
+<image src="https://raw.githubusercontent.com/home-assistant/brands/refs/heads/master/custom_integrations/personal_weather_station/icon%402x.png" align="right" style="margin-top:-2em;width:160px;margin-right:2em;display:inline-block;float:right;"></image>
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration) 
 
@@ -82,7 +82,7 @@ This integration is compatible with HACS as a **custom repository** and can be a
 **Important:** In your weather station configuration, make sure to set the URL to point to your Home Assistant instance:  
 
 ```
-http://<YOUR_IP>:8123
+http://<home_assistant_ip>:8123
 ```
 
 ### HTTP Endpoint
