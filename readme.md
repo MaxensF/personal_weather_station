@@ -110,8 +110,8 @@ Query parameters format:
 
 Make sure to set these parameters in the WSLink application:
 
-- **URL**: http://<HOME_ASSISTANT_IP>:8123
-- **Sender ID**: any identifier (e.g., my_station) — this will become the device ID in Home Assistant
+- **URL**: ```http://<HOME_ASSISTANT_IP>:8123```
+- **Sender ID**: `any identifier (e.g., my_station) — this will become the device ID in Home Assistant
 - **Station Key**: you can leave it blank (not used)
 - **Upload** Interval: any interval you want, e.g., 60 seconds
 
