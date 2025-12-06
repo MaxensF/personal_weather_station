@@ -1,6 +1,6 @@
 
 
-<image src="https://raw.githubusercontent.com/home-assistant/brands/refs/heads/master/custom_integrations/personal_weather_station/icon%402x.png" align="right" style="margin-top:-2em;width:160px;margin-right:2em;display:inline-block;float:right;"></image>
+<image src="https://raw.githubusercontent.com/home-assistant/brands/refs/heads/master/custom_integrations/personal_weather_station/icon%402x.png" align="right" style="margin-top:-2em;width:150px;margin-right:2em;display:inline-block;float:right;"></image>
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration) 
 
@@ -46,6 +46,8 @@ Each sensor supports metadata such as **name**, **unit of measurement**, **icon*
 The following personal weather stations have been confirmed to work with this integration:
 
 - **Bresser 7-in-1 Weather Station**
+  - 7002586
+  - 7002582
 
 Other stations may also work if they can send HTTP GET requests with query parameters matching the keys defined in `SENSOR_LIST`.  
 Feel free to try your own weather station and see if it works, and consider contributing any new compatible models to the project!
@@ -77,7 +79,9 @@ This integration is compatible with HACS as a **custom repository** and can be a
 
 ---
 
-## Configuration
+## Weather station configuration
+
+### Manual configuration
 
 **Important:** In your weather station configuration, make sure to set the URL to point to your Home Assistant instance:  
 
@@ -85,7 +89,7 @@ This integration is compatible with HACS as a **custom repository** and can be a
 http://<home_assistant_ip>:8123
 ```
 
-### HTTP Endpoint
+#### HTTP Endpoint
 
 The integration exposes an HTTP endpoint that your weather station can call:
 
@@ -100,7 +104,18 @@ Query parameters format:
 ```
 
 - `ID`: Unique device ID (required).  
-- Other parameters: Sensor keys matching `SENSOR_LIST`.  
+- Other parameters: Sensor keys matching `SENSOR_LIST`.
+
+### WSLink configuration
+
+Make sure to set these parameters in the WSLink application:
+
+- **URL**: http://<HOME_ASSISTANT_IP>:8123
+- **Sender ID**: any identifier (e.g., my_station) — this will become the device ID in Home Assistant
+- **Station Key**: you can leave it blank (not used)
+- **Upload** Interval: any interval you want, e.g., 60 seconds
+
+This configuration will allow WSLink to send weather data correctly to Home Assistant via the PWS integration.
 
 ### Config Flow
 
@@ -123,6 +138,42 @@ http://192.168.1.23:8123/weatherstation/updateweatherstation.php?ID=my_station&t
 ```
 
 - Creates/updates sensors `temperature` and `humidity` for device `my_station`.
+
+---
+
+## Entity Creation
+
+The integration automatically creates entities based on the parameters received in each HTTP request. 
+When a new parameter is sent that does not yet exist as a sensor in Home Assistant, the integration will generate a new entity for it under the device corresponding to the ID of the request.
+
+Multiple requests can be sent sequentially to create new entities. You do not need to include all parameters in a single request. Any new parameter sent in a later request will automatically create its corresponding entity.
+
+Entities have no default values, as they are created only when a value is received from the station.
+They always reflect the last received value.
+
+### Example:
+
+HTTP request:
+```http://192.168.1.23:8123/weatherstation/updateweatherstation.php?ID=my_station&tempf=72&humidity=55&winddir=180```
+
+Will create the `my_station` device. Following entities will be attached to this device:
+- `my_station.tempf`
+- `my_station.humidity`
+- `my_station.winddir`
+
+Subsequent requests with new parameters (e.g., rainin=0.1) will create additional entities automatically without manual configuration.
+
+## Entity Update
+
+When a value is received from the weather station, the integration automatically updates the corresponding entity:
+
+- If the value contains a decimal point (.), it is converted to a float.
+- If the value is a whole number, it is converted to an int.
+- If the value cannot be converted to a number, it is stored as a string.
+
+This ensures that each entity always reflects the last received value in the appropriate type, while preserving non-numeric values as strings.
+
+**Note:** This integration does not perform unit conversions itself. All values are stored as received in Weather Underground format (°F, mph, inHg, inches), and Home Assistant handles any necessary conversion to metric units if your system is configured in metric mode
 
 ---
 
