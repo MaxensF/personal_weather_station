@@ -12,7 +12,8 @@ from homeassistant.const import (
     CONCENTRATION_PARTS_PER_BILLION,
     CONCENTRATION_PARTS_PER_MILLION,
     DEGREE,
-    PERCENTAGE
+    PERCENTAGE,
+    UV_INDEX
 )
 
 DOMAIN = "personal_weather_station"
@@ -34,7 +35,7 @@ SENSOR_LIST = {
     "leafwetness": {"name": "Leaf Wetness", "icon": "mdi:water-percent", "unit": PERCENTAGE, "device_class": SensorDeviceClass.HUMIDITY},
 
     # Pressure
-    "baromin": {"name": "Pressure", "icon": "mdi:gauge", "unit": UnitOfPressure.MMHG, "device_class": SensorDeviceClass.PRESSURE},
+    "baromin": {"name": "Pressure", "icon": "mdi:gauge", "unit": UnitOfPressure.INHG, "device_class": SensorDeviceClass.PRESSURE},
 
     # Wind
     "winddir": {"name": "Wind Direction", "icon": "mdi:compass", "unit": DEGREE, "device_class": SensorDeviceClass.WIND_DIRECTION},
@@ -55,7 +56,7 @@ SENSOR_LIST = {
 
     # Sun / UV
     "solarradiation": {"name": "Solar Radiation", "icon": "mdi:weather-sunny", "unit": UnitOfIrradiance.WATTS_PER_SQUARE_METER, "device_class": SensorDeviceClass.IRRADIANCE},
-    "UV": {"name": "UV Index", "icon": "mdi:weather-sunny-alert", "unit": None, "device_class": None},
+    "UV": {"name": "UV Index", "icon": "mdi:weather-sunny-alert", "unit": UV_INDEX, "device_class": None},
 
     # Clouds / Visibility
     #"weather": {"name": "METAR Weather", "icon": "mdi:weather-partly-cloudy", "unit": ""},

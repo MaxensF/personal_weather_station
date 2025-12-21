@@ -9,5 +9,5 @@
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/MaxensF/personal_weather_station/issues",
   "requirements": ["aiohttp"],
-  "version": "1.0.1"
+  "version": "1.0.2"
 }

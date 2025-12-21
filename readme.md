@@ -1,6 +1,6 @@
 
 
-<image src="https://raw.githubusercontent.com/home-assistant/brands/refs/heads/master/custom_integrations/personal_weather_station/icon%402x.png" align="right" style="margin-top:-2em;width:150px;margin-right:2em;display:inline-block;float:right;"></image>
+<image src="https://raw.githubusercontent.com/home-assistant/brands/refs/heads/master/custom_integrations/personal_weather_station/icon%402x.png" alt="image" align="right" height="177"></image>
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration) 
 
