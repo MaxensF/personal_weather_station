@@ -2,6 +2,7 @@ from aiohttp import web
 from homeassistant.components.http import HomeAssistantView
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import CONF_PASSWORD
 
 from .const import DOMAIN, SENSOR_LIST
 from .sensor import PwsSensor, PwsDevice
@@ -25,6 +26,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     #  Reference to the function that adds entities
     hass.data.setdefault(DOMAIN + "_add_entities", None)
 
+    # Listen for options updates
+    entry.async_on_unload(entry.add_update_listener(update_listener))
+
     async def handle_request(request):
         """
         Handle HTTP requests from the weather station.
@@ -38,6 +42,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
         # Extract all query parameters from the URL
         params = request.rel_url.query
+
+        # Check for password
+        # Check options first, then data
+        password = entry.options.get(CONF_PASSWORD)
+        if password is None:
+            password = entry.data.get(CONF_PASSWORD)
+
+        if password:
+            request_password = params.get("PASSWORD")
+            if request_password != password:
+                return web.json_response({"status": "error", "detail": "Invalid password"}, status=401)
 
         # Get the devices dictionary from hass.data
         devices = hass.data[DOMAIN + "_devices"]
@@ -72,8 +87,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         # Loop through all query parameters
         for key, value in params.items():
 
-            # Skip the "ID" parameter as it is not a sensor
-            if key == "ID":
+            # Skip the "ID" and "PASSWORD" parameter as it is not a sensor
+            if key == "ID" or key == "PASSWORD":
                 continue
 
             # Skip any key that is not in the predefined SENSOR_LIST
@@ -159,6 +174,17 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
     hass.data.pop(DOMAIN + "_add_entities", None)
 
     return True
+
+
+async def update_listener(hass: HomeAssistant, entry: ConfigEntry):
+    """
+    Handle options update.
+
+    Args:
+        hass: Home Assistant instance.
+        entry: Config entry object.
+    """
+    await hass.config_entries.async_reload(entry.entry_id)
 
 
 class PwsView(HomeAssistantView):
