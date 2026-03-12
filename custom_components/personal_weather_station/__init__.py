@@ -69,6 +69,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         # Initialize a counter for updated sensors
         updated = 0
 
+        # Create a map for case-insensitive lookup
+        sensor_map = {k.lower(): k for k in SENSOR_LIST}
+
         # Loop through all query parameters
         for key, value in params.items():
 
@@ -76,9 +79,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             if key == "ID":
                 continue
 
+            # Check if key exists (case insensitive)
+            normalized_key = sensor_map.get(key.lower())
+
             # Skip any key that is not in the predefined SENSOR_LIST
-            if key not in SENSOR_LIST:
+            if not normalized_key:
                 continue
+
+            # Use the normalized key
+            key = normalized_key
 
             # Attempt to convert the value to a number (int or float)
             try:
