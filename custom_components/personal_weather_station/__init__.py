@@ -38,6 +38,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
         # Extract all query parameters from the URL
         params = request.rel_url.query
+        print(params)
 
         # Get the devices dictionary from hass.data
         devices = hass.data[DOMAIN + "_devices"]
