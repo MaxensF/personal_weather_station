@@ -65,6 +65,8 @@ class PwsSensor(SensorEntity):
         _meta: Metadata dictionary from SENSOR_LIST (name, icon, unit, device_class).
     """
 
+    _attr_has_entity_name = True
+
     def __init__(self, device: PwsDevice, key: str):
         """
         Initialize the sensor entity.
