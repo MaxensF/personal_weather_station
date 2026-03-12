@@ -113,6 +113,10 @@ class PwsSensor(SensorEntity):
         return self._meta.get("device_class")
 
     @property
+    def entity_registry_enabled_default(self):
+        return self._meta.get("enabled", True)
+
+    @property
     def should_poll(self):
         return False
 

@@ -59,7 +59,7 @@ SENSOR_LIST = {
     "UV": {"name": "UV Index", "icon": "mdi:weather-sunny-alert", "unit": UV_INDEX, "device_class": None},
 
     # Clouds / Visibility
-    #"weather": {"name": "METAR Weather", "icon": "mdi:weather-partly-cloudy", "unit": ""},
+    "weather": {"name": "METAR Weather", "icon": "mdi:weather-partly-cloudy", "unit": None, "enabled": False},
     "clouds": {"name": "Cloud Cover", "icon": "mdi:weather-cloudy", "unit": PERCENTAGE, "device_class": None},
     "visibility": {"name": "Visibility", "icon": "mdi:eye", "unit": UnitOfLength.MILES,"device_class": SensorDeviceClass.DISTANCE},
 
@@ -85,13 +85,12 @@ SENSOR_LIST = {
     "AqOZONE": {"name": "Ozone", "icon": "mdi:molecule", "unit": CONCENTRATION_PARTS_PER_BILLION, "device_class": SensorDeviceClass.VOLATILE_ORGANIC_COMPOUNDS_PARTS},
 
     # Metadata
-    #"dateutc": {"name": "Last Updated", "icon": "mdi:clock", "unit": "", "device_class": SensorDeviceClass.DATE},
-    #"softwaretype": {"name": "Software Type", "icon": "mdi:alpha-s-box", "unit": ""},
+    "dateutc": {"name": "Last Updated", "icon": "mdi:clock", "unit": None, "device_class": None, "enabled": False},
+    "softwaretype": {"name": "Software Type", "icon": "mdi:alpha-s-box", "unit": None, "enabled": False},
     "rtfreq": {"name": "Update frequency", "icon": "mdi:timer", "unit": UnitOfTime.SECONDS , "device_class": SensorDeviceClass.DURATION},
-    #"lowbatt": {"name": "Low Battery", "icon": "mdi:battery-alert", "unit": "", "device_class": ""},
-    #"dateutc-datetime": {"name": "Last Updated DateTime", "icon": "mdi:clock", "unit": "", "device_class": SensorDeviceClass.DATE},
-    #"last-received-datetime": {"name": "Last Received", "icon": "mdi:clock", "unit": "", "device_class": SensorDeviceClass.DATE},
-    #"last-query-state": {"name": "Last Query", "icon": "mdi:clipboard-text", "unit": ""},
-    #"last-query-trigger": {"name": "Last Query Trigger", "icon": "mdi:clipboard-text", "unit": ""},
+    "lowbatt": {"name": "Low Battery", "icon": "mdi:battery-alert", "unit": None, "device_class": None, "enabled": False},
+    "dateutc-datetime": {"name": "Last Updated DateTime", "icon": "mdi:clock", "unit": None, "device_class": None, "enabled": False},
+    "last-received-datetime": {"name": "Last Received", "icon": "mdi:clock", "unit": None, "device_class": None, "enabled": False},
+    "last-query-state": {"name": "Last Query", "icon": "mdi:clipboard-text", "unit": None, "enabled": False},
+    "last-query-trigger": {"name": "Last Query Trigger", "icon": "mdi:clipboard-text", "unit": None, "enabled": False},
 }
-
