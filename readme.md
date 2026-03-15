@@ -21,7 +21,7 @@ This custom Home Assistant integration allows you to receive real-time data from
 - Automatically create new sensors for any supported data key.
 - Update existing sensors in real-time.
 - Fully compatible with Home Assistant sensor platform.
-- No authentication required (optional to add in `PwsView` if desired).
+- Authentication (optional)
 
 ---
 
@@ -53,12 +53,7 @@ The following personal weather stations have been confirmed to work with this in
   - 7003400
   - 7004406
 
-> [!IMPORTANT]  
-> Bresser weather stations running firmware version **3.02** or later require SSL.
-> With these versions, using HTTP will cause a silent failure, meaning no data will be transmitted.
-> Home Assistant must therefore be configured with SSL enabled, and the URL configured in WSLink must use https instead of http.
-
-Other stations may also work if they can send HTTP GET requests with query parameters matching the keys defined in `SENSOR_LIST`.  
+Other stations may also work if they can send HTTP/HTTPS GET requests with query parameters matching the keys defined in `SENSOR_LIST`.  
 Feel free to try your own weather station and see if it works, and consider contributing any new compatible models to the project!
 
 ---
@@ -90,7 +85,7 @@ This integration is compatible with HACS as a **custom repository** and can be a
 
 ## Weather station configuration
 
-### Manual configuration
+### Manual configuration for any Weather Station supporting the PWS protocol
 
 Set at least these parameters :
 
@@ -115,23 +110,30 @@ Query parameters format:
 ```
 
 - `ID`: Unique device ID (required).
-- `PASSWORD`: a password known only to you
+- `PASSWORD`: a password known only to you (this is the station key).
 - Other parameters: Sensor keys matching `SENSOR_LIST`.
 
-### WSLink configuration
+### Configuration for Weather Stations with WSLink App
 
 Make sure to set these parameters in the WSLink application:
 
-- **URL**: ```http://<HOME_ASSISTANT_IP>:8123```
-- **Sender ID**: `any identifier (e.g., my_station) — this will become the device ID in Home Assistant
-- **Station Key**: a password known only to you.
+- **URL**: ```http://<HOME_ASSISTANT_IP>:8123``` (for http) or ```<HOME_ASSISTANT_DOMAIN>``` (for https) (depending on weather your Weather Station only supports http or https)
+- **Sender ID**: any identifier (e.g., my_station) — this will become the device ID in Home Assistant
+- **Station Key**: a password known only to you
 - **Upload** Interval: any interval you want, e.g., 60 seconds
+- **API Type**: Note that some stations have this field. In that case, make sure to select "WUnderground API".
 
-This configuration will allow WSLink to send weather data correctly to Home Assistant via the PWS integration.
+This configuration will allow your Weather Station to send weather data correctly to Home Assistant via the PWS integration. As this integration only allows you to configure one station key, all of your Weather Stations should use the same.
+
+> [!IMPORTANT]  
+> Bresser weather stations running firmware version **3.02** or later require SSL.
+> With these versions, using HTTP will cause a silent failure, meaning no data will be transmitted.
+> Note: There might be versions prior to 3.02 that also require SSL, but 3.02 is the first known version that definitively needs it.
+> Home Assistant must therefore be configured with SSL enabled, and the URL configured in WSLink must use https instead of http.
 
 ### Config Flow
 - Add a new weather station using its station key. Ensure that this key matches the one configured in the weather station settings or leave it blank to accept any station key.
-- All setup is done automatically upon HTTP requests.
+- All setup is done automatically upon HTTP(S) requests.
 
 ---
 
@@ -222,7 +224,6 @@ When the integration is removed:
 Contributions are welcome! Please open issues or pull requests on GitHub.
 
 - Add new sensors to `SENSOR_LIST` for additional weather data.
-- Improve error handling or authentication for the HTTP endpoint.
 - Optimize performance or add async support where possible.
 
 ---
@@ -231,6 +232,3 @@ Contributions are welcome! Please open issues or pull requests on GitHub.
 ![License](https://img.shields.io/badge/license-Public%20Domain-blue)
 <br>
 This software is released into the **public domain** under the [Unlicense](https://unlicense.org):
-
-
-
