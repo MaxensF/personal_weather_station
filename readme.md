@@ -239,6 +239,7 @@ When the integration is removed:
 Contributions are welcome! Please open issues or pull requests on GitHub.
 
 - Add new sensors to `SENSOR_LIST` for additional weather data.
+- Improve error handling
 - Optimize performance or add async support where possible.
 
 ---
