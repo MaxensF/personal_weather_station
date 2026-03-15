@@ -77,6 +77,17 @@ Feel free to try your own weather station and see if it works, and consider cont
 
 ## Installation
 
+### HACS Installation (Recommended)
+
+This integration is available in the default HACS store. You do not need to add a custom repository anymore!
+
+1. Open HACS in Home Assistant
+2. Search for **"Personal Weather Station"**
+3. Click **Download**, then install the integration
+4. Restart Home Assistant
+5. Add the integration from **Settings → Devices & Services → Add Integration**
+
+
 ### Manual Installation
 
 1. Navigate to your Home Assistant configuration folder.
@@ -84,19 +95,6 @@ Feel free to try your own weather station and see if it works, and consider cont
 3. Copy all integration files into this folder (`__init__.py`, `sensor.py`, `manifest.json`, etc.).
 4. Restart Home Assistant.
 5. Add the integration from  **Settings → Devices & Services → Add Integration**
-
-
-### HACS Installation
-
-This integration is compatible with HACS as a **custom repository** and can be added manually in a few steps:
-
-1. Open HACS in Home Assistant
-2. Click the menu (three dots) → **Custom repositories**
-3. Add the URL of this GitHub repository
-4. Choose **Integration** as the category
-5. Click **Add**, then install the integration from HACS
-6. Restart Home Assistant.
-7. Add the integration from  **Settings → Devices & Services → Add Integration**
 
 ---
 
