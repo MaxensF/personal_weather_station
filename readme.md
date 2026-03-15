@@ -96,7 +96,7 @@ Set at least these parameters :
 
 - **URL**: ```http://<HOME_ASSISTANT_IP>:8123```
 - **ID**: `any identifier (e.g., my_station) — this will become the device ID in Home Assistant
-- **Station Key**: a password known only to you (required)
+- **Station Key**: a password known only to you.
 
 **Important** : In your weather station configuration, make sure to set the URL to point to your Home Assistant instance
 
@@ -115,7 +115,7 @@ Query parameters format:
 ```
 
 - `ID`: Unique device ID (required).
-- `PASSWORD`: a password known only to you (required)
+- `PASSWORD`: a password known only to you
 - Other parameters: Sensor keys matching `SENSOR_LIST`.
 
 ### WSLink configuration
@@ -124,13 +124,13 @@ Make sure to set these parameters in the WSLink application:
 
 - **URL**: ```http://<HOME_ASSISTANT_IP>:8123```
 - **Sender ID**: `any identifier (e.g., my_station) — this will become the device ID in Home Assistant
-- **Station Key**: a password known only to you (required)
+- **Station Key**: a password known only to you.
 - **Upload** Interval: any interval you want, e.g., 60 seconds
 
 This configuration will allow WSLink to send weather data correctly to Home Assistant via the PWS integration.
 
 ### Config Flow
-- Add a new weather station using its station key. Ensure that this key matches the one configured in the weather station settings.
+- Add a new weather station using its station key. Ensure that this key matches the one configured in the weather station settings or leave it blank to accept any station key.
 - All setup is done automatically upon HTTP requests.
 
 ---
