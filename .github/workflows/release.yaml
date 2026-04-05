@@ -1,0 +1,28 @@
+name: Release Build
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-zip:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Code checkout 
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      # 2. Create the zip
+      - name: Create zip
+        run: |
+          ZIP_NAME="personal_weather_station_${{ github.ref_name }}.zip"
+          zip -r $ZIP_NAME . -x ".git/*"
+
+      # 3. ZIP upload as asset
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v1
+        with:
+          files: personal_weather_station_${{ github.ref_name }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
