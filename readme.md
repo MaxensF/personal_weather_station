@@ -58,6 +58,10 @@ The following personal weather stations have been confirmed to work with this in
 Other stations may also work if they can send HTTP/HTTPS GET requests with query parameters matching the keys defined in `SENSOR_LIST`.  
 Feel free to try your own weather station and see if it works, and consider contributing any new compatible models to the project!
 
+### Advanced workaround
+
+Some weather stations do not support natively custom URLs. A workaround is possible, see detailed setup here: [Intercepting Wunderground traffic (issue #20)](../../issues/20)
+
 ---
 
 ## Quick Start Guide for Bresser Stations with WSLink App
