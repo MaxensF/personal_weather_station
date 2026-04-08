@@ -60,7 +60,7 @@ SENSOR_LIST = {
     "t1rainmth": {"name": "Monthly Rainfall", "icon": "mdi:weather-rainy", "unit": UnitOfLength.MILLIMETERS, "device_class": SensorDeviceClass.PRECIPITATION},
     "t1rainyr": {"name": "Yearly Rainfall", "icon": "mdi:weather-rainy", "unit": UnitOfLength.MILLIMETERS, "device_class": SensorDeviceClass.PRECIPITATION},
 
-    # Unknown weather station type 2/3/4 Multi-Channel Sensors
+    # 7002586 Type 2/3/4 Multi-Channel Sensors
     "soilmoisture2": {"name": "CH2 Soil Moisture", "icon": "mdi:water-percent", "unit": PERCENTAGE, "device_class": SensorDeviceClass.HUMIDITY},
     "soilmoisture3": {"name": "CH3 Soil Moisture", "icon": "mdi:water-percent", "unit": PERCENTAGE, "device_class": SensorDeviceClass.HUMIDITY},
     "soilmoisture4": {"name": "CH4 Soil Moisture", "icon": "mdi:water-percent", "unit": PERCENTAGE, "device_class": SensorDeviceClass.HUMIDITY},
