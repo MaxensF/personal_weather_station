@@ -1,63 +1,40 @@
 name: Release Build
 
 on:
-  release:
-    types: [published]
-
+  push:
+    tags:
+      - "*"
+      
 jobs:
-  build-zip:
-    name: Build and upload integration zip
+  release:
     runs-on: ubuntu-latest
-
     permissions:
       contents: write
-
     steps:
-      # 1. Checkout repository
-      - name: 📥 Checkout repository
-        uses: actions/checkout@v4
+      # 1. Checkout code
+      - uses: actions/checkout@v4
 
-      # 2. Detect the integration folder inside custom_components
-      - name: 🔎 Detect integration folder
-        id: integration
+      # 2. Get version from tag
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      # 3. Create ZIP in repo root 
+      - name: Create zip archive for HACS
         run: |
-          FOLDER=$(find custom_components -mindepth 1 -maxdepth 1 -type d | head -n 1 | xargs basename)
-          echo "folder=$FOLDER" >> $GITHUB_OUTPUT
+          cd custom_components/personal_weather_station
+          zip -r ../../personal_weather_station.zip .
 
-      # 3. Extract version from release tag (remove leading "v" if present)
-      - name: 🔢 Extract version
-        id: version
-        run: |
-          VERSION="${GITHUB_REF_NAME#v}"
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      # 4. Verify ZIP exists
+      - name: List files
+        run: ls -l personal_weather_station.zip
 
-      # 4. Update version in manifest.json
-      - name: 🖊️ Update manifest version
-        run: |
-          FILE="custom_components/${{ steps.integration.outputs.folder }}/manifest.json"
-          jq ".version = \"${{ steps.version.outputs.version }}\"" "$FILE" > tmp && mv tmp "$FILE"
-
-      # 5. Validate that the version was correctly updated
-      - name: 👀 Validate manifest
-        run: |
-          FILE="custom_components/${{ steps.integration.outputs.folder }}/manifest.json"
-          VERSION=$(jq -r '.version' "$FILE")
-          if [ "$VERSION" != "${{ steps.version.outputs.version }}" ]; then
-            echo "Version mismatch!"
-            exit 1
-          fi
-
-      # 6. Create a clean zip archive of the integration only
-      - name: 📦 Create zip
-        run: |
-          cd custom_components/${{ steps.integration.outputs.folder }}
-          zip -r "../../${{ steps.integration.outputs.folder }}_${{ steps.version.outputs.version }}.zip" . \
-            -x "__pycache__/*" "*.pyc" "*.log"
-
-      # 7. Upload the zip file as a GitHub release asset
-      - name: 📤 Upload release asset
+      # 5. Create GitHub Release and attach ZIP
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ steps.integration.outputs.folder }}_${{ steps.version.outputs.version }}.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ github.ref }}
+          name: "Version ${{ env.VERSION }}"
+          draft: true
+          generate_release_notes: true
+          files: personal_weather_station.zip
