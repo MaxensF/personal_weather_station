@@ -63,7 +63,7 @@ class PwsSensor(SensorEntity):
     Attributes:
         device: Reference to the parent PwsDevice.
         _key: Sensor key identifier (string).
-        _meta: Metadata dictionary from SENSOR_LIST (name, icon, unit, device_class).
+        _meta: Metadata dictionary from SENSOR_LIST (name, icon, unit, device_class, state_class).
     """
 
 
@@ -122,6 +122,10 @@ class PwsSensor(SensorEntity):
     def device_class(self):
         return self._meta.get("device_class")
 
+    @property
+    def state_class(self):
+        return self._meta.get("state_class")
+    
     #@property
     #def entity_registry_enabled_default(self):
     #    return self._meta.get("enabled", True)
