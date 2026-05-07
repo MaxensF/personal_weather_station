@@ -54,15 +54,19 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             if request_password != password:
                 return web.json_response({"status": "error", "detail": "Invalid password"}, status=401)
 
-        # Get the devices dictionary from hass.data
-        devices = hass.data[DOMAIN + "_devices"]
+        # Get the devices dictionary from hass.data.
+        # During reload there is a brief window where unload removed the key.
+        devices = hass.data.setdefault(DOMAIN + "_devices", {})
 
         # Get the reference to the function that adds new entities
         add_entities = hass.data.get(DOMAIN + "_add_entities")
 
         # If the sensor platform is not ready, return an error JSON response
         if not add_entities:
-            return web.json_response({"status": "error", "detail": "Sensor platform not ready"})
+            return web.json_response(
+                {"status": "error", "detail": "Sensor platform not ready"},
+                status=503,
+            )
 
         # Get the device ID from the query parameters
         device_id = params.get("ID")
