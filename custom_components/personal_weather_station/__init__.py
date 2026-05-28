@@ -2,6 +2,7 @@ from aiohttp import web
 from homeassistant.components.http import HomeAssistantView
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import CONF_PASSWORD
 
 from .const import DOMAIN, SENSOR_LIST
 from .sensor import PwsSensor, PwsDevice
@@ -25,6 +26,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     #  Reference to the function that adds entities
     hass.data.setdefault(DOMAIN + "_add_entities", None)
 
+    # Listen for options updates
+    entry.async_on_unload(entry.add_update_listener(update_listener))
+
     async def handle_request(request):
         """
         Handle HTTP requests from the weather station.
@@ -39,15 +43,30 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         # Extract all query parameters from the URL
         params = request.rel_url.query
 
-        # Get the devices dictionary from hass.data
-        devices = hass.data[DOMAIN + "_devices"]
+        # Check for password
+        # Check options first, then data
+        password = entry.options.get(CONF_PASSWORD)
+        if password is None:
+            password = entry.data.get(CONF_PASSWORD)
+
+        if password:
+            request_password = params.get("PASSWORD")
+            if request_password != password:
+                return web.json_response({"status": "error", "detail": "Invalid password"}, status=401)
+
+        # Get the devices dictionary from hass.data.
+        # During reload there is a brief window where unload removed the key.
+        devices = hass.data.setdefault(DOMAIN + "_devices", {})
 
         # Get the reference to the function that adds new entities
         add_entities = hass.data.get(DOMAIN + "_add_entities")
 
         # If the sensor platform is not ready, return an error JSON response
         if not add_entities:
-            return web.json_response({"status": "error", "detail": "Sensor platform not ready"})
+            return web.json_response(
+                {"status": "error", "detail": "Sensor platform not ready"},
+                status=503,
+            )
 
         # Get the device ID from the query parameters
         device_id = params.get("ID")
@@ -69,16 +88,25 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         # Initialize a counter for updated sensors
         updated = 0
 
+        # Create a map for case-insensitive lookup
+        sensor_map = {k.lower(): k for k in SENSOR_LIST}
+
         # Loop through all query parameters
         for key, value in params.items():
 
-            # Skip the "ID" parameter as it is not a sensor
-            if key == "ID":
+            # Skip the "ID" and "PASSWORD" parameter as it is not a sensor
+            if key == "ID" or key == "PASSWORD":
                 continue
 
+            # Check if key exists (case insensitive)
+            normalized_key = sensor_map.get(key.lower())
+
             # Skip any key that is not in the predefined SENSOR_LIST
-            if key not in SENSOR_LIST:
+            if not normalized_key:
                 continue
+
+            # Use the normalized key
+            key = normalized_key
 
             # Attempt to convert the value to a number (int or float)
             try:
@@ -159,6 +187,17 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
     hass.data.pop(DOMAIN + "_add_entities", None)
 
     return True
+
+
+async def update_listener(hass: HomeAssistant, entry: ConfigEntry):
+    """
+    Handle options update.
+
+    Args:
+        hass: Home Assistant instance.
+        entry: Config entry object.
+    """
+    await hass.config_entries.async_reload(entry.entry_id)
 
 
 class PwsView(HomeAssistantView):

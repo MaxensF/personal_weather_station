@@ -3,12 +3,17 @@ name: Close inactive issues
 on:
   schedule:
     - cron: '0 0 * * *'
+  workflow_dispatch:
 
+permissions:
+  issues: write
+  pull-requests: write
+  
 jobs:
   stale:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/stale@v9
+      - uses: actions/stale@v10
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 

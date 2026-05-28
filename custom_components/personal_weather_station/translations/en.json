@@ -1,0 +1,23 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Personal Weather Station",
+        "description": "Set a station key here that your weather stations must transmit so that their data is not rejected. If you leave the field blank, all requests will be accepted.",
+        "data": {
+          "password": "Station Key"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "description": "Set a station key here that your weather stations must transmit so that their data is not rejected. If you leave the field blank, all requests will be accepted.",
+        "data": {
+          "password": "Station Key"
+        }
+      }
+    }
+  }
+}

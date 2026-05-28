@@ -1,4 +1,5 @@
 from homeassistant.components.sensor import SensorEntity
+from homeassistant.util import slugify
 from .const import DOMAIN, SENSOR_LIST
 
 
@@ -62,8 +63,9 @@ class PwsSensor(SensorEntity):
     Attributes:
         device: Reference to the parent PwsDevice.
         _key: Sensor key identifier (string).
-        _meta: Metadata dictionary from SENSOR_LIST (name, icon, unit, device_class).
+        _meta: Metadata dictionary from SENSOR_LIST (name, icon, unit, device_class, state_class).
     """
+
 
     def __init__(self, device: PwsDevice, key: str):
         """
@@ -87,6 +89,7 @@ class PwsSensor(SensorEntity):
         self._meta = SENSOR_LIST.get(
             key, {"name": key, "icon": "mdi:help"}
         )
+        self._attr_has_entity_name = True
 
     @property
     def name(self):
@@ -95,6 +98,13 @@ class PwsSensor(SensorEntity):
     @property
     def unique_id(self):
         return f"{DOMAIN}_{self.device.device_id}_{self._key}".lower()
+
+    @property
+    def suggested_object_id(self):
+        """Prefix entity IDs with station/device id for easier discovery."""
+        sensor_part = slugify(self._meta.get("name", self._key))
+        station_part = slugify(self.device.device_id)
+        return f"{station_part}_{sensor_part}"
 
     @property
     def native_value(self):
@@ -111,6 +121,14 @@ class PwsSensor(SensorEntity):
     @property
     def device_class(self):
         return self._meta.get("device_class")
+
+    @property
+    def state_class(self):
+        return self._meta.get("state_class")
+    
+    #@property
+    #def entity_registry_enabled_default(self):
+    #    return self._meta.get("enabled", True)
 
     @property
     def should_poll(self):
