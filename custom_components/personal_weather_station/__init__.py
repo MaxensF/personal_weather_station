@@ -68,12 +68,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
                 status=503,
             )
 
-        # Get the device ID from the query parameters
-        device_id = params.get("ID")
+        # Get the device ID from supported query parameters.
+        # Keep backward compatibility with "ID" and support WSLink's "wsid".
+        device_id = params.get("ID") or params.get("wsid")
 
-        # If no ID is provided, return an error JSON response
+        # If no device identifier is provided, return an error JSON response
         if not device_id:
-            return web.json_response({"status": "error", "detail": "Missing ID"})
+            return web.json_response({"status": "error", "detail": "Missing device identifier (ID or wsid)"})
 
         # If this device ID does not exist yet, create a new PwsDevice instance
         if device_id not in devices:
@@ -94,8 +95,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         # Loop through all query parameters
         for key, value in params.items():
 
-            # Skip the "ID" and "PASSWORD" parameter as it is not a sensor
-            if key == "ID" or key == "PASSWORD":
+            # Skip identifier/auth parameters as they are not sensors.
+            if key in ("ID", "wsid", "PASSWORD"):
                 continue
 
             # Check if key exists (case insensitive)
@@ -157,6 +158,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     # Register the HTTP view to listen on the specified URL
     hass.http.register_view(
         PwsView("/weatherstation/updateweatherstation.php", handle_request)
+    )
+    hass.http.register_view(
+        PwsView("/data/upload.php", handle_request)
     )
 
     # Forward the setup of the config entry to the sensor platform
