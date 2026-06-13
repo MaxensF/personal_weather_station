@@ -126,6 +126,10 @@ class PwsSensor(SensorEntity):
     def state_class(self):
         return self._meta.get("state_class")
     
+    @property
+    def suggested_display_precision(self):
+        return self._meta.get("precision")
+    
     #@property
     #def entity_registry_enabled_default(self):
     #    return self._meta.get("enabled", True)
