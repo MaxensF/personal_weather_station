@@ -38,14 +38,14 @@ SENSOR_LIST = {
     "baromin": {"name": "Pressure", "icon": "mdi:gauge", "unit": UnitOfPressure.INHG, "device_class": SensorDeviceClass.PRESSURE, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
 
     # Wind
-    "winddir": {"name": "Wind Direction", "icon": "mdi:compass", "unit": DEGREE, "device_class": SensorDeviceClass.WIND_DIRECTION,"state_class": SensorStateClass.MEASUREMENT, "precision": 1},
+    "winddir": {"name": "Wind Direction", "icon": "mdi:compass", "unit": DEGREE, "device_class": SensorDeviceClass.WIND_DIRECTION,"state_class": SensorStateClass.MEASUREMENT_ANGLE, "precision": 1},
     "windspeedmph": {"name": "Wind Speed", "icon": "mdi:weather-windy", "unit": UnitOfSpeed.MILES_PER_HOUR, "device_class": SensorDeviceClass.WIND_SPEED, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
     "windgustmph": {"name": "Wind Gust", "icon": "mdi:weather-windy", "unit": UnitOfSpeed.MILES_PER_HOUR, "device_class": SensorDeviceClass.WIND_SPEED, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
-    "windgustdir": {"name": "Gust Direction", "icon": "mdi:compass", "unit": DEGREE, "device_class": SensorDeviceClass.WIND_DIRECTION, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
-    "winddir_avg2m": {"name": "Wind Direction 2min Avg", "icon": "mdi:compass", "unit": DEGREE, "device_class": SensorDeviceClass.WIND_DIRECTION, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
+    "windgustdir": {"name": "Gust Direction", "icon": "mdi:compass", "unit": DEGREE, "device_class": SensorDeviceClass.WIND_DIRECTION, "state_class": SensorStateClass.MEASUREMENT_ANGLE, "precision": 1},
+    "winddir_avg2m": {"name": "Wind Direction 2min Avg", "icon": "mdi:compass", "unit": DEGREE, "device_class": SensorDeviceClass.WIND_DIRECTION, "state_class": SensorStateClass.MEASUREMENT_ANGLE, "precision": 1},
     "windspdmph_avg2m": {"name": "Wind Speed 2min Avg", "icon": "mdi:weather-windy", "unit": UnitOfSpeed.MILES_PER_HOUR, "device_class": SensorDeviceClass.WIND_SPEED, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
     "windgustmph_10m": {"name": "Gust Speed 10min Avg", "icon": "mdi:weather-windy", "unit": UnitOfSpeed.MILES_PER_HOUR, "device_class": SensorDeviceClass.WIND_SPEED, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
-    "windgustdir_10m": {"name": "Gust Direction 10min Avg", "icon": "mdi:compass", "unit": DEGREE, "device_class": SensorDeviceClass.WIND_DIRECTION, "state_class": SensorStateClass.MEASUREMENT,"precision": 1},
+    "windgustdir_10m": {"name": "Gust Direction 10min Avg", "icon": "mdi:compass", "unit": DEGREE, "device_class": SensorDeviceClass.WIND_DIRECTION, "state_class": SensorStateClass.MEASUREMENT_ANGLE,"precision": 1},
     
     # Rain
     "rainin": {"name": "Hourly Rain", "icon": "mdi:weather-rainy", "unit": UnitOfVolumetricFlux.INCHES_PER_HOUR, "device_class": SensorDeviceClass.PRECIPITATION_INTENSITY, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
@@ -76,7 +76,7 @@ SENSOR_LIST = {
     "t1chill": {"name": "Wind Chill Temperature", "icon": "mdi:thermometer", "unit": UnitOfTemperature.CELSIUS, "device_class": SensorDeviceClass.TEMPERATURE, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
     "t1heat": {"name": "Heat Index Temperature", "icon": "mdi:thermometer", "unit": UnitOfTemperature.CELSIUS, "device_class": SensorDeviceClass.TEMPERATURE, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
     "t1dew": {"name": "Dew Point Temperature", "icon": "mdi:thermometer", "unit": UnitOfTemperature.CELSIUS, "device_class": SensorDeviceClass.TEMPERATURE, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
-    "t1wdir": {"name": "Wind Direction", "icon": "mdi:compass", "unit": DEGREE, "device_class": SensorDeviceClass.WIND_DIRECTION, "precision": 0},
+    "t1wdir": {"name": "Wind Direction", "icon": "mdi:compass", "unit": DEGREE, "device_class": SensorDeviceClass.WIND_DIRECTION, "state_class": SensorStateClass.MEASUREMENT_ANGLE, "precision": 0},
     "t1ws": {"name": "Wind Speed", "icon": "mdi:weather-windy", "unit": UnitOfSpeed.METERS_PER_SECOND, "device_class": SensorDeviceClass.WIND_SPEED, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
     "t1ws10mav": {"name": "10 Minute Average Wind Speed", "icon": "mdi:weather-windy", "unit": UnitOfSpeed.METERS_PER_SECOND, "device_class": SensorDeviceClass.WIND_SPEED, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
     "t1wgust": {"name": "Wind Gust", "icon": "mdi:weather-windy", "unit": UnitOfSpeed.METERS_PER_SECOND, "device_class": SensorDeviceClass.WIND_SPEED, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
