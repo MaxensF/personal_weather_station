@@ -50,7 +50,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             password = entry.data.get(CONF_PASSWORD)
 
         if password:
-            request_password = params.get("PASSWORD")
+            request_password = params.get("PASSWORD") or params.get("wspw")
             if request_password != password:
                 return web.json_response({"status": "error", "detail": "Invalid password"}, status=401)
 
@@ -96,7 +96,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         for key, value in params.items():
 
             # Skip identifier/auth parameters as they are not sensors.
-            if key in ("ID", "wsid", "PASSWORD"):
+            if key in ("ID", "wsid", "PASSWORD", "wspw"):
                 continue
 
             # Check if key exists (case insensitive)
