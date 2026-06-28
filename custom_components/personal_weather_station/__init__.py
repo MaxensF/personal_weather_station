@@ -10,7 +10,9 @@ import logging
 from .const import DOMAIN, SENSOR_LIST, CONF_DEBUG
 from .sensor import PwsSensor, PwsDevice
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("custom_components.personal_weather_station")
+_LOGGER.setLevel(logging.DEBUG)
+_LOGGER.propagate = True
 REQUEST_COUNTER = itertools.count(1)
 
 
