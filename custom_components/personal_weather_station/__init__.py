@@ -149,7 +149,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
                     continue
 
                 # Check if key exists (case insensitive)
-                normalized_key = sensor_map.get(key.lower())
+                normalized_key = SENSOR_MAP.get(key.lower())
 
                 # Skip any key that is not in the predefined SENSOR_LIST
                 if not normalized_key:
