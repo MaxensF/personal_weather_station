@@ -17,7 +17,7 @@ from homeassistant.const import (
 )
 
 DOMAIN = "personal_weather_station"
-
+CONF_DEBUG = "debug"
 
 SENSOR_LIST = {
 

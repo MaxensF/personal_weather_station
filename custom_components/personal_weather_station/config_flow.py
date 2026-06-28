@@ -3,7 +3,7 @@ from homeassistant import config_entries
 from homeassistant.core import callback
 import voluptuous as vol
 from homeassistant.const import CONF_PASSWORD
-from .const import DOMAIN
+from .const import DOMAIN, CONF_DEBUG
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
@@ -42,6 +42,10 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                         CONF_PASSWORD,
                         self._config_entry.data.get(CONF_PASSWORD, "")
                     )
-                ): str
+                ): str,
+                vol.Optional(
+                    CONF_DEBUG,
+                    default=self._config_entry.options.get(CONF_DEBUG, False)
+                ): bool
             })
         )

@@ -3,9 +3,16 @@ from homeassistant.components.http import HomeAssistantView
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_PASSWORD
+import itertools
+import time
+import logging
 
-from .const import DOMAIN, SENSOR_LIST
+from .const import DOMAIN, SENSOR_LIST, CONF_DEBUG
 from .sensor import PwsSensor, PwsDevice
+
+_LOGGER = logging.getLogger(__name__)
+REQUEST_COUNTER = itertools.count(1)
+
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
@@ -40,120 +47,178 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             web.Response: JSON response indicating success, created/updated sensors, or error.
         """
 
-        # Extract all query parameters from the URL
-        params = request.rel_url.query
+        start = time.monotonic()
+        request_id = next(REQUEST_COUNTER)
 
-        # Check for password
-        # Check options first, then data
-        password = entry.options.get(CONF_PASSWORD)
-        if password is None:
-            password = entry.data.get(CONF_PASSWORD)
+        debug = entry.options.get(CONF_DEBUG, False)
 
-        if password:
-            request_password = params.get("PASSWORD") or params.get("wspw")
-            if request_password != password:
-                return web.json_response({"status": "error", "detail": "Invalid password"}, status=401)
+        def debug_log(message, *args):
+            if debug:
+                _LOGGER.info(message, *args)
 
-        # Get the devices dictionary from hass.data.
-        # During reload there is a brief window where unload removed the key.
-        devices = hass.data.setdefault(DOMAIN + "_devices", {})
+        try:         
+            
+            debug_log("[#%d] %s request from %s", request_id, request.method, request.remote )
 
-        # Get the reference to the function that adds new entities
-        add_entities = hass.data.get(DOMAIN + "_add_entities")
+            # Extract all query parameters from the URL
+            params = request.rel_url.query
 
-        # If the sensor platform is not ready, return an error JSON response
-        if not add_entities:
-            return web.json_response(
-                {"status": "error", "detail": "Sensor platform not ready"},
-                status=503,
+            debug_log(
+                    "\n"
+                    "========== Weather Station Request ==========\n"
+                    "Method     : %s\n"
+                    "Remote IP  : %s\n"
+                    "URL        : %s\n"
+                    "HTTP       : %s\n"
+                    "Headers    : %s\n"
+                    "Parameters : %s\n"
+                    "=============================================",
+                    request.method,
+                    request.remote,
+                    request.raw_path,
+                    request.version,
+                    dict(request.headers),
+                    dict(params),
+                )
+
+            # Check for password
+            # Check options first, then data
+            password = entry.options.get(CONF_PASSWORD)
+            if password is None:
+                password = entry.data.get(CONF_PASSWORD)
+
+            if password:
+                request_password = params.get("PASSWORD") or params.get("wspw")
+                if request_password != password:
+                    debug_log("[#%d] Returning HTTP 401", request_id)
+                    return web.json_response({"status": "error", "detail": "Invalid password"}, status=401)
+
+            # Get the devices dictionary from hass.data.
+            # During reload there is a brief window where unload removed the key.
+            devices = hass.data.setdefault(DOMAIN + "_devices", {})
+
+            # Get the reference to the function that adds new entities
+            add_entities = hass.data.get(DOMAIN + "_add_entities")
+
+            # If the sensor platform is not ready, return an error JSON response
+            if not add_entities:
+                debug_log("[#%d] Returning HTTP 503 (sensor platform not ready)", request_id)
+                return web.json_response(
+                    {"status": "error", "detail": "Sensor platform not ready"},
+                    status=503,
+                )
+
+            # Get the device ID from supported query parameters.
+            # Keep backward compatibility with "ID" and support WSLink's "wsid".
+            device_id = params.get("ID") or params.get("wsid")
+
+            # If no device identifier is provided, return an error JSON response
+            if not device_id:
+                debug_log("[#%d] Returning HTTP 400 (missing device ID)", request_id)
+                return web.json_response({"status": "error", "detail": "Missing device identifier (ID or wsid)"})
+
+            # If this device ID does not exist yet, create a new PwsDevice instance
+            if device_id not in devices:
+                debug_log("[#%d] New device detected: %s", request_id, device_id)
+                devices[device_id] = PwsDevice(hass, device_id)
+
+            # Retrieve the device object
+            device = devices[device_id]
+
+            # Initialize a list to store any new sensors to add to Home Assistant
+            new_entities = []
+
+            # Initialize a counter for updated sensors
+            updated = 0
+
+            # Create a map for case-insensitive lookup
+            sensor_map = {k.lower(): k for k in SENSOR_LIST}
+
+            processed_params = sum(
+                1 for key in params
+                if key not in ("ID", "wsid", "PASSWORD", "wspw")
             )
 
-        # Get the device ID from supported query parameters.
-        # Keep backward compatibility with "ID" and support WSLink's "wsid".
-        device_id = params.get("ID") or params.get("wsid")
+            debug_log("[#%d] Processing %d sensor parameters", request_id, processed_params)
 
-        # If no device identifier is provided, return an error JSON response
-        if not device_id:
-            return web.json_response({"status": "error", "detail": "Missing device identifier (ID or wsid)"})
+            # Loop through all query parameters
+            for key, value in params.items():
 
-        # If this device ID does not exist yet, create a new PwsDevice instance
-        if device_id not in devices:
-            devices[device_id] = PwsDevice(hass, device_id)
+                # Skip identifier/auth parameters as they are not sensors.
+                if key in ("ID", "wsid", "PASSWORD", "wspw"):
+                    continue
 
-        # Retrieve the device object
-        device = devices[device_id]
+                # Check if key exists (case insensitive)
+                normalized_key = sensor_map.get(key.lower())
 
-        # Initialize a list to store any new sensors to add to Home Assistant
-        new_entities = []
+                # Skip any key that is not in the predefined SENSOR_LIST
+                if not normalized_key:
+                    debug_log("[#%d] Ignoring unknown parameter '%s'='%s'", request_id, key, value)
+                    continue
 
-        # Initialize a counter for updated sensors
-        updated = 0
+                # Use the normalized key
+                key = normalized_key
 
-        # Create a map for case-insensitive lookup
-        sensor_map = {k.lower(): k for k in SENSOR_LIST}
+                # Attempt to convert the value to a number (int or float)
+                try:
+                    if "." in value:
+                        value = float(value)
+                    else:
+                        value = int(value)
+                except(ValueError, TypeError):
 
-        # Loop through all query parameters
-        for key, value in params.items():
+                    # Leave value as string if conversion fails
+                    pass
 
-            # Skip identifier/auth parameters as they are not sensors.
-            if key in ("ID", "wsid", "PASSWORD", "wspw"):
-                continue
+                # Update the sensor value in the device's data dictionary
+                device.data[key] = value
 
-            # Check if key exists (case insensitive)
-            normalized_key = sensor_map.get(key.lower())
+                # If this sensor does not exist yet, create it
+                if key not in device.sensors:
 
-            # Skip any key that is not in the predefined SENSOR_LIST
-            if not normalized_key:
-                continue
+                    debug_log("[#%d] Creating sensor '%s'", request_id, key )
 
-            # Use the normalized key
-            key = normalized_key
+                    # Instantiate a new PwsSensor
+                    sensor = PwsSensor(device, key)
 
-            # Attempt to convert the value to a number (int or float)
-            try:
-                if "." in value:
-                    value = float(value)
+                    # Store the sensor in the device's sensors dictionary
+                    device.sensors[key] = sensor
+
+                    # Add it to the list of new entities to register
+                    new_entities.append(sensor)
+
                 else:
-                    value = int(value)
-            except(ValueError, TypeError):
 
-                # Leave value as string if conversion fails
-                pass
+                    # If the sensor already exists, update its state in Home Assistant
+                    device.sensors[key].async_write_ha_state()
 
-            # Update the sensor value in the device's data dictionary
-            device.data[key] = value
+                    # Increment the updated counter
+                    updated += 1
 
-            # If this sensor does not exist yet, create it
-            if key not in device.sensors:
+            # If there are any new sensors, add them to Home Assistant
+            if new_entities:
+                add_entities(new_entities)
+            
+            elapsed = time.monotonic() - start
+                
+            debug_log("[#%d] Returning HTTP 200 (device=%s created=%d updated=%d time=%.3fs)", request_id, device_id, len(new_entities), updated, elapsed)
 
-                # Instantiate a new PwsSensor
-                sensor = PwsSensor(device, key)
-
-                # Store the sensor in the device's sensors dictionary
-                device.sensors[key] = sensor
-
-                # Add it to the list of new entities to register
-                new_entities.append(sensor)
-
-            else:
-
-                # If the sensor already exists, update its state in Home Assistant
-                device.sensors[key].async_write_ha_state()
-
-                # Increment the updated counter
-                updated += 1
-
-        # If there are any new sensors, add them to Home Assistant
-        if new_entities:
-            add_entities(new_entities)
-
-        # Return a JSON response summarizing the operation
-        return web.json_response({
-            "status": "ok",
-            "device": device_id,
-            "created": len(new_entities),
-            "updated": updated
-        })
+            # Return a JSON response summarizing the operation
+            return web.json_response({
+                "status": "ok",
+                "device": device_id,
+                "created": len(new_entities),
+                "updated": updated
+            })
+                
+        except Exception:
+            _LOGGER.exception(
+                "[#%d] Unhandled exception while processing %s from %s",
+                request_id,
+                request.raw_path,
+                request.remote,
+            )
+            raise
 
     # Register the HTTP view to listen on the specified URL
     hass.http.register_view(
