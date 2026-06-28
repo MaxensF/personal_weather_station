@@ -132,7 +132,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             updated = 0
 
             # Create a map for case-insensitive lookup
-            sensor_map = {k.lower(): k for k in SENSOR_LIST}
+            SENSOR_MAP = {k.lower(): k for k in SENSOR_LIST}
 
             processed_params = sum(
                 1 for key in params
