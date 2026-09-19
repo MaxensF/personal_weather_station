@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Osobní meteostanice",
+        "description": "Nastavte zde klíč stanice, který musí vaše meteostanice odesílat, aby jejich data nebyla odmítnuta. Ponecháte-li pole prázdné, budou přijaty všechny požadavky.",
+        "data": {
+          "password": "Klíč stanice"
+        }
+      },
+      "station": {
+        "title": "Krok 1 z 5 — vaše stanice",
+        "description": "{image}\n\nVaše meteostanice si zařízení a senzory vytvoří sama, takže tady není co přidávat. Následuje to, co je třeba zadat v aplikaci stanice.\n\nOtevřete aplikaci, ověřte, že je firmware stanice aktuální, a otevřete její nastavení."
+      },
+      "settings": {
+        "title": "Krok 2 z 5 — meteorologická služba",
+        "description": "{image}\n\nZvolte **Weather server**."
+      },
+      "server": {
+        "title": "Krok 3 z 5 — jiný server",
+        "description": "{image}\n\nZvolte **Other Server**."
+      },
+      "form": {
+        "title": "Krok 4 z 5 — nastavení serveru",
+        "description": "{image}\n\nVyplňte formulář a stiskněte **Save**.\n\n**URL**\n{urls}\nBez `http://` i bez `https://`. Použijte adresu, na kterou stanice dosáhne ve vaší vlastní síti — není žádný důvod kvůli tomu vystavovat Home Assistant internetu. Pokud stanice nepřekládá jména, zadejte IP adresu.\n\n**Station ID** — cokoli chcete. Stane se z něj název zařízení v Home Assistantu.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minuta je dobrá hodnota.\n\n**API type** — *WSLink API*. *WUnderground API* zvolte jen tehdy, pokud vaše stanice WSLink nenabízí: přenáší polovinu údajů a jen čtyři kanály.\n\n**Upload** — nechte zapnuté.\n\n> ⏱️ Některé stanice ztratí Wi-Fi, pokud se na této obrazovce zdržíte. Mějte adresu po ruce, zadejte ji a uložte."
+      },
+      "confirm": {
+        "title": "Krok 5 z 5 — confirm & exit",
+        "description": "{image}\n\nVraťte se zpět a stiskněte **Confirm & Exit**.\n\n> ⚠️ **Nastavení do stanice zapisuje až Confirm & Exit.** Samotné uložení nezmění nic.\n\nJakmile to uděláte, stiskněte Další."
+      },
+      "received": {
+        "title": "Vaše stanice mluví s Home Assistantem",
+        "description": "**{station}** právě odeslala první data.\n\nJejí senzory se objeví při dalším odeslání a vytvoří se z toho, co stanice skutečně posílá — tady není co vybírat."
+      },
+      "timeout": {
+        "title": "Zatím nic nedorazilo",
+        "description": "Za posledních {minutes} minut neodeslala data žádná stanice.{key_hint_extra}\n\nObvyklou příčinou je adresa, na kterou stanice nedosáhne, nestisknuté **Confirm & Exit**, nebo firmware od verze 3.02, který vyžaduje HTTPS.\n\nAdresy, na které ji nasměrovat:\n{urls}\nKoncové body naslouchající odesílání:\n{endpoints}\n\nStiskněte Další a dokončete to i tak — nastavení zůstane zachováno, koncové body začnou opravdu naslouchat a oprava vás sem vrátí, dokud se nějaká stanice neobjeví."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Již nakonfigurováno. Jediná instance obsluhuje všechny meteostanice."
+    },
+    "progress": {
+      "waiting_for_station": "Čeká se na první data z vaší stanice…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Osobní meteostanice",
+        "menu_options": {
+          "options": "Nastavení",
+          "instructions": "Jak nasměrovat stanici na Home Assistant"
+        }
+      },
+      "options": {
+        "title": "Osobní meteostanice",
+        "description": "Nastavte zde klíč stanice, který musí vaše meteostanice odesílat, aby jejich data nebyla odmítnuta. Ponecháte-li pole prázdné, budou přijaty všechny požadavky.",
+        "data": {
+          "password": "Klíč stanice",
+          "availability_timeout": "Označit jako nedostupné po (minutách)",
+          "debug": "Zaznamenávat každý příchozí požadavek"
+        },
+        "data_description": {
+          "availability_timeout": "Jak dlouho může stanice mlčet, než budou její senzory označeny jako nedostupné. 0 znamená nikdy neoznačovat.",
+          "debug": "Zapisuje celý obsah každého požadavku do protokolu Home Assistant. Užitečné při nastavování stanice, poté rušivé."
+        }
+      },
+      "station": {
+        "title": "Krok 1 z 5 — vaše stanice",
+        "description": "{image}\n\nVaše meteostanice si zařízení a senzory vytvoří sama, takže tady není co přidávat. Následuje to, co je třeba zadat v aplikaci stanice.\n\nOtevřete aplikaci, ověřte, že je firmware stanice aktuální, a otevřete její nastavení."
+      },
+      "settings": {
+        "title": "Krok 2 z 5 — meteorologická služba",
+        "description": "{image}\n\nZvolte **Weather server**."
+      },
+      "server": {
+        "title": "Krok 3 z 5 — jiný server",
+        "description": "{image}\n\nZvolte **Other Server**."
+      },
+      "form": {
+        "title": "Krok 4 z 5 — nastavení serveru",
+        "description": "{image}\n\nVyplňte formulář a stiskněte **Save**.\n\n**URL**\n{urls}\nBez `http://` i bez `https://`. Použijte adresu, na kterou stanice dosáhne ve vaší vlastní síti — není žádný důvod kvůli tomu vystavovat Home Assistant internetu. Pokud stanice nepřekládá jména, zadejte IP adresu.\n\n**Station ID** — cokoli chcete. Stane se z něj název zařízení v Home Assistantu.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minuta je dobrá hodnota.\n\n**API type** — *WSLink API*. *WUnderground API* zvolte jen tehdy, pokud vaše stanice WSLink nenabízí: přenáší polovinu údajů a jen čtyři kanály.\n\n**Upload** — nechte zapnuté.\n\n> ⏱️ Některé stanice ztratí Wi-Fi, pokud se na této obrazovce zdržíte. Mějte adresu po ruce, zadejte ji a uložte."
+      },
+      "confirm": {
+        "title": "Krok 5 z 5 — confirm & exit",
+        "description": "{image}\n\nVraťte se zpět a stiskněte **Confirm & Exit**.\n\n> ⚠️ **Nastavení do stanice zapisuje až Confirm & Exit.** Samotné uložení nezmění nic.\n\nJakmile to uděláte, stiskněte Další."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Meteostanice odmítnuta: nesprávný klíč stanice",
+      "description": "Meteostanice na adrese {ip} se pokusila odeslat data jako `{station_id}`, aniž by odeslala očekávaný klíč stanice.\n\nZkontrolujte, zda se klíč nastavený ve stanici nebo v aplikaci WSLink shoduje s klíčem nastaveným v této integraci. Tato zpráva zmizí sama, jakmile bude přijat požadavek z {ip}."
+    },
+    "missing_device_id": {
+      "title": "Meteostanice odmítnuta: chybí identifikátor stanice",
+      "description": "Meteostanice na adrese {ip} odeslala data bez identifikátoru stanice.\n\nNastavte Sender ID v aplikaci WSLink nebo parametr ID v konfiguraci stanice. Tato zpráva zmizí sama, jakmile bude přijat požadavek z {ip}."
+    },
+    "legacy_entity_ids": {
+      "title": "ID entit opakují název stanice",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Zkrátit ID entit",
+            "description": "Do verze 1.0.8 tato integrace vytvářela ID entit, která nesou název stanice dvakrát, například `{example_old}`. Nové stanice už to nedělají.\n\n**{count} entit** lze přejmenovat, například na `{example_new}`.\n\nHistorie a dlouhodobé statistiky přejmenování sledují automaticky. **Automatizace, skripty, scény a nástěnky nikoli** — vše, co odkazuje na stará ID, budete muset upravit sami.\n\nPokud je raději chcete nechat tak, jak jsou, tuto opravu ignorujte."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Údaje o spojení, úniku a baterii jsou stále čísla",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Převést na binární senzory",
+            "description": "Údaje o spojení, úniku vody a baterii se posílají jako 1 nebo 0. Až do verze 1.0.8 se vystavovaly jako číselné senzory, například `{example}`, které nelze použít se standardními kartami pro únik, konektivitu a slabou baterii v Home Assistantu. Nové stanice dostávají binární senzory zobrazující **Mokro / Sucho**, **Připojeno / Odpojeno** a **Zapnuto / Vypnuto**.\n\nPřevést lze **{count} entit**. Úrovně baterie 0~5 u senzorů kvality ovzduší si ponechávají procenta: šest stupňů je víc, než dokáže zapnuto/vypnuto unést.\n\nZměna platformy není přejmenování: staré entity se odstraní a znovu vytvoří jako `binary_sensor`. **Jejich zaznamenaná historie se ztratí** — tyto údaje nemají dlouhodobou statistiku, takže je dotčena jen surová historie — a **automatizace, skripty, scény a nástěnky, které na ně míří, je nutné upravit**. Nové entity se objeví při dalším odeslání stanice.\n\nPokud je raději necháte tak, jak jsou, tuto opravu ignorujte."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Zatím žádná meteostanice nic neodeslala",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Nastavte svou meteostanici",
+            "description": "Vaše meteostanice vytváří zařízení a senzory — zde není co přidávat.\n\nV aplikaci stanice otevřete svou stanici, pak **Settings → Weather server → Other Server**, a vyplňte:\n\n**URL**\n{urls}\nBez `http://` nebo `https://`. Použijte adresu, na kterou vaše stanice dosáhne ve vaší vlastní síti — není žádný důvod kvůli tomu vystavovat Home Assistant internetu. Pokud vaše stanice nepřekládá názvy, zadejte IP adresu.\n\n**Station ID** — cokoli chcete. Stane se názvem zařízení v Home Assistantu.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minuta je dobrá hodnota.\n\n**API type** — *WSLink API*.\n\n**Upload** — nechte zapnuté.\n\nStiskněte **Save**, vraťte se zpět a stiskněte **Confirm & Exit**.\n\n> ⚠️ **Teprve Confirm & Exit zapíše nastavení do stanice.** Samotné uložení nic nezmění. Vaše senzory se objeví vteřinu poté.\n\nNaslouchající koncové body jsou:\n{endpoints}"
+          },
+          "received": {
+            "title": "Vaše stanice prošla",
+            "description": "**{station}** odeslala své první odeslání. Její senzory se právě vytvářejí a další přibudou, jak je stanice bude hlásit.\n\nTato zpráva se už nevrátí."
+          },
+          "timeout": {
+            "title": "Zatím nic nedorazilo",
+            "description": "Za {minutes} minut nedorazilo žádné odeslání.\n\nPodle pravděpodobnosti:\n\n  - **Stiskli jste Confirm & Exit?** Samotné uložení obrazovky serveru do stanice nic nezapíše.\n  - **URL** musí být {urls_inline}, bez `http://`, a dosažitelné stanicí ve vaší síti.\n  - **Upload** musí být na té obrazovce zapnutý.\n  - Některé firmwary Bresser od **3.02** výše odmítají prosté HTTP a vyžadují adresu se službou HTTPS.\n  - Interval odesílání může být prostě delší než čekání.\n  - **Klíč stanice**: {key_hint}.\n\nPokud stanice na Home Assistant dosáhla, ale byla odmítnuta, hlásí se to zvlášť v **Nastavení → Systém → Opravy**.\n\nMůžete zavřít. Zůstane zde, dokud se stanice neobjeví, a opětovné otevření spustí čekání znovu."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Čekání na první odeslání vaší stanice…"
+        },
+        "abort": {
+          "not_received": "Zatím nic nedorazilo, takže tohle zůstává otevřené. Zůstává v Opravách, dokud se stanice neobjeví, a můžete to znovu otevřít a čekat dál."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "Stanice {station} posílá údaje, které se zahazují",
+      "description": "**{count} parametrů** ze stanice **{station}** není rozpoznáno, jejich hodnoty se proto při každém odeslání zahodí:\n\n{parameters}\n\nObvyklou příčinou je stanice, která hlásí víc, než dokáže její protokol přenést. Weather Underground má pro doplňkové senzory jen **4 místa**; pokud vaše stanice nabízí **WSLink** jako *API type*, přechod na něj zpřístupní sedm kanálů a zhruba dvojnásobek údajů.\n\nPokud příčina není tato, jsou tyto názvy parametrů přesně tím, co potřebuje hlášení chyby: založte je v [systému hlášení]({issue_tracker}) a bude je možné doplnit.\n\nMůžete to také ignorovat — nic není rozbité, jen tyto konkrétní hodnoty nedorazí."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "Stanice {device} zatím neodeslala žádný směr větru, takže není podle čeho kalibrovat. Počkejte na další odeslání a zkuste to znovu."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Absolutní tlak vzduchu"
+      },
+      "apiver": {
+        "name": "Verze API"
+      },
+      "aqbc": {
+        "name": "Černý uhlík"
+      },
+      "aqco": {
+        "name": "Oxid uhelnatý"
+      },
+      "aqcot": {
+        "name": "Oxid uhelnatý ve stopovém množství"
+      },
+      "aqec": {
+        "name": "Elementární uhlík"
+      },
+      "aqno": {
+        "name": "Oxid dusnatý"
+      },
+      "aqno2": {
+        "name": "NO2 X vypočtené"
+      },
+      "aqno2t": {
+        "name": "Oxid dusičitý"
+      },
+      "aqno2y": {
+        "name": "NO2 Y vypočtené"
+      },
+      "aqno3": {
+        "name": "Ion NO3"
+      },
+      "aqnox": {
+        "name": "Oxidy dusíku"
+      },
+      "aqnoy": {
+        "name": "Celkový reaktivní dusík"
+      },
+      "aqoc": {
+        "name": "Organický uhlík"
+      },
+      "aqozone": {
+        "name": "Ozon"
+      },
+      "aqpm10": {
+        "name": "Hmotnost PM10"
+      },
+      "aqpm2_5": {
+        "name": "Hmotnost PM2.5"
+      },
+      "aqso2": {
+        "name": "Oxid siřičitý"
+      },
+      "aqso2t": {
+        "name": "Oxid siřičitý ve stopovém množství"
+      },
+      "aqso4": {
+        "name": "Ion SO4"
+      },
+      "aquv_aeth": {
+        "name": "Aethalometr kanál 2"
+      },
+      "baromin": {
+        "name": "Tlak"
+      },
+      "clouds": {
+        "name": "Oblačnost"
+      },
+      "dailyrainin": {
+        "name": "Denní déšť"
+      },
+      "dewptf": {
+        "name": "Rosný bod"
+      },
+      "humidity": {
+        "name": "Venkovní vlhkost"
+      },
+      "inbat": {
+        "name": "Úroveň baterie konzole"
+      },
+      "indoorhumidity": {
+        "name": "Vnitřní vlhkost"
+      },
+      "indoortempf": {
+        "name": "Vnitřní teplota"
+      },
+      "inhum": {
+        "name": "Vnitřní vlhkost"
+      },
+      "intem": {
+        "name": "Vnitřní teplota"
+      },
+      "last_update": {
+        "name": "Poslední příjem"
+      },
+      "leafwetness": {
+        "name": "Ovlhčení listů"
+      },
+      "leafwetness2": {
+        "name": "CH2 ovlhčení listů"
+      },
+      "lowbatt": {
+        "name": "Slabá baterie"
+      },
+      "monthlyrainin": {
+        "name": "Měsíční déšť"
+      },
+      "rainin": {
+        "name": "Hodinový déšť"
+      },
+      "rbar": {
+        "name": "Relativní tlak vzduchu"
+      },
+      "rtfreq": {
+        "name": "Frekvence aktualizace"
+      },
+      "soilmoisture": {
+        "name": "Vlhkost půdy"
+      },
+      "soilmoisture2": {
+        "name": "CH2 vlhkost půdy"
+      },
+      "soilmoisture3": {
+        "name": "CH3 vlhkost půdy"
+      },
+      "soilmoisture4": {
+        "name": "CH4 vlhkost půdy"
+      },
+      "soiltemp2f": {
+        "name": "CH2 teplota půdy"
+      },
+      "soiltemp3f": {
+        "name": "CH3 teplota půdy"
+      },
+      "soiltemp4f": {
+        "name": "CH4 teplota půdy"
+      },
+      "soiltempf": {
+        "name": "Teplota půdy"
+      },
+      "solarradiation": {
+        "name": "Sluneční záření"
+      },
+      "t10bat": {
+        "name": "Úroveň baterie čidla CO2"
+      },
+      "t10cn": {
+        "name": "Stav připojení čidla CO2"
+      },
+      "t10co2": {
+        "name": "Koncentrace CO2"
+      },
+      "t11bat": {
+        "name": "Úroveň baterie čidla CO"
+      },
+      "t11cn": {
+        "name": "Stav připojení čidla CO"
+      },
+      "t11co": {
+        "name": "Koncentrace CO"
+      },
+      "t1bat": {
+        "name": "Stav baterie venkovního čidla"
+      },
+      "t1chill": {
+        "name": "Teplota ochlazení větrem"
+      },
+      "t1cn": {
+        "name": "Stav připojení venkovního čidla"
+      },
+      "t1dew": {
+        "name": "Teplota rosného bodu"
+      },
+      "t1feels": {
+        "name": "Pocitová teplota"
+      },
+      "t1heat": {
+        "name": "Index horka"
+      },
+      "t1hum": {
+        "name": "Venkovní vlhkost"
+      },
+      "t1raindy": {
+        "name": "Denní úhrn srážek"
+      },
+      "t1rainhr": {
+        "name": "Hodinový úhrn srážek"
+      },
+      "t1rainmth": {
+        "name": "Měsíční úhrn srážek"
+      },
+      "t1rainra": {
+        "name": "Intenzita deště"
+      },
+      "t1rainwy": {
+        "name": "Týdenní úhrn srážek"
+      },
+      "t1rainyr": {
+        "name": "Roční úhrn srážek"
+      },
+      "t1solrad": {
+        "name": "Intenzita světla"
+      },
+      "t1tem": {
+        "name": "Venkovní teplota"
+      },
+      "t1uvi": {
+        "name": "UV index"
+      },
+      "t1wbgt": {
+        "name": "Teplota WBGT"
+      },
+      "t1wdir": {
+        "name": "Směr větru"
+      },
+      "t1wgust": {
+        "name": "Náraz větru"
+      },
+      "t1ws": {
+        "name": "Rychlost větru"
+      },
+      "t1ws10mav": {
+        "name": "Rychlost větru prům. 10 min"
+      },
+      "t234c1bat": {
+        "name": "CH1 stav baterie"
+      },
+      "t234c1cn": {
+        "name": "CH1 stav připojení"
+      },
+      "t234c1hum": {
+        "name": "CH1 vlhkost"
+      },
+      "t234c1tem": {
+        "name": "CH1 teplota"
+      },
+      "t234c1tp": {
+        "name": "CH1 typ čidla"
+      },
+      "t234c2bat": {
+        "name": "CH2 stav baterie"
+      },
+      "t234c2cn": {
+        "name": "CH2 stav připojení"
+      },
+      "t234c2hum": {
+        "name": "CH2 vlhkost"
+      },
+      "t234c2tem": {
+        "name": "CH2 teplota"
+      },
+      "t234c2tp": {
+        "name": "CH2 typ čidla"
+      },
+      "t234c3bat": {
+        "name": "CH3 stav baterie"
+      },
+      "t234c3cn": {
+        "name": "CH3 stav připojení"
+      },
+      "t234c3hum": {
+        "name": "CH3 vlhkost"
+      },
+      "t234c3tem": {
+        "name": "CH3 teplota"
+      },
+      "t234c3tp": {
+        "name": "CH3 typ čidla"
+      },
+      "t234c4bat": {
+        "name": "CH4 stav baterie"
+      },
+      "t234c4cn": {
+        "name": "CH4 stav připojení"
+      },
+      "t234c4hum": {
+        "name": "CH4 vlhkost"
+      },
+      "t234c4tem": {
+        "name": "CH4 teplota"
+      },
+      "t234c4tp": {
+        "name": "CH4 typ čidla"
+      },
+      "t234c5bat": {
+        "name": "CH5 stav baterie"
+      },
+      "t234c5cn": {
+        "name": "CH5 stav připojení"
+      },
+      "t234c5hum": {
+        "name": "CH5 vlhkost"
+      },
+      "t234c5tem": {
+        "name": "CH5 teplota"
+      },
+      "t234c5tp": {
+        "name": "CH5 typ čidla"
+      },
+      "t234c6bat": {
+        "name": "CH6 stav baterie"
+      },
+      "t234c6cn": {
+        "name": "CH6 stav připojení"
+      },
+      "t234c6hum": {
+        "name": "CH6 vlhkost"
+      },
+      "t234c6tem": {
+        "name": "CH6 teplota"
+      },
+      "t234c6tp": {
+        "name": "CH6 typ čidla"
+      },
+      "t234c7bat": {
+        "name": "CH7 stav baterie"
+      },
+      "t234c7cn": {
+        "name": "CH7 stav připojení"
+      },
+      "t234c7hum": {
+        "name": "CH7 vlhkost"
+      },
+      "t234c7tem": {
+        "name": "CH7 teplota"
+      },
+      "t234c7tp": {
+        "name": "CH7 typ čidla"
+      },
+      "t5ls1dtc": {
+        "name": "Blesky celkem za 1 den"
+      },
+      "t5ls1htc": {
+        "name": "Blesky celkem za 1 hodinu"
+      },
+      "t5ls30mtc": {
+        "name": "Blesky za posledních 30 minut"
+      },
+      "t5ls5mtc": {
+        "name": "Blesky za posledních 5 minut"
+      },
+      "t5lsbat": {
+        "name": "Stav baterie čidla blesků"
+      },
+      "t5lscn": {
+        "name": "Stav připojení čidla blesků"
+      },
+      "t5lsf": {
+        "name": "Blesky za poslední hodinu"
+      },
+      "t5lskm": {
+        "name": "Vzdálenost blesku"
+      },
+      "t5lst": {
+        "name": "Čas posledního blesku"
+      },
+      "t6c1bat": {
+        "name": "CH1 stav baterie detektoru úniku"
+      },
+      "t6c1cn": {
+        "name": "CH1 stav připojení detektoru úniku"
+      },
+      "t6c1wls": {
+        "name": "CH1 stav úniku vody"
+      },
+      "t6c2bat": {
+        "name": "CH2 stav baterie detektoru úniku"
+      },
+      "t6c2cn": {
+        "name": "CH2 stav připojení detektoru úniku"
+      },
+      "t6c2wls": {
+        "name": "CH2 stav úniku vody"
+      },
+      "t6c3bat": {
+        "name": "CH3 stav baterie detektoru úniku"
+      },
+      "t6c3cn": {
+        "name": "CH3 stav připojení detektoru úniku"
+      },
+      "t6c3wls": {
+        "name": "CH3 stav úniku vody"
+      },
+      "t6c4bat": {
+        "name": "CH4 stav baterie detektoru úniku"
+      },
+      "t6c4cn": {
+        "name": "CH4 stav připojení detektoru úniku"
+      },
+      "t6c4wls": {
+        "name": "CH4 stav úniku vody"
+      },
+      "t6c5bat": {
+        "name": "CH5 stav baterie detektoru úniku"
+      },
+      "t6c5cn": {
+        "name": "CH5 stav připojení detektoru úniku"
+      },
+      "t6c5wls": {
+        "name": "CH5 stav úniku vody"
+      },
+      "t6c6bat": {
+        "name": "CH6 stav baterie detektoru úniku"
+      },
+      "t6c6cn": {
+        "name": "CH6 stav připojení detektoru úniku"
+      },
+      "t6c6wls": {
+        "name": "CH6 stav úniku vody"
+      },
+      "t6c7bat": {
+        "name": "CH7 stav baterie detektoru úniku"
+      },
+      "t6c7cn": {
+        "name": "CH7 stav připojení detektoru úniku"
+      },
+      "t6c7wls": {
+        "name": "CH7 stav úniku vody"
+      },
+      "t8bat": {
+        "name": "Úroveň baterie čidla prachu"
+      },
+      "t8cn": {
+        "name": "Stav připojení čidla prachu"
+      },
+      "t8pm10": {
+        "name": "Koncentrace PM10"
+      },
+      "t8pm10ai": {
+        "name": "AQI PM10"
+      },
+      "t8pm25": {
+        "name": "Koncentrace PM2.5"
+      },
+      "t8pm25ai": {
+        "name": "AQI PM2.5"
+      },
+      "t9bat": {
+        "name": "Úroveň baterie čidla HCHO/VOC"
+      },
+      "t9cn": {
+        "name": "Stav připojení čidla HCHO/VOC"
+      },
+      "t9hcho": {
+        "name": "Koncentrace HCHO"
+      },
+      "t9voclv": {
+        "name": "Úroveň VOC",
+        "state": {
+          "very_low": "Velmi nízká",
+          "low": "Nízká",
+          "moderate": "Střední",
+          "high": "Vysoká",
+          "very_high": "Velmi vysoká"
+        }
+      },
+      "tempf": {
+        "name": "Venkovní teplota"
+      },
+      "uv": {
+        "name": "UV index"
+      },
+      "visibility": {
+        "name": "Viditelnost"
+      },
+      "weeklyrainin": {
+        "name": "Týdenní déšť"
+      },
+      "wind_direction_raw": {
+        "name": "Směr větru (surový)"
+      },
+      "windchillf": {
+        "name": "Pocitová teplota větrem"
+      },
+      "winddir": {
+        "name": "Směr větru"
+      },
+      "winddir_avg2m": {
+        "name": "Směr větru prům. 2 min"
+      },
+      "windgustdir": {
+        "name": "Směr nárazu"
+      },
+      "windgustdir_10m": {
+        "name": "Směr nárazu prům. 10 min"
+      },
+      "windgustmph": {
+        "name": "Náraz větru"
+      },
+      "windgustmph_10m": {
+        "name": "Rychlost nárazu prům. 10 min"
+      },
+      "windspdmph_avg2m": {
+        "name": "Rychlost větru prům. 2 min"
+      },
+      "windspeedmph": {
+        "name": "Rychlost větru"
+      },
+      "yearlyrainin": {
+        "name": "Roční déšť"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Úroveň baterie konzole"
+      },
+      "station_online": {
+        "name": "Stanice online"
+      },
+      "t10cn": {
+        "name": "Stav připojení čidla CO2"
+      },
+      "t11cn": {
+        "name": "Stav připojení čidla CO"
+      },
+      "t1bat": {
+        "name": "Stav baterie venkovního čidla"
+      },
+      "t1cn": {
+        "name": "Stav připojení venkovního čidla"
+      },
+      "t234c1bat": {
+        "name": "CH1 stav baterie"
+      },
+      "t234c1cn": {
+        "name": "CH1 stav připojení"
+      },
+      "t234c2bat": {
+        "name": "CH2 stav baterie"
+      },
+      "t234c2cn": {
+        "name": "CH2 stav připojení"
+      },
+      "t234c3bat": {
+        "name": "CH3 stav baterie"
+      },
+      "t234c3cn": {
+        "name": "CH3 stav připojení"
+      },
+      "t234c4bat": {
+        "name": "CH4 stav baterie"
+      },
+      "t234c4cn": {
+        "name": "CH4 stav připojení"
+      },
+      "t234c5bat": {
+        "name": "CH5 stav baterie"
+      },
+      "t234c5cn": {
+        "name": "CH5 stav připojení"
+      },
+      "t234c6bat": {
+        "name": "CH6 stav baterie"
+      },
+      "t234c6cn": {
+        "name": "CH6 stav připojení"
+      },
+      "t234c7bat": {
+        "name": "CH7 stav baterie"
+      },
+      "t234c7cn": {
+        "name": "CH7 stav připojení"
+      },
+      "t5lsbat": {
+        "name": "Stav baterie čidla blesků"
+      },
+      "t5lscn": {
+        "name": "Stav připojení čidla blesků"
+      },
+      "t6c1bat": {
+        "name": "CH1 stav baterie detektoru úniku"
+      },
+      "t6c1cn": {
+        "name": "CH1 stav připojení detektoru úniku"
+      },
+      "t6c1wls": {
+        "name": "CH1 stav úniku vody"
+      },
+      "t6c2bat": {
+        "name": "CH2 stav baterie detektoru úniku"
+      },
+      "t6c2cn": {
+        "name": "CH2 stav připojení detektoru úniku"
+      },
+      "t6c2wls": {
+        "name": "CH2 stav úniku vody"
+      },
+      "t6c3bat": {
+        "name": "CH3 stav baterie detektoru úniku"
+      },
+      "t6c3cn": {
+        "name": "CH3 stav připojení detektoru úniku"
+      },
+      "t6c3wls": {
+        "name": "CH3 stav úniku vody"
+      },
+      "t6c4bat": {
+        "name": "CH4 stav baterie detektoru úniku"
+      },
+      "t6c4cn": {
+        "name": "CH4 stav připojení detektoru úniku"
+      },
+      "t6c4wls": {
+        "name": "CH4 stav úniku vody"
+      },
+      "t6c5bat": {
+        "name": "CH5 stav baterie detektoru úniku"
+      },
+      "t6c5cn": {
+        "name": "CH5 stav připojení detektoru úniku"
+      },
+      "t6c5wls": {
+        "name": "CH5 stav úniku vody"
+      },
+      "t6c6bat": {
+        "name": "CH6 stav baterie detektoru úniku"
+      },
+      "t6c6cn": {
+        "name": "CH6 stav připojení detektoru úniku"
+      },
+      "t6c6wls": {
+        "name": "CH6 stav úniku vody"
+      },
+      "t6c7bat": {
+        "name": "CH7 stav baterie detektoru úniku"
+      },
+      "t6c7cn": {
+        "name": "CH7 stav připojení detektoru úniku"
+      },
+      "t6c7wls": {
+        "name": "CH7 stav úniku vody"
+      },
+      "t8cn": {
+        "name": "Stav připojení čidla prachu"
+      },
+      "t9cn": {
+        "name": "Stav připojení čidla HCHO/VOC"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Posun směru větru"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Vynulovat posun"
+      },
+      "set_north": {
+        "name": "Nastavit sever podle aktuální hodnoty"
+      }
+    }
+  }
+}

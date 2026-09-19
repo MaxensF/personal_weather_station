@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Kişisel hava istasyonu",
+        "description": "Hava istasyonlarınızın verilerinin reddedilmemesi için göndermesi gereken istasyon anahtarını buraya girin. Alanı boş bırakırsanız tüm istekler kabul edilir.",
+        "data": {
+          "password": "İstasyon anahtarı"
+        }
+      },
+      "station": {
+        "title": "5 adımdan 1. adım — istasyonunuz",
+        "description": "{image}\n\nHava istasyonunuz kendi cihazlarını ve algılayıcılarını kendisi oluşturur, dolayısıyla bu tarafta eklenecek bir şey yok. Aşağıdakiler istasyonun uygulamasına girilecek olanlardır.\n\nUygulamayı açın, istasyonun bellenimi güncel mi diye bakın, sonra ayarlarını açın."
+      },
+      "settings": {
+        "title": "5 adımdan 2. adım — hava servisi",
+        "description": "{image}\n\n**Weather server** öğesini seçin."
+      },
+      "server": {
+        "title": "5 adımdan 3. adım — başka sunucu",
+        "description": "{image}\n\n**Other Server** öğesini seçin."
+      },
+      "form": {
+        "title": "5 adımdan 4. adım — sunucu ayarları",
+        "description": "{image}\n\nFormu doldurun, sonra **Save** düğmesine basın.\n\n**URL**\n{urls}\n`http://` veya `https://` olmadan. İstasyonunuzun kendi ağınızda ulaşabileceği bir adres kullanın — bunun için Home Assistant'ı internete açmanın hiçbir nedeni yok. İstasyonunuz adları çözemiyorsa IP adresini yazın.\n\n**Station ID** — ne isterseniz. Home Assistant'ta cihazın adı bu olur.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 dakika iyi bir değerdir.\n\n**API type** — *WSLink API*. *WUnderground API* seçeneğini yalnızca istasyonunuz WSLink sunmuyorsa seçin: yarısı kadar ölçüm ve yalnızca dört kanal taşır.\n\n**Upload** — açık bırakın.\n\n> ⏱️ Bu ekranda oyalanırsanız bazı istasyonlar Wi-Fi bağlantısını yitirir. Adresi hazır tutun, girin ve kaydedin."
+      },
+      "confirm": {
+        "title": "5 adımdan 5. adım — confirm & exit",
+        "description": "{image}\n\nGeri dönün, sonra **Confirm & Exit** düğmesine basın.\n\n> ⚠️ **Ayarları istasyona yazan şey Confirm & Exit'tir.** Yalnızca kaydetmek hiçbir şeyi değiştirmez.\n\nBunu yaptığınızda İleri düğmesine basın."
+      },
+      "received": {
+        "title": "İstasyonunuz Home Assistant ile konuşuyor",
+        "description": "**{station}** az önce ilk gönderimini yaptı.\n\nAlgılayıcıları bir sonrakinde görünür ve istasyonun gerçekte gönderdiklerinden oluşturulur — burada seçilecek bir şey yok."
+      },
+      "timeout": {
+        "title": "Henüz hiçbir şey gelmedi",
+        "description": "Son {minutes} dakikada hiçbir istasyon veri göndermedi.{key_hint_extra}\n\nOlağan nedenler, istasyonun ulaşamadığı bir adres, basılmamış **Confirm & Exit** ya da HTTPS isteyen 3.02 ve sonrası bellenimdir.\n\nYönlendirilecek adresler:\n{urls}\nGönderimleri bekleyen uç noktalar:\n{endpoints}\n\nYine de bitirmek için İleri düğmesine basın — kurulum korunur, uç noktalar gerçekten dinlemeye başlar ve bir istasyon ortaya çıkana dek bir onarım sizi buraya geri getirir."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Zaten yapılandırıldı. Tek bir örnek tüm hava istasyonlarına hizmet eder."
+    },
+    "progress": {
+      "waiting_for_station": "İstasyonunuzun ilk gönderimi bekleniyor…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Kişisel hava istasyonu",
+        "menu_options": {
+          "options": "Ayarlar",
+          "instructions": "Bir istasyonu Home Assistant'a nasıl yönlendirirsiniz"
+        }
+      },
+      "options": {
+        "title": "Kişisel hava istasyonu",
+        "description": "Hava istasyonlarınızın verilerinin reddedilmemesi için göndermesi gereken istasyon anahtarını buraya girin. Alanı boş bırakırsanız tüm istekler kabul edilir.",
+        "data": {
+          "password": "İstasyon anahtarı",
+          "availability_timeout": "Şu süre sonra kullanılamaz olarak işaretle (dakika)",
+          "debug": "Gelen her isteği günlüğe kaydet"
+        },
+        "data_description": {
+          "availability_timeout": "Bir istasyonun sensörleri kullanılamaz olarak işaretlenmeden önce ne kadar sessiz kalabileceği. 0 hiçbir zaman işaretleme anlamına gelir.",
+          "debug": "Her isteğin tüm içeriğini Home Assistant günlüğüne yazar. Bir istasyonu kurarken yararlı, sonrasında gürültülü."
+        }
+      },
+      "station": {
+        "title": "5 adımdan 1. adım — istasyonunuz",
+        "description": "{image}\n\nHava istasyonunuz kendi cihazlarını ve algılayıcılarını kendisi oluşturur, dolayısıyla bu tarafta eklenecek bir şey yok. Aşağıdakiler istasyonun uygulamasına girilecek olanlardır.\n\nUygulamayı açın, istasyonun bellenimi güncel mi diye bakın, sonra ayarlarını açın."
+      },
+      "settings": {
+        "title": "5 adımdan 2. adım — hava servisi",
+        "description": "{image}\n\n**Weather server** öğesini seçin."
+      },
+      "server": {
+        "title": "5 adımdan 3. adım — başka sunucu",
+        "description": "{image}\n\n**Other Server** öğesini seçin."
+      },
+      "form": {
+        "title": "5 adımdan 4. adım — sunucu ayarları",
+        "description": "{image}\n\nFormu doldurun, sonra **Save** düğmesine basın.\n\n**URL**\n{urls}\n`http://` veya `https://` olmadan. İstasyonunuzun kendi ağınızda ulaşabileceği bir adres kullanın — bunun için Home Assistant'ı internete açmanın hiçbir nedeni yok. İstasyonunuz adları çözemiyorsa IP adresini yazın.\n\n**Station ID** — ne isterseniz. Home Assistant'ta cihazın adı bu olur.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 dakika iyi bir değerdir.\n\n**API type** — *WSLink API*. *WUnderground API* seçeneğini yalnızca istasyonunuz WSLink sunmuyorsa seçin: yarısı kadar ölçüm ve yalnızca dört kanal taşır.\n\n**Upload** — açık bırakın.\n\n> ⏱️ Bu ekranda oyalanırsanız bazı istasyonlar Wi-Fi bağlantısını yitirir. Adresi hazır tutun, girin ve kaydedin."
+      },
+      "confirm": {
+        "title": "5 adımdan 5. adım — confirm & exit",
+        "description": "{image}\n\nGeri dönün, sonra **Confirm & Exit** düğmesine basın.\n\n> ⚠️ **Ayarları istasyona yazan şey Confirm & Exit'tir.** Yalnızca kaydetmek hiçbir şeyi değiştirmez.\n\nBunu yaptığınızda İleri düğmesine basın."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Hava istasyonu reddedildi: yanlış istasyon anahtarı",
+      "description": "{ip} adresindeki bir hava istasyonu, beklenen istasyon anahtarını göndermeden `{station_id}` olarak veri göndermeye çalıştı.\n\nİstasyonda veya WSLink uygulamasında ayarlanan anahtarın bu entegrasyondakiyle eşleştiğini kontrol edin. Bu mesaj, {ip} adresinden gelen bir istek kabul edilir edilmez kendiliğinden kaybolur."
+    },
+    "missing_device_id": {
+      "title": "Hava istasyonu reddedildi: istasyon tanımlayıcısı yok",
+      "description": "{ip} adresindeki bir hava istasyonu, istasyon tanımlayıcısı olmadan veri gönderdi.\n\nWSLink uygulamasında bir Sender ID veya istasyon yapılandırmasında bir ID parametresi ayarlayın. Bu mesaj, {ip} adresinden gelen bir istek kabul edilir edilmez kendiliğinden kaybolur."
+    },
+    "legacy_entity_ids": {
+      "title": "Varlık kimlikleri istasyon adını yineliyor",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Varlık kimliklerini kısaltın",
+            "description": "1.0.8 sürümüne kadar bu entegrasyon, istasyon adını iki kez taşıyan varlık kimlikleri oluşturuyordu; örneğin `{example_old}`. Yeni istasyonlar artık böyle yapmıyor.\n\n**{count} varlık** yeniden adlandırılabilir, örneğin `{example_new}` olarak.\n\nGeçmiş ve uzun vadeli istatistikler yeniden adlandırmayı otomatik olarak izler. **Otomasyonlar, betikler, sahneler ve panolar izlemez** — eski kimliklere atıfta bulunan her şeyi kendiniz güncellemeniz gerekir.\n\nOlduğu gibi bırakmayı tercih ederseniz bu onarımı yok sayın."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Bağlantı, sızıntı ve pil değerleri hâlâ sayı",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "İkili sensörlere dönüştür",
+            "description": "Bağlantı, su sızıntısı ve pil değerleri 1 veya 0 olarak gönderilir. 1.0.8 sürümüne kadar `{example}` gibi sayısal algılayıcılar olarak sunuluyorlardı; bunlar Home Assistant'ın standart sızıntı, bağlantı ve düşük pil kartlarıyla kullanılamaz. Yeni istasyonlar **Islak / Kuru**, **Bağlı / Bağlantı yok** ve **Açık / Kapalı** gösteren ikili algılayıcılar alır.\n\n**{count} varlık** dönüştürülebilir. Hava kalitesi algılayıcılarının 0~5 pil düzeyleri yüzdesini korur: altı basamak, bir açık/kapalının taşıyabileceğinden fazladır.\n\nPlatform değiştirmek bir yeniden adlandırma değildir: eski varlıklar kaldırılır ve `binary_sensor` olarak yeniden oluşturulur. **Kaydedilmiş geçmişleri kaybolur** — bu değerlerin uzun vadeli istatistiği yoktur, dolayısıyla yalnızca ham geçmiş etkilenir — ve **bunlara işaret eden otomasyonlar, betikler, sahneler ve panolar güncellenmelidir**. Yeni varlıklar istasyonun bir sonraki gönderiminde belirir.\n\nOnları olduğu gibi bırakmayı yeğlerseniz bu onarımı yok sayın."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Henüz hiçbir hava istasyonu bir şey göndermedi",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Hava istasyonunuzu kurun",
+            "description": "Cihazları ve sensörleri oluşturan hava istasyonunuzdur — burada eklenecek bir şey yok.\n\nİstasyonun uygulamasında istasyonunuzu açın, ardından **Settings → Weather server → Other Server** yolunu izleyip doldurun:\n\n**URL**\n{urls}\n`http://` veya `https://` olmadan. İstasyonunuzun kendi ağınızda ulaşabileceği bir adres kullanın — bunun için Home Assistant'ı internete açmanın hiçbir gerekçesi yok. İstasyonunuz adları çözemiyorsa IP adresini yazın.\n\n**Station ID** — ne isterseniz. Home Assistant'ta cihaz adı olur.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 dakika iyi bir değerdir.\n\n**API type** — *WSLink API*.\n\n**Upload** — açık bırakın.\n\n**Save** tuşuna basın, geri dönün, sonra **Confirm & Exit** tuşuna basın.\n\n> ⚠️ **Ayarları istasyona yazan Confirm & Exit'tir.** Yalnızca kaydetmek hiçbir şeyi değiştirmez. Sensörleriniz bir saniye sonra görünür.\n\nDinleyen uç noktalar:\n{endpoints}"
+          },
+          "received": {
+            "title": "İstasyonunuz ulaştı",
+            "description": "**{station}** ilk gönderimini yaptı. Sensörleri şimdi oluşturuluyor, istasyon bildirdikçe yenileri eklenecek.\n\nBu mesaj bir daha görünmeyecek."
+          },
+          "timeout": {
+            "title": "Henüz bir şey alınmadı",
+            "description": "{minutes} dakikada hiçbir gönderim gelmedi.\n\nOlasılık sırasına göre:\n\n  - **Confirm & Exit tuşuna bastınız mı?** Yalnızca sunucu ekranını kaydetmek istasyona hiçbir şey yazmaz.\n  - **URL** {urls_inline} olmalı, `http://` olmadan ve istasyonun ağınızda erişebileceği şekilde.\n  - O ekranda **Upload** açık olmalı.\n  - **3.02** ve sonrası bazı Bresser üretici yazılımları düz HTTP'yi reddeder ve HTTPS sunan bir adres ister.\n  - Gönderim aralığı basitçe bekleme süresinden uzun olabilir.\n  - **İstasyon anahtarı**: {key_hint}.\n\nİstasyon Home Assistant'a ulaştı ama geri çevrildiyse, bu ayrıca **Ayarlar → Sistem → Onarımlar** bölümünde bildirilir.\n\nKapatabilirsiniz. Bir istasyon görünene kadar burada kalır ve yeniden açmak beklemeyi baştan başlatır."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "İstasyonunuzun ilk gönderimi bekleniyor…"
+        },
+        "abort": {
+          "not_received": "Henüz bir şey gelmedi, bu yüzden açık bırakılıyor. Bir istasyon görünene kadar Onarımlar'da kalır ve yeniden açıp tekrar bekleyebilirsiniz."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "{station} istasyonu atılan ölçümler gönderiyor",
+      "description": "**{station}** istasyonundan gelen **{count} parametre** tanınmıyor, bu yüzden değerleri her gönderimde atılıyor:\n\n{parameters}\n\nOlağan neden, istasyonun protokolünün taşıyabileceğinden fazlasını bildirmesidir. Weather Underground'da ek algılayıcılar için yalnızca **4 yer** vardır; istasyonunuz *API type* olarak **WSLink** sunuyorsa, ona geçmek yedi kanalı ve aşağı yukarı iki katı ölçümü açar.\n\nNeden bu değilse, bir hata bildiriminin ihtiyaç duyduğu tam olarak bu parametre adlarıdır: [sorun izleyicide]({issue_tracker}) bir tane açın, böylece eklenebilirler.\n\nBunu göz ardı da edebilirsiniz — bozulan bir şey yok, yalnızca bu belirli değerler ulaşmıyor."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "{device} istasyonu henüz bir rüzgâr yönü göndermedi, bu yüzden kalibre edilecek bir şey yok. Bir sonraki gönderimi bekleyip tekrar deneyin."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Mutlak hava basıncı"
+      },
+      "apiver": {
+        "name": "API sürümü"
+      },
+      "aqbc": {
+        "name": "Siyah karbon"
+      },
+      "aqco": {
+        "name": "Karbon monoksit"
+      },
+      "aqcot": {
+        "name": "Eser miktarda karbon monoksit"
+      },
+      "aqec": {
+        "name": "Elementer karbon"
+      },
+      "aqno": {
+        "name": "Azot monoksit"
+      },
+      "aqno2": {
+        "name": "NO2 X hesaplanan"
+      },
+      "aqno2t": {
+        "name": "Azot dioksit"
+      },
+      "aqno2y": {
+        "name": "NO2 Y hesaplanan"
+      },
+      "aqno3": {
+        "name": "NO3 iyonu"
+      },
+      "aqnox": {
+        "name": "Azot oksitler"
+      },
+      "aqnoy": {
+        "name": "Toplam reaktif azot"
+      },
+      "aqoc": {
+        "name": "Organik karbon"
+      },
+      "aqozone": {
+        "name": "Ozon"
+      },
+      "aqpm10": {
+        "name": "PM10 kütlesi"
+      },
+      "aqpm2_5": {
+        "name": "PM2.5 kütlesi"
+      },
+      "aqso2": {
+        "name": "Kükürt dioksit"
+      },
+      "aqso2t": {
+        "name": "Eser miktarda kükürt dioksit"
+      },
+      "aqso4": {
+        "name": "SO4 iyonu"
+      },
+      "aquv_aeth": {
+        "name": "Etalometre kanal 2"
+      },
+      "baromin": {
+        "name": "Basınç"
+      },
+      "clouds": {
+        "name": "Bulut örtüsü"
+      },
+      "dailyrainin": {
+        "name": "Günlük yağmur"
+      },
+      "dewptf": {
+        "name": "Çiy noktası"
+      },
+      "humidity": {
+        "name": "Dış nem"
+      },
+      "inbat": {
+        "name": "Konsol pil seviyesi"
+      },
+      "indoorhumidity": {
+        "name": "İç nem"
+      },
+      "indoortempf": {
+        "name": "İç sıcaklık"
+      },
+      "inhum": {
+        "name": "İç nem"
+      },
+      "intem": {
+        "name": "İç sıcaklık"
+      },
+      "last_update": {
+        "name": "Son alım"
+      },
+      "leafwetness": {
+        "name": "Yaprak ıslaklığı"
+      },
+      "leafwetness2": {
+        "name": "CH2 yaprak ıslaklığı"
+      },
+      "lowbatt": {
+        "name": "Düşük pil"
+      },
+      "monthlyrainin": {
+        "name": "Aylık yağmur"
+      },
+      "rainin": {
+        "name": "Saatlik yağmur"
+      },
+      "rbar": {
+        "name": "Bağıl hava basıncı"
+      },
+      "rtfreq": {
+        "name": "Güncelleme sıklığı"
+      },
+      "soilmoisture": {
+        "name": "Toprak nemi"
+      },
+      "soilmoisture2": {
+        "name": "CH2 toprak nemi"
+      },
+      "soilmoisture3": {
+        "name": "CH3 toprak nemi"
+      },
+      "soilmoisture4": {
+        "name": "CH4 toprak nemi"
+      },
+      "soiltemp2f": {
+        "name": "CH2 toprak sıcaklığı"
+      },
+      "soiltemp3f": {
+        "name": "CH3 toprak sıcaklığı"
+      },
+      "soiltemp4f": {
+        "name": "CH4 toprak sıcaklığı"
+      },
+      "soiltempf": {
+        "name": "Toprak sıcaklığı"
+      },
+      "solarradiation": {
+        "name": "Güneş ışınımı"
+      },
+      "t10bat": {
+        "name": "CO2 sensörü pil seviyesi"
+      },
+      "t10cn": {
+        "name": "CO2 sensörü bağlantı durumu"
+      },
+      "t10co2": {
+        "name": "CO2 yoğunluğu"
+      },
+      "t11bat": {
+        "name": "CO sensörü pil seviyesi"
+      },
+      "t11cn": {
+        "name": "CO sensörü bağlantı durumu"
+      },
+      "t11co": {
+        "name": "CO yoğunluğu"
+      },
+      "t1bat": {
+        "name": "Dış sensör pil durumu"
+      },
+      "t1chill": {
+        "name": "Rüzgâr soğutma sıcaklığı"
+      },
+      "t1cn": {
+        "name": "Dış sensör bağlantı durumu"
+      },
+      "t1dew": {
+        "name": "Çiy noktası sıcaklığı"
+      },
+      "t1feels": {
+        "name": "Hissedilen sıcaklık"
+      },
+      "t1heat": {
+        "name": "Sıcaklık indeksi"
+      },
+      "t1hum": {
+        "name": "Dış nem"
+      },
+      "t1raindy": {
+        "name": "Günlük yağış"
+      },
+      "t1rainhr": {
+        "name": "Saatlik yağış"
+      },
+      "t1rainmth": {
+        "name": "Aylık yağış"
+      },
+      "t1rainra": {
+        "name": "Yağmur şiddeti"
+      },
+      "t1rainwy": {
+        "name": "Haftalık yağış"
+      },
+      "t1rainyr": {
+        "name": "Yıllık yağış"
+      },
+      "t1solrad": {
+        "name": "Işık şiddeti"
+      },
+      "t1tem": {
+        "name": "Dış sıcaklık"
+      },
+      "t1uvi": {
+        "name": "UV indeksi"
+      },
+      "t1wbgt": {
+        "name": "WBGT sıcaklığı"
+      },
+      "t1wdir": {
+        "name": "Rüzgâr yönü"
+      },
+      "t1wgust": {
+        "name": "Rüzgâr hamlesi"
+      },
+      "t1ws": {
+        "name": "Rüzgâr hızı"
+      },
+      "t1ws10mav": {
+        "name": "Rüzgâr hızı 10 dk ort."
+      },
+      "t234c1bat": {
+        "name": "CH1 pil durumu"
+      },
+      "t234c1cn": {
+        "name": "CH1 bağlantı durumu"
+      },
+      "t234c1hum": {
+        "name": "CH1 nem"
+      },
+      "t234c1tem": {
+        "name": "CH1 sıcaklık"
+      },
+      "t234c1tp": {
+        "name": "CH1 sensör tipi"
+      },
+      "t234c2bat": {
+        "name": "CH2 pil durumu"
+      },
+      "t234c2cn": {
+        "name": "CH2 bağlantı durumu"
+      },
+      "t234c2hum": {
+        "name": "CH2 nem"
+      },
+      "t234c2tem": {
+        "name": "CH2 sıcaklık"
+      },
+      "t234c2tp": {
+        "name": "CH2 sensör tipi"
+      },
+      "t234c3bat": {
+        "name": "CH3 pil durumu"
+      },
+      "t234c3cn": {
+        "name": "CH3 bağlantı durumu"
+      },
+      "t234c3hum": {
+        "name": "CH3 nem"
+      },
+      "t234c3tem": {
+        "name": "CH3 sıcaklık"
+      },
+      "t234c3tp": {
+        "name": "CH3 sensör tipi"
+      },
+      "t234c4bat": {
+        "name": "CH4 pil durumu"
+      },
+      "t234c4cn": {
+        "name": "CH4 bağlantı durumu"
+      },
+      "t234c4hum": {
+        "name": "CH4 nem"
+      },
+      "t234c4tem": {
+        "name": "CH4 sıcaklık"
+      },
+      "t234c4tp": {
+        "name": "CH4 sensör tipi"
+      },
+      "t234c5bat": {
+        "name": "CH5 pil durumu"
+      },
+      "t234c5cn": {
+        "name": "CH5 bağlantı durumu"
+      },
+      "t234c5hum": {
+        "name": "CH5 nem"
+      },
+      "t234c5tem": {
+        "name": "CH5 sıcaklık"
+      },
+      "t234c5tp": {
+        "name": "CH5 sensör tipi"
+      },
+      "t234c6bat": {
+        "name": "CH6 pil durumu"
+      },
+      "t234c6cn": {
+        "name": "CH6 bağlantı durumu"
+      },
+      "t234c6hum": {
+        "name": "CH6 nem"
+      },
+      "t234c6tem": {
+        "name": "CH6 sıcaklık"
+      },
+      "t234c6tp": {
+        "name": "CH6 sensör tipi"
+      },
+      "t234c7bat": {
+        "name": "CH7 pil durumu"
+      },
+      "t234c7cn": {
+        "name": "CH7 bağlantı durumu"
+      },
+      "t234c7hum": {
+        "name": "CH7 nem"
+      },
+      "t234c7tem": {
+        "name": "CH7 sıcaklık"
+      },
+      "t234c7tp": {
+        "name": "CH7 sensör tipi"
+      },
+      "t5ls1dtc": {
+        "name": "1 günde toplam yıldırım"
+      },
+      "t5ls1htc": {
+        "name": "1 saatte toplam yıldırım"
+      },
+      "t5ls30mtc": {
+        "name": "Son 30 dakikadaki yıldırımlar"
+      },
+      "t5ls5mtc": {
+        "name": "Son 5 dakikadaki yıldırımlar"
+      },
+      "t5lsbat": {
+        "name": "Yıldırım sensörü pil durumu"
+      },
+      "t5lscn": {
+        "name": "Yıldırım sensörü bağlantı durumu"
+      },
+      "t5lsf": {
+        "name": "Son bir saatteki yıldırımlar"
+      },
+      "t5lskm": {
+        "name": "Yıldırım mesafesi"
+      },
+      "t5lst": {
+        "name": "Son yıldırım zamanı"
+      },
+      "t6c1bat": {
+        "name": "CH1 kaçak sensörü pil durumu"
+      },
+      "t6c1cn": {
+        "name": "CH1 kaçak sensörü bağlantı durumu"
+      },
+      "t6c1wls": {
+        "name": "CH1 su kaçağı durumu"
+      },
+      "t6c2bat": {
+        "name": "CH2 kaçak sensörü pil durumu"
+      },
+      "t6c2cn": {
+        "name": "CH2 kaçak sensörü bağlantı durumu"
+      },
+      "t6c2wls": {
+        "name": "CH2 su kaçağı durumu"
+      },
+      "t6c3bat": {
+        "name": "CH3 kaçak sensörü pil durumu"
+      },
+      "t6c3cn": {
+        "name": "CH3 kaçak sensörü bağlantı durumu"
+      },
+      "t6c3wls": {
+        "name": "CH3 su kaçağı durumu"
+      },
+      "t6c4bat": {
+        "name": "CH4 kaçak sensörü pil durumu"
+      },
+      "t6c4cn": {
+        "name": "CH4 kaçak sensörü bağlantı durumu"
+      },
+      "t6c4wls": {
+        "name": "CH4 su kaçağı durumu"
+      },
+      "t6c5bat": {
+        "name": "CH5 kaçak sensörü pil durumu"
+      },
+      "t6c5cn": {
+        "name": "CH5 kaçak sensörü bağlantı durumu"
+      },
+      "t6c5wls": {
+        "name": "CH5 su kaçağı durumu"
+      },
+      "t6c6bat": {
+        "name": "CH6 kaçak sensörü pil durumu"
+      },
+      "t6c6cn": {
+        "name": "CH6 kaçak sensörü bağlantı durumu"
+      },
+      "t6c6wls": {
+        "name": "CH6 su kaçağı durumu"
+      },
+      "t6c7bat": {
+        "name": "CH7 kaçak sensörü pil durumu"
+      },
+      "t6c7cn": {
+        "name": "CH7 kaçak sensörü bağlantı durumu"
+      },
+      "t6c7wls": {
+        "name": "CH7 su kaçağı durumu"
+      },
+      "t8bat": {
+        "name": "Partikül sensörü pil seviyesi"
+      },
+      "t8cn": {
+        "name": "Partikül sensörü bağlantı durumu"
+      },
+      "t8pm10": {
+        "name": "PM10 yoğunluğu"
+      },
+      "t8pm10ai": {
+        "name": "PM10 AQI"
+      },
+      "t8pm25": {
+        "name": "PM2.5 yoğunluğu"
+      },
+      "t8pm25ai": {
+        "name": "PM2.5 AQI"
+      },
+      "t9bat": {
+        "name": "HCHO/UOB sensörü pil seviyesi"
+      },
+      "t9cn": {
+        "name": "HCHO/UOB sensörü bağlantı durumu"
+      },
+      "t9hcho": {
+        "name": "HCHO yoğunluğu"
+      },
+      "t9voclv": {
+        "name": "UOB seviyesi",
+        "state": {
+          "very_low": "Çok düşük",
+          "low": "Düşük",
+          "moderate": "Orta",
+          "high": "Yüksek",
+          "very_high": "Çok yüksek"
+        }
+      },
+      "tempf": {
+        "name": "Dış sıcaklık"
+      },
+      "uv": {
+        "name": "UV indeksi"
+      },
+      "visibility": {
+        "name": "Görüş mesafesi"
+      },
+      "weeklyrainin": {
+        "name": "Haftalık yağmur"
+      },
+      "wind_direction_raw": {
+        "name": "Rüzgâr yönü (ham)"
+      },
+      "windchillf": {
+        "name": "Rüzgâr soğutması"
+      },
+      "winddir": {
+        "name": "Rüzgâr yönü"
+      },
+      "winddir_avg2m": {
+        "name": "Rüzgâr yönü 2 dk ort."
+      },
+      "windgustdir": {
+        "name": "Hamle yönü"
+      },
+      "windgustdir_10m": {
+        "name": "Hamle yönü 10 dk ort."
+      },
+      "windgustmph": {
+        "name": "Rüzgâr hamlesi"
+      },
+      "windgustmph_10m": {
+        "name": "Hamle hızı 10 dk ort."
+      },
+      "windspdmph_avg2m": {
+        "name": "Rüzgâr hızı 2 dk ort."
+      },
+      "windspeedmph": {
+        "name": "Rüzgâr hızı"
+      },
+      "yearlyrainin": {
+        "name": "Yıllık yağmur"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Konsol pil seviyesi"
+      },
+      "station_online": {
+        "name": "İstasyon çevrimiçi"
+      },
+      "t10cn": {
+        "name": "CO2 sensörü bağlantı durumu"
+      },
+      "t11cn": {
+        "name": "CO sensörü bağlantı durumu"
+      },
+      "t1bat": {
+        "name": "Dış sensör pil durumu"
+      },
+      "t1cn": {
+        "name": "Dış sensör bağlantı durumu"
+      },
+      "t234c1bat": {
+        "name": "CH1 pil durumu"
+      },
+      "t234c1cn": {
+        "name": "CH1 bağlantı durumu"
+      },
+      "t234c2bat": {
+        "name": "CH2 pil durumu"
+      },
+      "t234c2cn": {
+        "name": "CH2 bağlantı durumu"
+      },
+      "t234c3bat": {
+        "name": "CH3 pil durumu"
+      },
+      "t234c3cn": {
+        "name": "CH3 bağlantı durumu"
+      },
+      "t234c4bat": {
+        "name": "CH4 pil durumu"
+      },
+      "t234c4cn": {
+        "name": "CH4 bağlantı durumu"
+      },
+      "t234c5bat": {
+        "name": "CH5 pil durumu"
+      },
+      "t234c5cn": {
+        "name": "CH5 bağlantı durumu"
+      },
+      "t234c6bat": {
+        "name": "CH6 pil durumu"
+      },
+      "t234c6cn": {
+        "name": "CH6 bağlantı durumu"
+      },
+      "t234c7bat": {
+        "name": "CH7 pil durumu"
+      },
+      "t234c7cn": {
+        "name": "CH7 bağlantı durumu"
+      },
+      "t5lsbat": {
+        "name": "Yıldırım sensörü pil durumu"
+      },
+      "t5lscn": {
+        "name": "Yıldırım sensörü bağlantı durumu"
+      },
+      "t6c1bat": {
+        "name": "CH1 kaçak sensörü pil durumu"
+      },
+      "t6c1cn": {
+        "name": "CH1 kaçak sensörü bağlantı durumu"
+      },
+      "t6c1wls": {
+        "name": "CH1 su kaçağı durumu"
+      },
+      "t6c2bat": {
+        "name": "CH2 kaçak sensörü pil durumu"
+      },
+      "t6c2cn": {
+        "name": "CH2 kaçak sensörü bağlantı durumu"
+      },
+      "t6c2wls": {
+        "name": "CH2 su kaçağı durumu"
+      },
+      "t6c3bat": {
+        "name": "CH3 kaçak sensörü pil durumu"
+      },
+      "t6c3cn": {
+        "name": "CH3 kaçak sensörü bağlantı durumu"
+      },
+      "t6c3wls": {
+        "name": "CH3 su kaçağı durumu"
+      },
+      "t6c4bat": {
+        "name": "CH4 kaçak sensörü pil durumu"
+      },
+      "t6c4cn": {
+        "name": "CH4 kaçak sensörü bağlantı durumu"
+      },
+      "t6c4wls": {
+        "name": "CH4 su kaçağı durumu"
+      },
+      "t6c5bat": {
+        "name": "CH5 kaçak sensörü pil durumu"
+      },
+      "t6c5cn": {
+        "name": "CH5 kaçak sensörü bağlantı durumu"
+      },
+      "t6c5wls": {
+        "name": "CH5 su kaçağı durumu"
+      },
+      "t6c6bat": {
+        "name": "CH6 kaçak sensörü pil durumu"
+      },
+      "t6c6cn": {
+        "name": "CH6 kaçak sensörü bağlantı durumu"
+      },
+      "t6c6wls": {
+        "name": "CH6 su kaçağı durumu"
+      },
+      "t6c7bat": {
+        "name": "CH7 kaçak sensörü pil durumu"
+      },
+      "t6c7cn": {
+        "name": "CH7 kaçak sensörü bağlantı durumu"
+      },
+      "t6c7wls": {
+        "name": "CH7 su kaçağı durumu"
+      },
+      "t8cn": {
+        "name": "Partikül sensörü bağlantı durumu"
+      },
+      "t9cn": {
+        "name": "HCHO/UOB sensörü bağlantı durumu"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Rüzgâr yönü sapması"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Sapmayı sıfırla"
+      },
+      "set_north": {
+        "name": "Kuzeyi mevcut değere ayarla"
+      }
+    }
+  }
+}

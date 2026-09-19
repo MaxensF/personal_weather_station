@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Osobista stacja pogodowa",
+        "description": "Ustaw tutaj klucz stacji, który Twoje stacje pogodowe muszą przesyłać, aby ich dane nie były odrzucane. Jeśli pozostawisz pole puste, wszystkie żądania będą akceptowane.",
+        "data": {
+          "password": "Klucz stacji"
+        }
+      },
+      "station": {
+        "title": "Krok 1 z 5 — twoja stacja",
+        "description": "{image}\n\nTwoja stacja pogodowa sama tworzy swoje urządzenia i czujniki, więc nie ma tu nic do dodania. Poniżej znajduje się to, co należy wpisać w aplikacji stacji.\n\nOtwórz aplikację, sprawdź, czy oprogramowanie układowe stacji jest aktualne, a następnie otwórz jej ustawienia."
+      },
+      "settings": {
+        "title": "Krok 2 z 5 — usługa pogodowa",
+        "description": "{image}\n\nWybierz **Weather server**."
+      },
+      "server": {
+        "title": "Krok 3 z 5 — inny serwer",
+        "description": "{image}\n\nWybierz **Other Server**."
+      },
+      "form": {
+        "title": "Krok 4 z 5 — ustawienia serwera",
+        "description": "{image}\n\nWypełnij formularz, a potem naciśnij **Save**.\n\n**URL**\n{urls}\nBez `http://` ani `https://`. Użyj adresu, do którego stacja dosięgnie w twojej własnej sieci — nie ma żadnego powodu, by z tego powodu wystawiać Home Assistanta do internetu. Jeśli stacja nie rozwiązuje nazw, wpisz adres IP.\n\n**Station ID** — cokolwiek zechcesz. To stanie się nazwą urządzenia w Home Assistancie.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minuta to dobra wartość.\n\n**API type** — *WSLink API*. *WUnderground API* wybierz tylko wtedy, gdy twoja stacja nie oferuje WSLink: przenosi o połowę mniej odczytów i tylko cztery kanały.\n\n**Upload** — zostaw włączone.\n\n> ⏱️ Niektóre stacje tracą Wi-Fi, jeśli zbyt długo zwlekasz na tym ekranie. Miej adres pod ręką, wpisz go i zapisz."
+      },
+      "confirm": {
+        "title": "Krok 5 z 5 — confirm & exit",
+        "description": "{image}\n\nWróć, a następnie naciśnij **Confirm & Exit**.\n\n> ⚠️ **To Confirm & Exit zapisuje ustawienia w stacji.** Samo zapisanie niczego nie zmienia.\n\nNaciśnij Dalej, gdy to zrobisz."
+      },
+      "received": {
+        "title": "Twoja stacja rozmawia z Home Assistantem",
+        "description": "**{station}** właśnie wysłała swoją pierwszą partię danych.\n\nJej czujniki pojawią się przy następnej i są tworzone z tego, co stacja rzeczywiście wysyła — tutaj nie ma czego wybierać."
+      },
+      "timeout": {
+        "title": "Nic jeszcze nie dotarło",
+        "description": "W ciągu ostatnich {minutes} minut żadna stacja niczego nie wysłała.{key_hint_extra}\n\nZwykłe przyczyny to adres, do którego stacja nie dosięga, nienaciśnięty **Confirm & Exit**, albo oprogramowanie od wersji 3.02 wzwyż, które wymaga HTTPS.\n\nAdresy, na które ją skierować, to:\n{urls}\nPunkty nasłuchujące wysyłek to:\n{endpoints}\n\nNaciśnij Dalej, aby mimo to zakończyć — konfiguracja zostaje zachowana, punkty naprawdę zaczynają nasłuchiwać, a naprawa sprowadzi cię tutaj z powrotem, dopóki jakaś stacja się nie pojawi."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Już skonfigurowano. Jedna instancja obsługuje wszystkie stacje pogodowe."
+    },
+    "progress": {
+      "waiting_for_station": "Oczekiwanie na pierwszą wysyłkę twojej stacji…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Osobista stacja pogodowa",
+        "menu_options": {
+          "options": "Ustawienia",
+          "instructions": "Jak skierować stację na Home Assistant"
+        }
+      },
+      "options": {
+        "title": "Osobista stacja pogodowa",
+        "description": "Ustaw tutaj klucz stacji, który Twoje stacje pogodowe muszą przesyłać, aby ich dane nie były odrzucane. Jeśli pozostawisz pole puste, wszystkie żądania będą akceptowane.",
+        "data": {
+          "password": "Klucz stacji",
+          "availability_timeout": "Oznacz jako niedostępne po (minutach)",
+          "debug": "Rejestruj każde przychodzące żądanie"
+        },
+        "data_description": {
+          "availability_timeout": "Jak długo stacja może milczeć, zanim jej czujniki zostaną oznaczone jako niedostępne. 0 oznacza, że nigdy nie będą oznaczane.",
+          "debug": "Zapisuje pełną treść każdego żądania w dzienniku Home Assistant. Przydatne podczas konfigurowania stacji, uciążliwe później."
+        }
+      },
+      "station": {
+        "title": "Krok 1 z 5 — twoja stacja",
+        "description": "{image}\n\nTwoja stacja pogodowa sama tworzy swoje urządzenia i czujniki, więc nie ma tu nic do dodania. Poniżej znajduje się to, co należy wpisać w aplikacji stacji.\n\nOtwórz aplikację, sprawdź, czy oprogramowanie układowe stacji jest aktualne, a następnie otwórz jej ustawienia."
+      },
+      "settings": {
+        "title": "Krok 2 z 5 — usługa pogodowa",
+        "description": "{image}\n\nWybierz **Weather server**."
+      },
+      "server": {
+        "title": "Krok 3 z 5 — inny serwer",
+        "description": "{image}\n\nWybierz **Other Server**."
+      },
+      "form": {
+        "title": "Krok 4 z 5 — ustawienia serwera",
+        "description": "{image}\n\nWypełnij formularz, a potem naciśnij **Save**.\n\n**URL**\n{urls}\nBez `http://` ani `https://`. Użyj adresu, do którego stacja dosięgnie w twojej własnej sieci — nie ma żadnego powodu, by z tego powodu wystawiać Home Assistanta do internetu. Jeśli stacja nie rozwiązuje nazw, wpisz adres IP.\n\n**Station ID** — cokolwiek zechcesz. To stanie się nazwą urządzenia w Home Assistancie.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minuta to dobra wartość.\n\n**API type** — *WSLink API*. *WUnderground API* wybierz tylko wtedy, gdy twoja stacja nie oferuje WSLink: przenosi o połowę mniej odczytów i tylko cztery kanały.\n\n**Upload** — zostaw włączone.\n\n> ⏱️ Niektóre stacje tracą Wi-Fi, jeśli zbyt długo zwlekasz na tym ekranie. Miej adres pod ręką, wpisz go i zapisz."
+      },
+      "confirm": {
+        "title": "Krok 5 z 5 — confirm & exit",
+        "description": "{image}\n\nWróć, a następnie naciśnij **Confirm & Exit**.\n\n> ⚠️ **To Confirm & Exit zapisuje ustawienia w stacji.** Samo zapisanie niczego nie zmienia.\n\nNaciśnij Dalej, gdy to zrobisz."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Stacja pogodowa odrzucona: nieprawidłowy klucz stacji",
+      "description": "Stacja pogodowa pod adresem {ip} próbowała wysłać dane jako `{station_id}`, nie przesyłając oczekiwanego klucza stacji.\n\nSprawdź, czy klucz skonfigurowany w stacji lub w aplikacji WSLink zgadza się z ustawionym w tej integracji. Ten komunikat zniknie sam, gdy tylko żądanie z {ip} zostanie zaakceptowane."
+    },
+    "missing_device_id": {
+      "title": "Stacja pogodowa odrzucona: brak identyfikatora stacji",
+      "description": "Stacja pogodowa pod adresem {ip} wysłała dane bez identyfikatora stacji.\n\nUstaw Sender ID w aplikacji WSLink lub parametr ID w konfiguracji stacji. Ten komunikat zniknie sam, gdy tylko żądanie z {ip} zostanie zaakceptowane."
+    },
+    "legacy_entity_ids": {
+      "title": "Identyfikatory encji powtarzają nazwę stacji",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Skróć identyfikatory encji",
+            "description": "Do wersji 1.0.8 ta integracja tworzyła identyfikatory encji zawierające nazwę stacji dwukrotnie, jak `{example_old}`. Nowe stacje już tego nie robią.\n\n**{count} encji** można zmienić nazwę, na przykład na `{example_new}`.\n\nHistoria i statystyki długoterminowe podążają za zmianą nazwy automatycznie. **Automatyzacje, skrypty, sceny i pulpity — nie** — wszystko, co odwołuje się do starych identyfikatorów, musisz zaktualizować samodzielnie.\n\nJeśli wolisz zostawić je bez zmian, zignoruj tę naprawę."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Odczyty połączenia, wycieku i baterii wciąż są liczbami",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Przekształć w czujniki binarne",
+            "description": "Odczyty połączenia, wycieku wody i baterii są wysyłane jako 1 albo 0. Do wersji 1.0.8 wystawiano je jako czujniki liczbowe, na przykład `{example}`, których nie da się użyć ze standardowymi kartami wycieku, łączności i słabej baterii w Home Assistancie. Nowe stacje dostają czujniki binarne pokazujące **Mokro / Sucho**, **Połączono / Rozłączono** oraz **Włączone / Wyłączone**.\n\nMożna przekształcić **{count} encji**. Poziomy baterii 0~5 czujników jakości powietrza zachowują swój procent: sześć stopni to więcej, niż zdoła unieść włączone/wyłączone.\n\nZmiana platformy nie jest zmianą nazwy: stare encje zostają usunięte i utworzone na nowo jako `binary_sensor`. **Ich zapisana historia przepada** — te odczyty nie mają statystyk długoterminowych, więc dotyczy to wyłącznie historii surowej — a **automatyzacje, skrypty, sceny i pulpity, które na nie wskazują, trzeba zaktualizować**. Nowe encje pojawią się przy następnym wysłaniu ze stacji.\n\nJeśli wolisz zostawić je tak, jak są, zignoruj tę naprawę."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Żadna stacja pogodowa jeszcze nic nie wysłała",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Skonfiguruj swoją stację pogodową",
+            "description": "To Twoja stacja pogodowa tworzy urządzenia i czujniki — tutaj nie ma czego dodawać.\n\nW aplikacji stacji otwórz swoją stację, następnie **Settings → Weather server → Other Server**, i wypełnij:\n\n**URL**\n{urls}\nBez `http://` ani `https://`. Użyj adresu, do którego Twoja stacja dotrze w Twojej własnej sieci — nie ma żadnego powodu, by w tym celu wystawiać Home Assistant do internetu. Jeśli Twoja stacja nie rozwiązuje nazw, wpisz adres IP.\n\n**Station ID** — cokolwiek chcesz. Stanie się nazwą urządzenia w Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minuta to dobra wartość.\n\n**API type** — *WSLink API*.\n\n**Upload** — zostaw włączone.\n\nNaciśnij **Save**, wróć i naciśnij **Confirm & Exit**.\n\n> ⚠️ **To Confirm & Exit zapisuje ustawienia w stacji.** Samo zapisanie niczego nie zmienia. Twoje czujniki pojawią się sekundę później.\n\nNasłuchujące punkty końcowe:\n{endpoints}"
+          },
+          "received": {
+            "title": "Twoja stacja się przebiła",
+            "description": "**{station}** wysłała swoje pierwsze dane. Jej czujniki są właśnie tworzone, a kolejne pojawią się, gdy stacja je zgłosi.\n\nTa wiadomość już nie wróci."
+          },
+          "timeout": {
+            "title": "Nic jeszcze nie dotarło",
+            "description": "W ciągu {minutes} minut nie dotarła żadna wysyłka.\n\nWedług prawdopodobieństwa:\n\n  - **Czy nacisnąłeś Confirm & Exit?** Samo zapisanie ekranu serwera niczego nie zapisuje w stacji.\n  - **URL** musi być {urls_inline}, bez `http://`, i osiągalny dla stacji w Twojej sieci.\n  - **Upload** musi być włączony na tamtym ekranie.\n  - Niektóre firmware'y Bresser od **3.02** odrzucają zwykły HTTP i wymagają adresu obsługującego HTTPS.\n  - Odstęp wysyłki może być po prostu dłuższy niż czas oczekiwania.\n  - **Klucz stacji**: {key_hint}.\n\nJeśli stacja dotarła do Home Assistant, ale została odrzucona, zgłaszane jest to osobno w **Ustawienia → System → Naprawy**.\n\nMożesz zamknąć. Zostaje tutaj, dopóki stacja się nie pojawi, a ponowne otwarcie rozpoczyna oczekiwanie od nowa."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Oczekiwanie na pierwszą wysyłkę Twojej stacji…"
+        },
+        "abort": {
+          "not_received": "Nic jeszcze nie dotarło, więc pozostaje to otwarte. Zostaje w Naprawach, dopóki stacja się nie pojawi, i możesz otworzyć to ponownie, by znów poczekać."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "Stacja {station} wysyła odczyty, które są odrzucane",
+      "description": "**{count} parametrów** ze stacji **{station}** nie zostało rozpoznanych, więc ich wartości są odrzucane przy każdym wysłaniu:\n\n{parameters}\n\nZwykłą przyczyną jest stacja raportująca więcej, niż jest w stanie przenieść jej protokół. Weather Underground ma tylko **4 miejsca** na dodatkowe czujniki; jeśli Twoja stacja oferuje **WSLink** jako *API type*, przejście na niego udostępnia siedem kanałów i mniej więcej dwa razy więcej odczytów.\n\nJeśli przyczyna jest inna, to właśnie te nazwy parametrów są tym, czego potrzebuje zgłoszenie błędu: otwórz je w [systemie zgłoszeń]({issue_tracker}), a będzie można je dodać.\n\nMożna to też zignorować — nic nie jest zepsute, po prostu te konkretne wartości nie docierają."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "Stacja {device} nie przesłała jeszcze kierunku wiatru, więc nie ma do czego kalibrować. Poczekaj na następną wysyłkę i spróbuj ponownie."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Ciśnienie absolutne"
+      },
+      "apiver": {
+        "name": "Wersja API"
+      },
+      "aqbc": {
+        "name": "Sadza"
+      },
+      "aqco": {
+        "name": "Tlenek węgla"
+      },
+      "aqcot": {
+        "name": "Tlenek węgla w ilościach śladowych"
+      },
+      "aqec": {
+        "name": "Węgiel elementarny"
+      },
+      "aqno": {
+        "name": "Tlenek azotu"
+      },
+      "aqno2": {
+        "name": "NO2 X obliczone"
+      },
+      "aqno2t": {
+        "name": "Dwutlenek azotu"
+      },
+      "aqno2y": {
+        "name": "NO2 Y obliczone"
+      },
+      "aqno3": {
+        "name": "Jon NO3"
+      },
+      "aqnox": {
+        "name": "Tlenki azotu"
+      },
+      "aqnoy": {
+        "name": "Całkowity azot reaktywny"
+      },
+      "aqoc": {
+        "name": "Węgiel organiczny"
+      },
+      "aqozone": {
+        "name": "Ozon"
+      },
+      "aqpm10": {
+        "name": "Masa PM10"
+      },
+      "aqpm2_5": {
+        "name": "Masa PM2.5"
+      },
+      "aqso2": {
+        "name": "Dwutlenek siarki"
+      },
+      "aqso2t": {
+        "name": "Dwutlenek siarki w ilościach śladowych"
+      },
+      "aqso4": {
+        "name": "Jon SO4"
+      },
+      "aquv_aeth": {
+        "name": "Aethalometr kanał 2"
+      },
+      "baromin": {
+        "name": "Ciśnienie"
+      },
+      "clouds": {
+        "name": "Zachmurzenie"
+      },
+      "dailyrainin": {
+        "name": "Opad dobowy"
+      },
+      "dewptf": {
+        "name": "Punkt rosy"
+      },
+      "humidity": {
+        "name": "Wilgotność zewnętrzna"
+      },
+      "inbat": {
+        "name": "Poziom baterii konsoli"
+      },
+      "indoorhumidity": {
+        "name": "Wilgotność wewnętrzna"
+      },
+      "indoortempf": {
+        "name": "Temperatura wewnętrzna"
+      },
+      "inhum": {
+        "name": "Wilgotność wewnętrzna"
+      },
+      "intem": {
+        "name": "Temperatura wewnętrzna"
+      },
+      "last_update": {
+        "name": "Ostatni odbiór"
+      },
+      "leafwetness": {
+        "name": "Zwilżenie liści"
+      },
+      "leafwetness2": {
+        "name": "CH2 zwilżenie liści"
+      },
+      "lowbatt": {
+        "name": "Niski poziom baterii"
+      },
+      "monthlyrainin": {
+        "name": "Opad miesięczny"
+      },
+      "rainin": {
+        "name": "Opad godzinowy"
+      },
+      "rbar": {
+        "name": "Ciśnienie względne"
+      },
+      "rtfreq": {
+        "name": "Częstotliwość aktualizacji"
+      },
+      "soilmoisture": {
+        "name": "Wilgotność gleby"
+      },
+      "soilmoisture2": {
+        "name": "CH2 wilgotność gleby"
+      },
+      "soilmoisture3": {
+        "name": "CH3 wilgotność gleby"
+      },
+      "soilmoisture4": {
+        "name": "CH4 wilgotność gleby"
+      },
+      "soiltemp2f": {
+        "name": "CH2 temperatura gleby"
+      },
+      "soiltemp3f": {
+        "name": "CH3 temperatura gleby"
+      },
+      "soiltemp4f": {
+        "name": "CH4 temperatura gleby"
+      },
+      "soiltempf": {
+        "name": "Temperatura gleby"
+      },
+      "solarradiation": {
+        "name": "Promieniowanie słoneczne"
+      },
+      "t10bat": {
+        "name": "Poziom baterii czujnika CO2"
+      },
+      "t10cn": {
+        "name": "Stan połączenia czujnika CO2"
+      },
+      "t10co2": {
+        "name": "Stężenie CO2"
+      },
+      "t11bat": {
+        "name": "Poziom baterii czujnika CO"
+      },
+      "t11cn": {
+        "name": "Stan połączenia czujnika CO"
+      },
+      "t11co": {
+        "name": "Stężenie CO"
+      },
+      "t1bat": {
+        "name": "Stan baterii czujnika zewnętrznego"
+      },
+      "t1chill": {
+        "name": "Temperatura chłodzenia wiatrem"
+      },
+      "t1cn": {
+        "name": "Stan połączenia czujnika zewnętrznego"
+      },
+      "t1dew": {
+        "name": "Temperatura punktu rosy"
+      },
+      "t1feels": {
+        "name": "Temperatura odczuwalna"
+      },
+      "t1heat": {
+        "name": "Indeks ciepła"
+      },
+      "t1hum": {
+        "name": "Wilgotność zewnętrzna"
+      },
+      "t1raindy": {
+        "name": "Suma opadu dobowa"
+      },
+      "t1rainhr": {
+        "name": "Suma opadu godzinowa"
+      },
+      "t1rainmth": {
+        "name": "Suma opadu miesięczna"
+      },
+      "t1rainra": {
+        "name": "Natężenie opadu"
+      },
+      "t1rainwy": {
+        "name": "Suma opadu tygodniowa"
+      },
+      "t1rainyr": {
+        "name": "Suma opadu roczna"
+      },
+      "t1solrad": {
+        "name": "Natężenie światła"
+      },
+      "t1tem": {
+        "name": "Temperatura zewnętrzna"
+      },
+      "t1uvi": {
+        "name": "Indeks UV"
+      },
+      "t1wbgt": {
+        "name": "Temperatura WBGT"
+      },
+      "t1wdir": {
+        "name": "Kierunek wiatru"
+      },
+      "t1wgust": {
+        "name": "Poryw wiatru"
+      },
+      "t1ws": {
+        "name": "Prędkość wiatru"
+      },
+      "t1ws10mav": {
+        "name": "Prędkość wiatru śr. 10 min"
+      },
+      "t234c1bat": {
+        "name": "CH1 stan baterii"
+      },
+      "t234c1cn": {
+        "name": "CH1 stan połączenia"
+      },
+      "t234c1hum": {
+        "name": "CH1 wilgotność"
+      },
+      "t234c1tem": {
+        "name": "CH1 temperatura"
+      },
+      "t234c1tp": {
+        "name": "CH1 typ czujnika"
+      },
+      "t234c2bat": {
+        "name": "CH2 stan baterii"
+      },
+      "t234c2cn": {
+        "name": "CH2 stan połączenia"
+      },
+      "t234c2hum": {
+        "name": "CH2 wilgotność"
+      },
+      "t234c2tem": {
+        "name": "CH2 temperatura"
+      },
+      "t234c2tp": {
+        "name": "CH2 typ czujnika"
+      },
+      "t234c3bat": {
+        "name": "CH3 stan baterii"
+      },
+      "t234c3cn": {
+        "name": "CH3 stan połączenia"
+      },
+      "t234c3hum": {
+        "name": "CH3 wilgotność"
+      },
+      "t234c3tem": {
+        "name": "CH3 temperatura"
+      },
+      "t234c3tp": {
+        "name": "CH3 typ czujnika"
+      },
+      "t234c4bat": {
+        "name": "CH4 stan baterii"
+      },
+      "t234c4cn": {
+        "name": "CH4 stan połączenia"
+      },
+      "t234c4hum": {
+        "name": "CH4 wilgotność"
+      },
+      "t234c4tem": {
+        "name": "CH4 temperatura"
+      },
+      "t234c4tp": {
+        "name": "CH4 typ czujnika"
+      },
+      "t234c5bat": {
+        "name": "CH5 stan baterii"
+      },
+      "t234c5cn": {
+        "name": "CH5 stan połączenia"
+      },
+      "t234c5hum": {
+        "name": "CH5 wilgotność"
+      },
+      "t234c5tem": {
+        "name": "CH5 temperatura"
+      },
+      "t234c5tp": {
+        "name": "CH5 typ czujnika"
+      },
+      "t234c6bat": {
+        "name": "CH6 stan baterii"
+      },
+      "t234c6cn": {
+        "name": "CH6 stan połączenia"
+      },
+      "t234c6hum": {
+        "name": "CH6 wilgotność"
+      },
+      "t234c6tem": {
+        "name": "CH6 temperatura"
+      },
+      "t234c6tp": {
+        "name": "CH6 typ czujnika"
+      },
+      "t234c7bat": {
+        "name": "CH7 stan baterii"
+      },
+      "t234c7cn": {
+        "name": "CH7 stan połączenia"
+      },
+      "t234c7hum": {
+        "name": "CH7 wilgotność"
+      },
+      "t234c7tem": {
+        "name": "CH7 temperatura"
+      },
+      "t234c7tp": {
+        "name": "CH7 typ czujnika"
+      },
+      "t5ls1dtc": {
+        "name": "Wyładowania łącznie w 1 dniu"
+      },
+      "t5ls1htc": {
+        "name": "Wyładowania łącznie w 1 godzinie"
+      },
+      "t5ls30mtc": {
+        "name": "Wyładowania w ostatnich 30 minutach"
+      },
+      "t5ls5mtc": {
+        "name": "Wyładowania w ostatnich 5 minutach"
+      },
+      "t5lsbat": {
+        "name": "Stan baterii czujnika burzowego"
+      },
+      "t5lscn": {
+        "name": "Stan połączenia czujnika burzowego"
+      },
+      "t5lsf": {
+        "name": "Wyładowania w ostatniej godzinie"
+      },
+      "t5lskm": {
+        "name": "Odległość wyładowania"
+      },
+      "t5lst": {
+        "name": "Czas ostatniego wyładowania"
+      },
+      "t6c1bat": {
+        "name": "CH1 stan baterii czujnika wycieku"
+      },
+      "t6c1cn": {
+        "name": "CH1 stan połączenia czujnika wycieku"
+      },
+      "t6c1wls": {
+        "name": "CH1 stan wycieku wody"
+      },
+      "t6c2bat": {
+        "name": "CH2 stan baterii czujnika wycieku"
+      },
+      "t6c2cn": {
+        "name": "CH2 stan połączenia czujnika wycieku"
+      },
+      "t6c2wls": {
+        "name": "CH2 stan wycieku wody"
+      },
+      "t6c3bat": {
+        "name": "CH3 stan baterii czujnika wycieku"
+      },
+      "t6c3cn": {
+        "name": "CH3 stan połączenia czujnika wycieku"
+      },
+      "t6c3wls": {
+        "name": "CH3 stan wycieku wody"
+      },
+      "t6c4bat": {
+        "name": "CH4 stan baterii czujnika wycieku"
+      },
+      "t6c4cn": {
+        "name": "CH4 stan połączenia czujnika wycieku"
+      },
+      "t6c4wls": {
+        "name": "CH4 stan wycieku wody"
+      },
+      "t6c5bat": {
+        "name": "CH5 stan baterii czujnika wycieku"
+      },
+      "t6c5cn": {
+        "name": "CH5 stan połączenia czujnika wycieku"
+      },
+      "t6c5wls": {
+        "name": "CH5 stan wycieku wody"
+      },
+      "t6c6bat": {
+        "name": "CH6 stan baterii czujnika wycieku"
+      },
+      "t6c6cn": {
+        "name": "CH6 stan połączenia czujnika wycieku"
+      },
+      "t6c6wls": {
+        "name": "CH6 stan wycieku wody"
+      },
+      "t6c7bat": {
+        "name": "CH7 stan baterii czujnika wycieku"
+      },
+      "t6c7cn": {
+        "name": "CH7 stan połączenia czujnika wycieku"
+      },
+      "t6c7wls": {
+        "name": "CH7 stan wycieku wody"
+      },
+      "t8bat": {
+        "name": "Poziom baterii czujnika pyłu"
+      },
+      "t8cn": {
+        "name": "Stan połączenia czujnika pyłu"
+      },
+      "t8pm10": {
+        "name": "Stężenie PM10"
+      },
+      "t8pm10ai": {
+        "name": "AQI PM10"
+      },
+      "t8pm25": {
+        "name": "Stężenie PM2.5"
+      },
+      "t8pm25ai": {
+        "name": "AQI PM2.5"
+      },
+      "t9bat": {
+        "name": "Poziom baterii czujnika HCHO/LZO"
+      },
+      "t9cn": {
+        "name": "Stan połączenia czujnika HCHO/LZO"
+      },
+      "t9hcho": {
+        "name": "Stężenie HCHO"
+      },
+      "t9voclv": {
+        "name": "Poziom LZO",
+        "state": {
+          "very_low": "Bardzo niski",
+          "low": "Niski",
+          "moderate": "Umiarkowany",
+          "high": "Wysoki",
+          "very_high": "Bardzo wysoki"
+        }
+      },
+      "tempf": {
+        "name": "Temperatura zewnętrzna"
+      },
+      "uv": {
+        "name": "Indeks UV"
+      },
+      "visibility": {
+        "name": "Widzialność"
+      },
+      "weeklyrainin": {
+        "name": "Opad tygodniowy"
+      },
+      "wind_direction_raw": {
+        "name": "Kierunek wiatru (surowy)"
+      },
+      "windchillf": {
+        "name": "Temperatura odczuwalna przy wietrze"
+      },
+      "winddir": {
+        "name": "Kierunek wiatru"
+      },
+      "winddir_avg2m": {
+        "name": "Kierunek wiatru śr. 2 min"
+      },
+      "windgustdir": {
+        "name": "Kierunek porywu"
+      },
+      "windgustdir_10m": {
+        "name": "Kierunek porywu śr. 10 min"
+      },
+      "windgustmph": {
+        "name": "Poryw wiatru"
+      },
+      "windgustmph_10m": {
+        "name": "Prędkość porywu śr. 10 min"
+      },
+      "windspdmph_avg2m": {
+        "name": "Prędkość wiatru śr. 2 min"
+      },
+      "windspeedmph": {
+        "name": "Prędkość wiatru"
+      },
+      "yearlyrainin": {
+        "name": "Opad roczny"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Poziom baterii konsoli"
+      },
+      "station_online": {
+        "name": "Stacja online"
+      },
+      "t10cn": {
+        "name": "Stan połączenia czujnika CO2"
+      },
+      "t11cn": {
+        "name": "Stan połączenia czujnika CO"
+      },
+      "t1bat": {
+        "name": "Stan baterii czujnika zewnętrznego"
+      },
+      "t1cn": {
+        "name": "Stan połączenia czujnika zewnętrznego"
+      },
+      "t234c1bat": {
+        "name": "CH1 stan baterii"
+      },
+      "t234c1cn": {
+        "name": "CH1 stan połączenia"
+      },
+      "t234c2bat": {
+        "name": "CH2 stan baterii"
+      },
+      "t234c2cn": {
+        "name": "CH2 stan połączenia"
+      },
+      "t234c3bat": {
+        "name": "CH3 stan baterii"
+      },
+      "t234c3cn": {
+        "name": "CH3 stan połączenia"
+      },
+      "t234c4bat": {
+        "name": "CH4 stan baterii"
+      },
+      "t234c4cn": {
+        "name": "CH4 stan połączenia"
+      },
+      "t234c5bat": {
+        "name": "CH5 stan baterii"
+      },
+      "t234c5cn": {
+        "name": "CH5 stan połączenia"
+      },
+      "t234c6bat": {
+        "name": "CH6 stan baterii"
+      },
+      "t234c6cn": {
+        "name": "CH6 stan połączenia"
+      },
+      "t234c7bat": {
+        "name": "CH7 stan baterii"
+      },
+      "t234c7cn": {
+        "name": "CH7 stan połączenia"
+      },
+      "t5lsbat": {
+        "name": "Stan baterii czujnika burzowego"
+      },
+      "t5lscn": {
+        "name": "Stan połączenia czujnika burzowego"
+      },
+      "t6c1bat": {
+        "name": "CH1 stan baterii czujnika wycieku"
+      },
+      "t6c1cn": {
+        "name": "CH1 stan połączenia czujnika wycieku"
+      },
+      "t6c1wls": {
+        "name": "CH1 stan wycieku wody"
+      },
+      "t6c2bat": {
+        "name": "CH2 stan baterii czujnika wycieku"
+      },
+      "t6c2cn": {
+        "name": "CH2 stan połączenia czujnika wycieku"
+      },
+      "t6c2wls": {
+        "name": "CH2 stan wycieku wody"
+      },
+      "t6c3bat": {
+        "name": "CH3 stan baterii czujnika wycieku"
+      },
+      "t6c3cn": {
+        "name": "CH3 stan połączenia czujnika wycieku"
+      },
+      "t6c3wls": {
+        "name": "CH3 stan wycieku wody"
+      },
+      "t6c4bat": {
+        "name": "CH4 stan baterii czujnika wycieku"
+      },
+      "t6c4cn": {
+        "name": "CH4 stan połączenia czujnika wycieku"
+      },
+      "t6c4wls": {
+        "name": "CH4 stan wycieku wody"
+      },
+      "t6c5bat": {
+        "name": "CH5 stan baterii czujnika wycieku"
+      },
+      "t6c5cn": {
+        "name": "CH5 stan połączenia czujnika wycieku"
+      },
+      "t6c5wls": {
+        "name": "CH5 stan wycieku wody"
+      },
+      "t6c6bat": {
+        "name": "CH6 stan baterii czujnika wycieku"
+      },
+      "t6c6cn": {
+        "name": "CH6 stan połączenia czujnika wycieku"
+      },
+      "t6c6wls": {
+        "name": "CH6 stan wycieku wody"
+      },
+      "t6c7bat": {
+        "name": "CH7 stan baterii czujnika wycieku"
+      },
+      "t6c7cn": {
+        "name": "CH7 stan połączenia czujnika wycieku"
+      },
+      "t6c7wls": {
+        "name": "CH7 stan wycieku wody"
+      },
+      "t8cn": {
+        "name": "Stan połączenia czujnika pyłu"
+      },
+      "t9cn": {
+        "name": "Stan połączenia czujnika HCHO/LZO"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Przesunięcie kierunku wiatru"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Wyzeruj przesunięcie"
+      },
+      "set_north": {
+        "name": "Ustaw północ na bieżącą wartość"
+      }
+    }
+  }
+}

@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Stație meteo personală",
+        "description": "Setați aici o cheie de stație pe care stațiile dvs. meteo trebuie să o transmită pentru ca datele lor să nu fie respinse. Dacă lăsați câmpul gol, toate cererile vor fi acceptate.",
+        "data": {
+          "password": "Cheie de stație"
+        }
+      },
+      "station": {
+        "title": "Pasul 1 din 5 — stația dumneavoastră",
+        "description": "{image}\n\nStația dumneavoastră meteo își creează singură dispozitivele și senzorii, așa că aici nu este nimic de adăugat. Urmează ceea ce trebuie introdus în aplicația stației.\n\nDeschideți aplicația, verificați că firmware-ul stației este actualizat, apoi deschideți setările acesteia."
+      },
+      "settings": {
+        "title": "Pasul 2 din 5 — serviciu meteo",
+        "description": "{image}\n\nAlegeți **Weather server**."
+      },
+      "server": {
+        "title": "Pasul 3 din 5 — alt server",
+        "description": "{image}\n\nAlegeți **Other Server**."
+      },
+      "form": {
+        "title": "Pasul 4 din 5 — setările serverului",
+        "description": "{image}\n\nCompletați formularul, apoi apăsați **Save**.\n\n**URL**\n{urls}\nFără `http://` și fără `https://`. Folosiți o adresă pe care stația o poate atinge în propria dumneavoastră rețea — nu există niciun motiv să expuneți Home Assistant pe internet pentru asta. Dacă stația nu rezolvă nume, puneți adresa IP.\n\n**Station ID** — ce doriți. Acesta devine numele dispozitivului în Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minut este o valoare bună.\n\n**API type** — *WSLink API*. Alegeți *WUnderground API* doar dacă stația dumneavoastră nu oferă WSLink: transportă jumătate din valori și doar patru canale.\n\n**Upload** — lăsați-l activat.\n\n> ⏱️ Unele stații pierd Wi-Fi-ul dacă zăboviți pe acest ecran. Țineți adresa la îndemână, completați-o și salvați."
+      },
+      "confirm": {
+        "title": "Pasul 5 din 5 — confirm & exit",
+        "description": "{image}\n\nReveniți înapoi, apoi apăsați **Confirm & Exit**.\n\n> ⚠️ **Confirm & Exit este cel care scrie setările în stație.** Simpla salvare nu schimbă nimic.\n\nApăsați Următorul de îndată ce ați făcut asta."
+      },
+      "received": {
+        "title": "Stația dumneavoastră vorbește cu Home Assistant",
+        "description": "**{station}** tocmai a trimis primul său transfer.\n\nSenzorii săi apar la următorul și sunt creați din ceea ce trimite stația în realitate — aici nu este nimic de ales."
+      },
+      "timeout": {
+        "title": "Încă nu a sosit nimic",
+        "description": "Nicio stație nu a trimis nimic în ultimele {minutes} minute.{key_hint_extra}\n\nCauzele obișnuite sunt o adresă pe care stația nu o poate atinge, **Confirm & Exit** neapăsat, sau un firmware de la 3.02 în sus, care cere HTTPS.\n\nAdresele către care să o îndreptați sunt:\n{urls}\nPunctele care ascultă transferurile sunt:\n{endpoints}\n\nApăsați Următorul pentru a termina oricum — configurarea se păstrează, punctele încep cu adevărat să asculte, iar o reparație vă va aduce înapoi aici până când apare o stație."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Deja configurat. O singură instanță deservește toate stațiile meteo."
+    },
+    "progress": {
+      "waiting_for_station": "Se așteaptă primul transfer al stației dumneavoastră…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Stație meteo personală",
+        "menu_options": {
+          "options": "Setări",
+          "instructions": "Cum să îndreptați o stație către Home Assistant"
+        }
+      },
+      "options": {
+        "title": "Stație meteo personală",
+        "description": "Setați aici o cheie de stație pe care stațiile dvs. meteo trebuie să o transmită pentru ca datele lor să nu fie respinse. Dacă lăsați câmpul gol, toate cererile vor fi acceptate.",
+        "data": {
+          "password": "Cheie de stație",
+          "availability_timeout": "Marchează ca indisponibil după (minute)",
+          "debug": "Înregistrează fiecare cerere primită"
+        },
+        "data_description": {
+          "availability_timeout": "Cât timp poate rămâne tăcută o stație înainte ca senzorii ei să fie marcați ca indisponibili. 0 înseamnă să nu fie marcați niciodată.",
+          "debug": "Scrie conținutul complet al fiecărei cereri în jurnalul Home Assistant. Util la configurarea unei stații, deranjant după aceea."
+        }
+      },
+      "station": {
+        "title": "Pasul 1 din 5 — stația dumneavoastră",
+        "description": "{image}\n\nStația dumneavoastră meteo își creează singură dispozitivele și senzorii, așa că aici nu este nimic de adăugat. Urmează ceea ce trebuie introdus în aplicația stației.\n\nDeschideți aplicația, verificați că firmware-ul stației este actualizat, apoi deschideți setările acesteia."
+      },
+      "settings": {
+        "title": "Pasul 2 din 5 — serviciu meteo",
+        "description": "{image}\n\nAlegeți **Weather server**."
+      },
+      "server": {
+        "title": "Pasul 3 din 5 — alt server",
+        "description": "{image}\n\nAlegeți **Other Server**."
+      },
+      "form": {
+        "title": "Pasul 4 din 5 — setările serverului",
+        "description": "{image}\n\nCompletați formularul, apoi apăsați **Save**.\n\n**URL**\n{urls}\nFără `http://` și fără `https://`. Folosiți o adresă pe care stația o poate atinge în propria dumneavoastră rețea — nu există niciun motiv să expuneți Home Assistant pe internet pentru asta. Dacă stația nu rezolvă nume, puneți adresa IP.\n\n**Station ID** — ce doriți. Acesta devine numele dispozitivului în Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minut este o valoare bună.\n\n**API type** — *WSLink API*. Alegeți *WUnderground API* doar dacă stația dumneavoastră nu oferă WSLink: transportă jumătate din valori și doar patru canale.\n\n**Upload** — lăsați-l activat.\n\n> ⏱️ Unele stații pierd Wi-Fi-ul dacă zăboviți pe acest ecran. Țineți adresa la îndemână, completați-o și salvați."
+      },
+      "confirm": {
+        "title": "Pasul 5 din 5 — confirm & exit",
+        "description": "{image}\n\nReveniți înapoi, apoi apăsați **Confirm & Exit**.\n\n> ⚠️ **Confirm & Exit este cel care scrie setările în stație.** Simpla salvare nu schimbă nimic.\n\nApăsați Următorul de îndată ce ați făcut asta."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Stație meteo respinsă: cheie de stație incorectă",
+      "description": "O stație meteo de la {ip} a încercat să trimită date ca `{station_id}` fără a transmite cheia de stație așteptată.\n\nVerificați dacă cheia configurată în stație sau în aplicația WSLink corespunde celei setate în această integrare. Acest mesaj dispare de la sine de îndată ce o cerere de la {ip} este acceptată."
+    },
+    "missing_device_id": {
+      "title": "Stație meteo respinsă: fără identificator de stație",
+      "description": "O stație meteo de la {ip} a trimis date fără identificator de stație.\n\nSetați un Sender ID în aplicația WSLink sau un parametru ID în configurația stației. Acest mesaj dispare de la sine de îndată ce o cerere de la {ip} este acceptată."
+    },
+    "legacy_entity_ids": {
+      "title": "Identificatorii entităților repetă numele stației",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Scurtați identificatorii entităților",
+            "description": "Până la versiunea 1.0.8 această integrare construia identificatori de entități care poartă numele stației de două ori, precum `{example_old}`. Stațiile noi nu mai fac asta.\n\n**{count} entități** pot fi redenumite, de exemplu în `{example_new}`.\n\nIstoricul și statisticile pe termen lung urmează redenumirea automat. **Automatizările, scripturile, scenele și tablourile de bord nu** — tot ce face referire la vechii identificatori va trebui să actualizați dumneavoastră.\n\nDacă preferați să le lăsați așa cum sunt, ignorați această reparație."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Valorile de conexiune, scurgere și baterie sunt încă numere",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Convertiți în senzori binari",
+            "description": "Valorile de conexiune, scurgere de apă și baterie sunt trimise ca 1 sau 0. Până la versiunea 1.0.8 erau expuse ca senzori numerici, de exemplu `{example}`, care nu pot fi folosiți cu cardurile standard de scurgere, conectivitate și baterie descărcată din Home Assistant. Stațiile noi primesc senzori binari care arată **Ud / Uscat**, **Conectat / Deconectat** și **Pornit / Oprit**.\n\nPot fi convertite **{count} entități**. Nivelurile de baterie 0~5 ale senzorilor de calitate a aerului își păstrează procentul: șase trepte înseamnă mai mult decât poate duce un pornit/oprit.\n\nSchimbarea platformei nu este o redenumire: entitățile vechi sunt eliminate și recreate ca `binary_sensor`. **Istoricul lor înregistrat se pierde** — aceste valori nu au statistici pe termen lung, deci este afectat doar istoricul brut — și **automatizările, scripturile, scenele și tablourile care le indică trebuie actualizate**. Entitățile noi apar la următorul transfer al stației.\n\nDacă preferați să le lăsați așa cum sunt, ignorați această reparație."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Nicio stație meteo nu a trimis încă nimic",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Configurați-vă stația meteo",
+            "description": "Stația dumneavoastră meteo este cea care creează dispozitivele și senzorii — aici nu este nimic de adăugat.\n\nÎn aplicația stației deschideți-vă stația, apoi **Settings → Weather server → Other Server**, și completați:\n\n**URL**\n{urls}\nFără `http://` sau `https://`. Folosiți o adresă la care stația dumneavoastră poate ajunge în propria rețea — nu există niciun motiv să expuneți Home Assistant pe internet pentru asta. Dacă stația nu rezolvă nume, puneți adresa IP.\n\n**Station ID** — ce doriți. Va deveni numele dispozitivului în Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minut este o valoare bună.\n\n**API type** — *WSLink API*.\n\n**Upload** — lăsați-l activat.\n\nApăsați **Save**, reveniți înapoi, apoi apăsați **Confirm & Exit**.\n\n> ⚠️ **Confirm & Exit este cel care scrie setările în stație.** Simpla salvare nu schimbă nimic. Senzorii apar o secundă mai târziu.\n\nPunctele finale care ascultă sunt:\n{endpoints}"
+          },
+          "received": {
+            "title": "Stația dumneavoastră a ajuns",
+            "description": "**{station}** a trimis prima sa transmisie. Senzorii ei se creează acum, iar alții vor apărea pe măsură ce stația îi raportează.\n\nAcest mesaj nu va reveni."
+          },
+          "timeout": {
+            "title": "Încă nu s-a primit nimic",
+            "description": "Nicio transmisie nu a sosit în {minutes} minute.\n\nÎn ordinea probabilității:\n\n  - **Ați apăsat Confirm & Exit?** Simpla salvare a ecranului serverului nu scrie nimic în stație.\n  - **URL** trebuie să fie {urls_inline}, fără `http://`, și accesibil stației în rețeaua dumneavoastră.\n  - **Upload** trebuie să fie activat pe acel ecran.\n  - Unele firmware-uri Bresser de la **3.02** încolo refuză HTTP simplu și cer o adresă care servește HTTPS.\n  - Intervalul de trimitere ar putea fi pur și simplu mai lung decât așteptarea.\n  - **Cheia stației**: {key_hint}.\n\nDacă stația a ajuns la Home Assistant dar a fost respinsă, acest lucru este raportat separat în **Setări → Sistem → Reparații**.\n\nPuteți închide. Rămâne aici până apare o stație, iar redeschiderea reia așteptarea de la început."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Se așteaptă prima transmisie a stației dumneavoastră…"
+        },
+        "abort": {
+          "not_received": "Încă nu a sosit nimic, așa că acest lucru rămâne deschis. Rămâne în Reparații până apare o stație, iar dumneavoastră îl puteți redeschide pentru a aștepta din nou."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "Stația {station} trimite valori care sunt aruncate",
+      "description": "**{count} parametri** de la **{station}** nu sunt recunoscuți, așa că valorile lor sunt aruncate la fiecare trimitere:\n\n{parameters}\n\nCauza obișnuită este o stație care raportează mai mult decât poate duce protocolul ei. Weather Underground are doar **4 locuri** pentru senzori suplimentari; dacă stația dumneavoastră oferă **WSLink** ca *API type*, trecerea la el dezvăluie șapte canale și aproximativ de două ori mai multe valori.\n\nDacă nu aceasta este cauza, exact aceste nume de parametri sunt ceea ce îi trebuie unui raport de eroare: deschideți unul pe [urmăritorul de probleme]({issue_tracker}) și vor putea fi adăugate.\n\nPuteți și să ignorați acest mesaj — nu s-a stricat nimic, doar că aceste valori anume nu ajung."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "Stația {device} nu a transmis încă nicio direcție a vântului, deci nu există după ce să se calibreze. Așteptați următoarea trimitere și încercați din nou."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Presiune atmosferică absolută"
+      },
+      "apiver": {
+        "name": "Versiune API"
+      },
+      "aqbc": {
+        "name": "Carbon negru"
+      },
+      "aqco": {
+        "name": "Monoxid de carbon"
+      },
+      "aqcot": {
+        "name": "Monoxid de carbon în urme"
+      },
+      "aqec": {
+        "name": "Carbon elementar"
+      },
+      "aqno": {
+        "name": "Monoxid de azot"
+      },
+      "aqno2": {
+        "name": "NO2 X calculat"
+      },
+      "aqno2t": {
+        "name": "Dioxid de azot"
+      },
+      "aqno2y": {
+        "name": "NO2 Y calculat"
+      },
+      "aqno3": {
+        "name": "Ion NO3"
+      },
+      "aqnox": {
+        "name": "Oxizi de azot"
+      },
+      "aqnoy": {
+        "name": "Azot reactiv total"
+      },
+      "aqoc": {
+        "name": "Carbon organic"
+      },
+      "aqozone": {
+        "name": "Ozon"
+      },
+      "aqpm10": {
+        "name": "Masă PM10"
+      },
+      "aqpm2_5": {
+        "name": "Masă PM2.5"
+      },
+      "aqso2": {
+        "name": "Dioxid de sulf"
+      },
+      "aqso2t": {
+        "name": "Dioxid de sulf în urme"
+      },
+      "aqso4": {
+        "name": "Ion SO4"
+      },
+      "aquv_aeth": {
+        "name": "Etalometru canalul 2"
+      },
+      "baromin": {
+        "name": "Presiune"
+      },
+      "clouds": {
+        "name": "Nebulozitate"
+      },
+      "dailyrainin": {
+        "name": "Ploaie zilnică"
+      },
+      "dewptf": {
+        "name": "Punct de rouă"
+      },
+      "humidity": {
+        "name": "Umiditate exterioară"
+      },
+      "inbat": {
+        "name": "Nivelul bateriei consolei"
+      },
+      "indoorhumidity": {
+        "name": "Umiditate interioară"
+      },
+      "indoortempf": {
+        "name": "Temperatură interioară"
+      },
+      "inhum": {
+        "name": "Umiditate interioară"
+      },
+      "intem": {
+        "name": "Temperatură interioară"
+      },
+      "last_update": {
+        "name": "Ultima recepție"
+      },
+      "leafwetness": {
+        "name": "Umectarea frunzelor"
+      },
+      "leafwetness2": {
+        "name": "CH2 umectarea frunzelor"
+      },
+      "lowbatt": {
+        "name": "Baterie descărcată"
+      },
+      "monthlyrainin": {
+        "name": "Ploaie lunară"
+      },
+      "rainin": {
+        "name": "Ploaie orară"
+      },
+      "rbar": {
+        "name": "Presiune atmosferică relativă"
+      },
+      "rtfreq": {
+        "name": "Frecvență de actualizare"
+      },
+      "soilmoisture": {
+        "name": "Umiditatea solului"
+      },
+      "soilmoisture2": {
+        "name": "CH2 umiditatea solului"
+      },
+      "soilmoisture3": {
+        "name": "CH3 umiditatea solului"
+      },
+      "soilmoisture4": {
+        "name": "CH4 umiditatea solului"
+      },
+      "soiltemp2f": {
+        "name": "CH2 temperatura solului"
+      },
+      "soiltemp3f": {
+        "name": "CH3 temperatura solului"
+      },
+      "soiltemp4f": {
+        "name": "CH4 temperatura solului"
+      },
+      "soiltempf": {
+        "name": "Temperatura solului"
+      },
+      "solarradiation": {
+        "name": "Radiație solară"
+      },
+      "t10bat": {
+        "name": "Nivelul bateriei senzorului CO2"
+      },
+      "t10cn": {
+        "name": "Starea conexiunii senzorului CO2"
+      },
+      "t10co2": {
+        "name": "Concentrație CO2"
+      },
+      "t11bat": {
+        "name": "Nivelul bateriei senzorului CO"
+      },
+      "t11cn": {
+        "name": "Starea conexiunii senzorului CO"
+      },
+      "t11co": {
+        "name": "Concentrație CO"
+      },
+      "t1bat": {
+        "name": "Starea bateriei senzorului exterior"
+      },
+      "t1chill": {
+        "name": "Temperatura de răcire eoliană"
+      },
+      "t1cn": {
+        "name": "Starea conexiunii senzorului exterior"
+      },
+      "t1dew": {
+        "name": "Temperatura punctului de rouă"
+      },
+      "t1feels": {
+        "name": "Temperatură resimțită"
+      },
+      "t1heat": {
+        "name": "Indice de căldură"
+      },
+      "t1hum": {
+        "name": "Umiditate exterioară"
+      },
+      "t1raindy": {
+        "name": "Precipitații zilnice"
+      },
+      "t1rainhr": {
+        "name": "Precipitații orare"
+      },
+      "t1rainmth": {
+        "name": "Precipitații lunare"
+      },
+      "t1rainra": {
+        "name": "Intensitatea ploii"
+      },
+      "t1rainwy": {
+        "name": "Precipitații săptămânale"
+      },
+      "t1rainyr": {
+        "name": "Precipitații anuale"
+      },
+      "t1solrad": {
+        "name": "Intensitate luminoasă"
+      },
+      "t1tem": {
+        "name": "Temperatură exterioară"
+      },
+      "t1uvi": {
+        "name": "Indice UV"
+      },
+      "t1wbgt": {
+        "name": "Temperatură WBGT"
+      },
+      "t1wdir": {
+        "name": "Direcția vântului"
+      },
+      "t1wgust": {
+        "name": "Rafală de vânt"
+      },
+      "t1ws": {
+        "name": "Viteza vântului"
+      },
+      "t1ws10mav": {
+        "name": "Viteza vântului medie 10 min"
+      },
+      "t234c1bat": {
+        "name": "CH1 starea bateriei"
+      },
+      "t234c1cn": {
+        "name": "CH1 starea conexiunii"
+      },
+      "t234c1hum": {
+        "name": "CH1 umiditate"
+      },
+      "t234c1tem": {
+        "name": "CH1 temperatură"
+      },
+      "t234c1tp": {
+        "name": "CH1 tipul senzorului"
+      },
+      "t234c2bat": {
+        "name": "CH2 starea bateriei"
+      },
+      "t234c2cn": {
+        "name": "CH2 starea conexiunii"
+      },
+      "t234c2hum": {
+        "name": "CH2 umiditate"
+      },
+      "t234c2tem": {
+        "name": "CH2 temperatură"
+      },
+      "t234c2tp": {
+        "name": "CH2 tipul senzorului"
+      },
+      "t234c3bat": {
+        "name": "CH3 starea bateriei"
+      },
+      "t234c3cn": {
+        "name": "CH3 starea conexiunii"
+      },
+      "t234c3hum": {
+        "name": "CH3 umiditate"
+      },
+      "t234c3tem": {
+        "name": "CH3 temperatură"
+      },
+      "t234c3tp": {
+        "name": "CH3 tipul senzorului"
+      },
+      "t234c4bat": {
+        "name": "CH4 starea bateriei"
+      },
+      "t234c4cn": {
+        "name": "CH4 starea conexiunii"
+      },
+      "t234c4hum": {
+        "name": "CH4 umiditate"
+      },
+      "t234c4tem": {
+        "name": "CH4 temperatură"
+      },
+      "t234c4tp": {
+        "name": "CH4 tipul senzorului"
+      },
+      "t234c5bat": {
+        "name": "CH5 starea bateriei"
+      },
+      "t234c5cn": {
+        "name": "CH5 starea conexiunii"
+      },
+      "t234c5hum": {
+        "name": "CH5 umiditate"
+      },
+      "t234c5tem": {
+        "name": "CH5 temperatură"
+      },
+      "t234c5tp": {
+        "name": "CH5 tipul senzorului"
+      },
+      "t234c6bat": {
+        "name": "CH6 starea bateriei"
+      },
+      "t234c6cn": {
+        "name": "CH6 starea conexiunii"
+      },
+      "t234c6hum": {
+        "name": "CH6 umiditate"
+      },
+      "t234c6tem": {
+        "name": "CH6 temperatură"
+      },
+      "t234c6tp": {
+        "name": "CH6 tipul senzorului"
+      },
+      "t234c7bat": {
+        "name": "CH7 starea bateriei"
+      },
+      "t234c7cn": {
+        "name": "CH7 starea conexiunii"
+      },
+      "t234c7hum": {
+        "name": "CH7 umiditate"
+      },
+      "t234c7tem": {
+        "name": "CH7 temperatură"
+      },
+      "t234c7tp": {
+        "name": "CH7 tipul senzorului"
+      },
+      "t5ls1dtc": {
+        "name": "Fulgere în total într-o zi"
+      },
+      "t5ls1htc": {
+        "name": "Fulgere în total în 1 oră"
+      },
+      "t5ls30mtc": {
+        "name": "Fulgere în ultimele 30 de minute"
+      },
+      "t5ls5mtc": {
+        "name": "Fulgere în ultimele 5 minute"
+      },
+      "t5lsbat": {
+        "name": "Starea bateriei senzorului de fulgere"
+      },
+      "t5lscn": {
+        "name": "Starea conexiunii senzorului de fulgere"
+      },
+      "t5lsf": {
+        "name": "Fulgere în ultima oră"
+      },
+      "t5lskm": {
+        "name": "Distanța fulgerului"
+      },
+      "t5lst": {
+        "name": "Ora ultimului fulger"
+      },
+      "t6c1bat": {
+        "name": "CH1 starea bateriei detectorului de scurgeri"
+      },
+      "t6c1cn": {
+        "name": "CH1 starea conexiunii detectorului de scurgeri"
+      },
+      "t6c1wls": {
+        "name": "CH1 starea scurgerii de apă"
+      },
+      "t6c2bat": {
+        "name": "CH2 starea bateriei detectorului de scurgeri"
+      },
+      "t6c2cn": {
+        "name": "CH2 starea conexiunii detectorului de scurgeri"
+      },
+      "t6c2wls": {
+        "name": "CH2 starea scurgerii de apă"
+      },
+      "t6c3bat": {
+        "name": "CH3 starea bateriei detectorului de scurgeri"
+      },
+      "t6c3cn": {
+        "name": "CH3 starea conexiunii detectorului de scurgeri"
+      },
+      "t6c3wls": {
+        "name": "CH3 starea scurgerii de apă"
+      },
+      "t6c4bat": {
+        "name": "CH4 starea bateriei detectorului de scurgeri"
+      },
+      "t6c4cn": {
+        "name": "CH4 starea conexiunii detectorului de scurgeri"
+      },
+      "t6c4wls": {
+        "name": "CH4 starea scurgerii de apă"
+      },
+      "t6c5bat": {
+        "name": "CH5 starea bateriei detectorului de scurgeri"
+      },
+      "t6c5cn": {
+        "name": "CH5 starea conexiunii detectorului de scurgeri"
+      },
+      "t6c5wls": {
+        "name": "CH5 starea scurgerii de apă"
+      },
+      "t6c6bat": {
+        "name": "CH6 starea bateriei detectorului de scurgeri"
+      },
+      "t6c6cn": {
+        "name": "CH6 starea conexiunii detectorului de scurgeri"
+      },
+      "t6c6wls": {
+        "name": "CH6 starea scurgerii de apă"
+      },
+      "t6c7bat": {
+        "name": "CH7 starea bateriei detectorului de scurgeri"
+      },
+      "t6c7cn": {
+        "name": "CH7 starea conexiunii detectorului de scurgeri"
+      },
+      "t6c7wls": {
+        "name": "CH7 starea scurgerii de apă"
+      },
+      "t8bat": {
+        "name": "Nivelul bateriei senzorului de particule"
+      },
+      "t8cn": {
+        "name": "Starea conexiunii senzorului de particule"
+      },
+      "t8pm10": {
+        "name": "Concentrație PM10"
+      },
+      "t8pm10ai": {
+        "name": "AQI PM10"
+      },
+      "t8pm25": {
+        "name": "Concentrație PM2.5"
+      },
+      "t8pm25ai": {
+        "name": "AQI PM2.5"
+      },
+      "t9bat": {
+        "name": "Nivelul bateriei senzorului HCHO/COV"
+      },
+      "t9cn": {
+        "name": "Starea conexiunii senzorului HCHO/COV"
+      },
+      "t9hcho": {
+        "name": "Concentrație HCHO"
+      },
+      "t9voclv": {
+        "name": "Nivel COV",
+        "state": {
+          "very_low": "Foarte scăzut",
+          "low": "Scăzut",
+          "moderate": "Moderat",
+          "high": "Ridicat",
+          "very_high": "Foarte ridicat"
+        }
+      },
+      "tempf": {
+        "name": "Temperatură exterioară"
+      },
+      "uv": {
+        "name": "Indice UV"
+      },
+      "visibility": {
+        "name": "Vizibilitate"
+      },
+      "weeklyrainin": {
+        "name": "Ploaie săptămânală"
+      },
+      "wind_direction_raw": {
+        "name": "Direcția vântului (brută)"
+      },
+      "windchillf": {
+        "name": "Răcire eoliană"
+      },
+      "winddir": {
+        "name": "Direcția vântului"
+      },
+      "winddir_avg2m": {
+        "name": "Direcția vântului medie 2 min"
+      },
+      "windgustdir": {
+        "name": "Direcția rafalei"
+      },
+      "windgustdir_10m": {
+        "name": "Direcția rafalei medie 10 min"
+      },
+      "windgustmph": {
+        "name": "Rafală de vânt"
+      },
+      "windgustmph_10m": {
+        "name": "Viteza rafalei medie 10 min"
+      },
+      "windspdmph_avg2m": {
+        "name": "Viteza vântului medie 2 min"
+      },
+      "windspeedmph": {
+        "name": "Viteza vântului"
+      },
+      "yearlyrainin": {
+        "name": "Ploaie anuală"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Nivelul bateriei consolei"
+      },
+      "station_online": {
+        "name": "Stație online"
+      },
+      "t10cn": {
+        "name": "Starea conexiunii senzorului CO2"
+      },
+      "t11cn": {
+        "name": "Starea conexiunii senzorului CO"
+      },
+      "t1bat": {
+        "name": "Starea bateriei senzorului exterior"
+      },
+      "t1cn": {
+        "name": "Starea conexiunii senzorului exterior"
+      },
+      "t234c1bat": {
+        "name": "CH1 starea bateriei"
+      },
+      "t234c1cn": {
+        "name": "CH1 starea conexiunii"
+      },
+      "t234c2bat": {
+        "name": "CH2 starea bateriei"
+      },
+      "t234c2cn": {
+        "name": "CH2 starea conexiunii"
+      },
+      "t234c3bat": {
+        "name": "CH3 starea bateriei"
+      },
+      "t234c3cn": {
+        "name": "CH3 starea conexiunii"
+      },
+      "t234c4bat": {
+        "name": "CH4 starea bateriei"
+      },
+      "t234c4cn": {
+        "name": "CH4 starea conexiunii"
+      },
+      "t234c5bat": {
+        "name": "CH5 starea bateriei"
+      },
+      "t234c5cn": {
+        "name": "CH5 starea conexiunii"
+      },
+      "t234c6bat": {
+        "name": "CH6 starea bateriei"
+      },
+      "t234c6cn": {
+        "name": "CH6 starea conexiunii"
+      },
+      "t234c7bat": {
+        "name": "CH7 starea bateriei"
+      },
+      "t234c7cn": {
+        "name": "CH7 starea conexiunii"
+      },
+      "t5lsbat": {
+        "name": "Starea bateriei senzorului de fulgere"
+      },
+      "t5lscn": {
+        "name": "Starea conexiunii senzorului de fulgere"
+      },
+      "t6c1bat": {
+        "name": "CH1 starea bateriei detectorului de scurgeri"
+      },
+      "t6c1cn": {
+        "name": "CH1 starea conexiunii detectorului de scurgeri"
+      },
+      "t6c1wls": {
+        "name": "CH1 starea scurgerii de apă"
+      },
+      "t6c2bat": {
+        "name": "CH2 starea bateriei detectorului de scurgeri"
+      },
+      "t6c2cn": {
+        "name": "CH2 starea conexiunii detectorului de scurgeri"
+      },
+      "t6c2wls": {
+        "name": "CH2 starea scurgerii de apă"
+      },
+      "t6c3bat": {
+        "name": "CH3 starea bateriei detectorului de scurgeri"
+      },
+      "t6c3cn": {
+        "name": "CH3 starea conexiunii detectorului de scurgeri"
+      },
+      "t6c3wls": {
+        "name": "CH3 starea scurgerii de apă"
+      },
+      "t6c4bat": {
+        "name": "CH4 starea bateriei detectorului de scurgeri"
+      },
+      "t6c4cn": {
+        "name": "CH4 starea conexiunii detectorului de scurgeri"
+      },
+      "t6c4wls": {
+        "name": "CH4 starea scurgerii de apă"
+      },
+      "t6c5bat": {
+        "name": "CH5 starea bateriei detectorului de scurgeri"
+      },
+      "t6c5cn": {
+        "name": "CH5 starea conexiunii detectorului de scurgeri"
+      },
+      "t6c5wls": {
+        "name": "CH5 starea scurgerii de apă"
+      },
+      "t6c6bat": {
+        "name": "CH6 starea bateriei detectorului de scurgeri"
+      },
+      "t6c6cn": {
+        "name": "CH6 starea conexiunii detectorului de scurgeri"
+      },
+      "t6c6wls": {
+        "name": "CH6 starea scurgerii de apă"
+      },
+      "t6c7bat": {
+        "name": "CH7 starea bateriei detectorului de scurgeri"
+      },
+      "t6c7cn": {
+        "name": "CH7 starea conexiunii detectorului de scurgeri"
+      },
+      "t6c7wls": {
+        "name": "CH7 starea scurgerii de apă"
+      },
+      "t8cn": {
+        "name": "Starea conexiunii senzorului de particule"
+      },
+      "t9cn": {
+        "name": "Starea conexiunii senzorului HCHO/COV"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Decalajul direcției vântului"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Resetează decalajul"
+      },
+      "set_north": {
+        "name": "Setează nordul pe valoarea actuală"
+      }
+    }
+  }
+}

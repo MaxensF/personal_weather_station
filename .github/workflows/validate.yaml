@@ -9,6 +9,10 @@ permissions: {}
 
 jobs:
   validate-hacs:
+    # The two checks that fail here are properties of the GitHub repository —
+    # topics, and issues being enabled — not of the code. A fork has neither, so
+    # this can never pass on one and would only mail its owner on every push.
+    if: ${{ !github.event.repository.fork }}
     runs-on: "ubuntu-latest"
     steps:
       - name: HACS validation

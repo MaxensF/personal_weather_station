@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Oma sääasema",
+        "description": "Aseta tähän asema-avain, joka sääasemiesi on lähetettävä, jotta niiden tietoja ei hylätä. Jos jätät kentän tyhjäksi, kaikki pyynnöt hyväksytään.",
+        "data": {
+          "password": "Asema-avain"
+        }
+      },
+      "station": {
+        "title": "Vaihe 1/5 — asemasi",
+        "description": "{image}\n\nSääasemasi luo laitteensa ja anturinsa itse, joten täällä ei ole mitään lisättävää. Seuraavassa on se, mikä kirjoitetaan aseman sovellukseen.\n\nAvaa sovellus, tarkista että aseman laiteohjelmisto on ajan tasalla, ja avaa sitten sen asetukset."
+      },
+      "settings": {
+        "title": "Vaihe 2/5 — sääpalvelu",
+        "description": "{image}\n\nValitse **Weather server**."
+      },
+      "server": {
+        "title": "Vaihe 3/5 — muu palvelin",
+        "description": "{image}\n\nValitse **Other Server**."
+      },
+      "form": {
+        "title": "Vaihe 4/5 — palvelimen asetukset",
+        "description": "{image}\n\nTäytä lomake ja paina **Save**.\n\n**URL**\n{urls}\nIlman `http://`- tai `https://`-alkua. Käytä osoitetta, johon asemasi yltää omassa verkossasi — ei ole mitään syytä altistaa Home Assistantia internetille tätä varten. Jos asemasi ei selvitä nimiä, käytä IP-osoitetta.\n\n**Station ID** — mitä haluat. Siitä tulee laitteen nimi Home Assistantissa.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minuutti on hyvä arvo.\n\n**API type** — *WSLink API*. Valitse *WUnderground API* vain, jos asemasi ei tarjoa WSLinkiä: se kuljettaa puolet vähemmän lukemia ja vain neljä kanavaa.\n\n**Upload** — jätä käyttöön.\n\n> ⏱️ Osa asemista pudottaa Wi-Fin, jos viivyt tällä näytöllä. Pidä osoite valmiina, kirjoita se ja tallenna."
+      },
+      "confirm": {
+        "title": "Vaihe 5/5 — confirm & exit",
+        "description": "{image}\n\nPalaa takaisin ja paina **Confirm & Exit**.\n\n> ⚠️ **Juuri Confirm & Exit kirjoittaa asetukset asemaan.** Pelkkä tallennus ei muuta mitään.\n\nPaina Seuraava, kun olet tehnyt sen."
+      },
+      "received": {
+        "title": "Asemasi puhuu Home Assistantille",
+        "description": "**{station}** lähetti juuri ensimmäisen erän.\n\nSen anturit ilmestyvät seuraavan myötä, ja ne luodaan siitä, mitä asema todella lähettää — täällä ei ole mitään valittavaa."
+      },
+      "timeout": {
+        "title": "Mitään ei ole vielä saapunut",
+        "description": "Yksikään asema ei ole lähettänyt mitään viimeisen {minutes} minuutin aikana.{key_hint_extra}\n\nTavallisia syitä ovat osoite, johon asema ei yllä, painamaton **Confirm & Exit**, tai laiteohjelmisto 3.02 tai uudempi, joka vaatii HTTPS:n.\n\nOsoitteet, joihin se osoitetaan:\n{urls}\nLähetyksiä kuuntelevat päätepisteet:\n{endpoints}\n\nPaina Seuraava viimeistelläksesi silti — asetukset säilyvät, päätepisteet alkavat todella kuunnella, ja korjaus tuo sinut tänne takaisin, kunnes jokin asema ilmaantuu."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Jo määritetty. Yksi ainoa instanssi palvelee kaikkia sääasemia."
+    },
+    "progress": {
+      "waiting_for_station": "Odotetaan asemasi ensimmäistä lähetystä…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Oma sääasema",
+        "menu_options": {
+          "options": "Asetukset",
+          "instructions": "Kuinka ohjata asema Home Assistantiin"
+        }
+      },
+      "options": {
+        "title": "Oma sääasema",
+        "description": "Aseta tähän asema-avain, joka sääasemiesi on lähetettävä, jotta niiden tietoja ei hylätä. Jos jätät kentän tyhjäksi, kaikki pyynnöt hyväksytään.",
+        "data": {
+          "password": "Asema-avain",
+          "availability_timeout": "Merkitse ei-saatavilla olevaksi (minuuttia)",
+          "debug": "Kirjaa jokainen saapuva pyyntö"
+        },
+        "data_description": {
+          "availability_timeout": "Kuinka kauan asema saa olla hiljaa ennen kuin sen anturit merkitään ei-saatavilla oleviksi. 0 tarkoittaa, ettei niitä merkitä koskaan.",
+          "debug": "Kirjoittaa jokaisen pyynnön koko sisällön Home Assistantin lokiin. Hyödyllistä asemaa määritettäessä, häiritsevää sen jälkeen."
+        }
+      },
+      "station": {
+        "title": "Vaihe 1/5 — asemasi",
+        "description": "{image}\n\nSääasemasi luo laitteensa ja anturinsa itse, joten täällä ei ole mitään lisättävää. Seuraavassa on se, mikä kirjoitetaan aseman sovellukseen.\n\nAvaa sovellus, tarkista että aseman laiteohjelmisto on ajan tasalla, ja avaa sitten sen asetukset."
+      },
+      "settings": {
+        "title": "Vaihe 2/5 — sääpalvelu",
+        "description": "{image}\n\nValitse **Weather server**."
+      },
+      "server": {
+        "title": "Vaihe 3/5 — muu palvelin",
+        "description": "{image}\n\nValitse **Other Server**."
+      },
+      "form": {
+        "title": "Vaihe 4/5 — palvelimen asetukset",
+        "description": "{image}\n\nTäytä lomake ja paina **Save**.\n\n**URL**\n{urls}\nIlman `http://`- tai `https://`-alkua. Käytä osoitetta, johon asemasi yltää omassa verkossasi — ei ole mitään syytä altistaa Home Assistantia internetille tätä varten. Jos asemasi ei selvitä nimiä, käytä IP-osoitetta.\n\n**Station ID** — mitä haluat. Siitä tulee laitteen nimi Home Assistantissa.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minuutti on hyvä arvo.\n\n**API type** — *WSLink API*. Valitse *WUnderground API* vain, jos asemasi ei tarjoa WSLinkiä: se kuljettaa puolet vähemmän lukemia ja vain neljä kanavaa.\n\n**Upload** — jätä käyttöön.\n\n> ⏱️ Osa asemista pudottaa Wi-Fin, jos viivyt tällä näytöllä. Pidä osoite valmiina, kirjoita se ja tallenna."
+      },
+      "confirm": {
+        "title": "Vaihe 5/5 — confirm & exit",
+        "description": "{image}\n\nPalaa takaisin ja paina **Confirm & Exit**.\n\n> ⚠️ **Juuri Confirm & Exit kirjoittaa asetukset asemaan.** Pelkkä tallennus ei muuta mitään.\n\nPaina Seuraava, kun olet tehnyt sen."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Sääasema hylätty: väärä asema-avain",
+      "description": "Osoitteessa {ip} oleva sääasema yritti lähettää tietoja nimellä `{station_id}` lähettämättä odotettua asema-avainta.\n\nTarkista, että asemaan tai WSLink-sovellukseen määritetty avain vastaa tässä integraatiossa asetettua. Tämä viesti katoaa itsestään heti, kun pyyntö osoitteesta {ip} hyväksytään."
+    },
+    "missing_device_id": {
+      "title": "Sääasema hylätty: ei asematunnistetta",
+      "description": "Osoitteessa {ip} oleva sääasema lähetti tietoja ilman asematunnistetta.\n\nAseta Sender ID WSLink-sovelluksessa tai ID-parametri aseman asetuksissa. Tämä viesti katoaa itsestään heti, kun pyyntö osoitteesta {ip} hyväksytään."
+    },
+    "legacy_entity_ids": {
+      "title": "Entiteettitunnukset toistavat aseman nimen",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Lyhennä entiteettitunnukset",
+            "description": "Versioon 1.0.8 asti tämä integraatio muodosti entiteettitunnuksia, joissa aseman nimi on kahdesti, kuten `{example_old}`. Uudet asemat eivät enää tee niin.\n\n**{count} entiteettiä** voidaan nimetä uudelleen, esimerkiksi muotoon `{example_new}`.\n\nHistoria ja pitkän aikavälin tilastot seuraavat uudelleennimeämistä automaattisesti. **Automaatiot, skriptit, kohtaukset ja koontinäytöt eivät** — sinun on itse päivitettävä kaikki, mikä viittaa vanhoihin tunnuksiin.\n\nJos haluat mieluummin pitää ne ennallaan, ohita tämä korjaus."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Yhteyden, vuodon ja akun lukemat ovat yhä numeroita",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Muunna binäärisensoreiksi",
+            "description": "Yhteyden, vesivuodon ja akun lukemat lähetetään arvona 1 tai 0. Versioon 1.0.8 asti ne näytettiin numeerisina antureina, kuten `{example}`, joita ei voi käyttää Home Assistantin vakiokorttien kanssa vuodolle, yhteydelle ja vähäiselle akulle. Uudet asemat saavat binääriset anturit, jotka näyttävät **Märkä / Kuiva**, **Yhdistetty / Ei yhteyttä** ja **Päällä / Pois**.\n\n**{count} entiteettiä** voidaan muuntaa. Ilmanlaatuantureiden 0~5-akkutasot säilyttävät prosenttinsa: kuusi porrasta on enemmän kuin päällä/pois pystyy kantamaan.\n\nAlustan vaihto ei ole uudelleennimeäminen: vanhat entiteetit poistetaan ja luodaan uudelleen muodossa `binary_sensor`. **Niiden tallennettu historia menetetään** — näillä lukemilla ei ole pitkän aikavälin tilastoja, joten vain raakahistoria kärsii — ja **automaatiot, skriptit, näkymät ja koontinäytöt, jotka osoittavat niihin, on päivitettävä**. Uudet entiteetit ilmestyvät aseman seuraavan lähetyksen myötä.\n\nJos jätät ne mieluummin ennalleen, ohita tämä korjaus."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Yksikään sääasema ei ole vielä lähettänyt mitään",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Määritä sääasemasi",
+            "description": "Sääasemasi luo laitteet ja anturit — täällä ei ole mitään lisättävää.\n\nAvaa aseman sovelluksessa asemasi, sitten **Settings → Weather server → Other Server**, ja täytä:\n\n**URL**\n{urls}\nIlman `http://`- tai `https://`-etuliitettä. Käytä osoitetta, johon asemasi pääsee omassa verkossasi — ei ole mitään syytä altistaa Home Assistantia internetille tätä varten. Jos asemasi ei selvitä nimiä, käytä IP-osoitetta.\n\n**Station ID** — mitä haluat. Siitä tulee laitteen nimi Home Assistantissa.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minuutti on hyvä arvo.\n\n**API type** — *WSLink API*.\n\n**Upload** — jätä käyttöön.\n\nPaina **Save**, palaa takaisin ja paina **Confirm & Exit**.\n\n> ⚠️ **Vasta Confirm & Exit kirjoittaa asetukset asemaan.** Pelkkä tallennus ei muuta mitään. Anturisi ilmestyvät sekunti sen jälkeen.\n\nKuuntelevat päätepisteet ovat:\n{endpoints}"
+          },
+          "received": {
+            "title": "Asemasi pääsi läpi",
+            "description": "**{station}** lähetti ensimmäisen lähetyksensä. Sen anturit luodaan parhaillaan, ja niitä tulee lisää sitä mukaa kun asema niistä ilmoittaa.\n\nTämä viesti ei palaa."
+          },
+          "timeout": {
+            "title": "Mitään ei ole vielä saapunut",
+            "description": "{minutes} minuutissa ei saapunut yhtään lähetystä.\n\nTodennäköisyysjärjestyksessä:\n\n  - **Painoitko Confirm & Exit?** Pelkkä palvelinnäytön tallentaminen ei kirjoita asemaan mitään.\n  - **URL**-kentän on oltava {urls_inline}, ilman `http://`-etuliitettä, ja aseman saavutettavissa verkossasi.\n  - **Upload** on oltava käytössä tuolla näytöllä.\n  - Jotkin Bresserin laiteohjelmistot versiosta **3.02** alkaen kieltäytyvät tavallisesta HTTP:stä ja vaativat HTTPS:ää tarjoavan osoitteen.\n  - Lähetysväli voi yksinkertaisesti olla odotusta pidempi.\n  - **Asema-avain**: {key_hint}.\n\nJos asema tavoitti Home Assistantin mutta käännytettiin, siitä ilmoitetaan erikseen kohdassa **Asetukset → Järjestelmä → Korjaukset**.\n\nVoit sulkea tämän. Se pysyy täällä, kunnes asema ilmestyy, ja uudelleen avaaminen aloittaa odotuksen alusta."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Odotetaan asemasi ensimmäistä lähetystä…"
+        },
+        "abort": {
+          "not_received": "Mitään ei ole vielä saapunut, joten tämä jää auki. Se pysyy Korjauksissa, kunnes asema ilmestyy, ja voit avata sen uudelleen odottaaksesi taas."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "Asema {station} lähettää lukemia, jotka hylätään",
+      "description": "**{count} parametria** asemalta **{station}** ei tunnisteta, joten niiden arvot hylätään jokaisella lähetyksellä:\n\n{parameters}\n\nTavallinen syy on asema, joka raportoi enemmän kuin sen protokolla pystyy välittämään. Weather Undergroundissa on vain **4 paikkaa** lisäantureille; jos asemasi tarjoaa *API type* -asetukseksi **WSLinkin**, siihen vaihtaminen tuo esiin seitsemän kanavaa ja noin kaksinkertaisen määrän lukemia.\n\nJos syy ei ole tämä, juuri nämä parametrien nimet ovat sitä, mitä vikailmoitus tarvitsee: avaa sellainen [vikaseurannassa]({issue_tracker}), niin ne voidaan lisätä.\n\nVoit myös jättää tämän huomiotta — mikään ei ole rikki, nämä tietyt arvot eivät vain saavu perille."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "Asema {device} ei ole vielä lähettänyt tuulen suuntaa, joten kalibroitavaa ei ole. Odota seuraavaa lähetystä ja yritä uudelleen."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Absoluuttinen ilmanpaine"
+      },
+      "apiver": {
+        "name": "API-versio"
+      },
+      "aqbc": {
+        "name": "Musta hiili"
+      },
+      "aqco": {
+        "name": "Hiilimonoksidi"
+      },
+      "aqcot": {
+        "name": "Hiilimonoksidi hivenpitoisuuksina"
+      },
+      "aqec": {
+        "name": "Alkuainehiili"
+      },
+      "aqno": {
+        "name": "Typpimonoksidi"
+      },
+      "aqno2": {
+        "name": "NO2 X laskettu"
+      },
+      "aqno2t": {
+        "name": "Typpidioksidi"
+      },
+      "aqno2y": {
+        "name": "NO2 Y laskettu"
+      },
+      "aqno3": {
+        "name": "NO3-ioni"
+      },
+      "aqnox": {
+        "name": "Typen oksidit"
+      },
+      "aqnoy": {
+        "name": "Reaktiivinen kokonaistyppi"
+      },
+      "aqoc": {
+        "name": "Orgaaninen hiili"
+      },
+      "aqozone": {
+        "name": "Otsoni"
+      },
+      "aqpm10": {
+        "name": "PM10-massa"
+      },
+      "aqpm2_5": {
+        "name": "PM2.5-massa"
+      },
+      "aqso2": {
+        "name": "Rikkidioksidi"
+      },
+      "aqso2t": {
+        "name": "Rikkidioksidi hivenpitoisuuksina"
+      },
+      "aqso4": {
+        "name": "SO4-ioni"
+      },
+      "aquv_aeth": {
+        "name": "Aethalometri kanava 2"
+      },
+      "baromin": {
+        "name": "Paine"
+      },
+      "clouds": {
+        "name": "Pilvisyys"
+      },
+      "dailyrainin": {
+        "name": "Vuorokauden sade"
+      },
+      "dewptf": {
+        "name": "Kastepiste"
+      },
+      "humidity": {
+        "name": "Ulkoilman kosteus"
+      },
+      "inbat": {
+        "name": "Konsolin akun taso"
+      },
+      "indoorhumidity": {
+        "name": "Sisäilman kosteus"
+      },
+      "indoortempf": {
+        "name": "Sisälämpötila"
+      },
+      "inhum": {
+        "name": "Sisäilman kosteus"
+      },
+      "intem": {
+        "name": "Sisälämpötila"
+      },
+      "last_update": {
+        "name": "Viimeisin vastaanotto"
+      },
+      "leafwetness": {
+        "name": "Lehtikosteus"
+      },
+      "leafwetness2": {
+        "name": "CH2 lehtikosteus"
+      },
+      "lowbatt": {
+        "name": "Akku vähissä"
+      },
+      "monthlyrainin": {
+        "name": "Kuukauden sade"
+      },
+      "rainin": {
+        "name": "Tunnin sade"
+      },
+      "rbar": {
+        "name": "Suhteellinen ilmanpaine"
+      },
+      "rtfreq": {
+        "name": "Päivitystiheys"
+      },
+      "soilmoisture": {
+        "name": "Maankosteus"
+      },
+      "soilmoisture2": {
+        "name": "CH2 maankosteus"
+      },
+      "soilmoisture3": {
+        "name": "CH3 maankosteus"
+      },
+      "soilmoisture4": {
+        "name": "CH4 maankosteus"
+      },
+      "soiltemp2f": {
+        "name": "CH2 maan lämpötila"
+      },
+      "soiltemp3f": {
+        "name": "CH3 maan lämpötila"
+      },
+      "soiltemp4f": {
+        "name": "CH4 maan lämpötila"
+      },
+      "soiltempf": {
+        "name": "Maan lämpötila"
+      },
+      "solarradiation": {
+        "name": "Auringon säteily"
+      },
+      "t10bat": {
+        "name": "CO2-anturin akun taso"
+      },
+      "t10cn": {
+        "name": "CO2-anturin yhteyden tila"
+      },
+      "t10co2": {
+        "name": "CO2-pitoisuus"
+      },
+      "t11bat": {
+        "name": "CO-anturin akun taso"
+      },
+      "t11cn": {
+        "name": "CO-anturin yhteyden tila"
+      },
+      "t11co": {
+        "name": "CO-pitoisuus"
+      },
+      "t1bat": {
+        "name": "Ulkoanturin akun tila"
+      },
+      "t1chill": {
+        "name": "Pakkasen purevuuden lämpötila"
+      },
+      "t1cn": {
+        "name": "Ulkoanturin yhteyden tila"
+      },
+      "t1dew": {
+        "name": "Kastepisteen lämpötila"
+      },
+      "t1feels": {
+        "name": "Tuntuu kuin -lämpötila"
+      },
+      "t1heat": {
+        "name": "Lämpöindeksi"
+      },
+      "t1hum": {
+        "name": "Ulkoilman kosteus"
+      },
+      "t1raindy": {
+        "name": "Vuorokauden sademäärä"
+      },
+      "t1rainhr": {
+        "name": "Tunnin sademäärä"
+      },
+      "t1rainmth": {
+        "name": "Kuukauden sademäärä"
+      },
+      "t1rainra": {
+        "name": "Sateen voimakkuus"
+      },
+      "t1rainwy": {
+        "name": "Viikon sademäärä"
+      },
+      "t1rainyr": {
+        "name": "Vuoden sademäärä"
+      },
+      "t1solrad": {
+        "name": "Valon voimakkuus"
+      },
+      "t1tem": {
+        "name": "Ulkolämpötila"
+      },
+      "t1uvi": {
+        "name": "UV-indeksi"
+      },
+      "t1wbgt": {
+        "name": "WBGT-lämpötila"
+      },
+      "t1wdir": {
+        "name": "Tuulen suunta"
+      },
+      "t1wgust": {
+        "name": "Tuulenpuuska"
+      },
+      "t1ws": {
+        "name": "Tuulen nopeus"
+      },
+      "t1ws10mav": {
+        "name": "Tuulen nopeus ka. 10 min"
+      },
+      "t234c1bat": {
+        "name": "CH1 akun tila"
+      },
+      "t234c1cn": {
+        "name": "CH1 yhteyden tila"
+      },
+      "t234c1hum": {
+        "name": "CH1 kosteus"
+      },
+      "t234c1tem": {
+        "name": "CH1 lämpötila"
+      },
+      "t234c1tp": {
+        "name": "CH1 anturin tyyppi"
+      },
+      "t234c2bat": {
+        "name": "CH2 akun tila"
+      },
+      "t234c2cn": {
+        "name": "CH2 yhteyden tila"
+      },
+      "t234c2hum": {
+        "name": "CH2 kosteus"
+      },
+      "t234c2tem": {
+        "name": "CH2 lämpötila"
+      },
+      "t234c2tp": {
+        "name": "CH2 anturin tyyppi"
+      },
+      "t234c3bat": {
+        "name": "CH3 akun tila"
+      },
+      "t234c3cn": {
+        "name": "CH3 yhteyden tila"
+      },
+      "t234c3hum": {
+        "name": "CH3 kosteus"
+      },
+      "t234c3tem": {
+        "name": "CH3 lämpötila"
+      },
+      "t234c3tp": {
+        "name": "CH3 anturin tyyppi"
+      },
+      "t234c4bat": {
+        "name": "CH4 akun tila"
+      },
+      "t234c4cn": {
+        "name": "CH4 yhteyden tila"
+      },
+      "t234c4hum": {
+        "name": "CH4 kosteus"
+      },
+      "t234c4tem": {
+        "name": "CH4 lämpötila"
+      },
+      "t234c4tp": {
+        "name": "CH4 anturin tyyppi"
+      },
+      "t234c5bat": {
+        "name": "CH5 akun tila"
+      },
+      "t234c5cn": {
+        "name": "CH5 yhteyden tila"
+      },
+      "t234c5hum": {
+        "name": "CH5 kosteus"
+      },
+      "t234c5tem": {
+        "name": "CH5 lämpötila"
+      },
+      "t234c5tp": {
+        "name": "CH5 anturin tyyppi"
+      },
+      "t234c6bat": {
+        "name": "CH6 akun tila"
+      },
+      "t234c6cn": {
+        "name": "CH6 yhteyden tila"
+      },
+      "t234c6hum": {
+        "name": "CH6 kosteus"
+      },
+      "t234c6tem": {
+        "name": "CH6 lämpötila"
+      },
+      "t234c6tp": {
+        "name": "CH6 anturin tyyppi"
+      },
+      "t234c7bat": {
+        "name": "CH7 akun tila"
+      },
+      "t234c7cn": {
+        "name": "CH7 yhteyden tila"
+      },
+      "t234c7hum": {
+        "name": "CH7 kosteus"
+      },
+      "t234c7tem": {
+        "name": "CH7 lämpötila"
+      },
+      "t234c7tp": {
+        "name": "CH7 anturin tyyppi"
+      },
+      "t5ls1dtc": {
+        "name": "Salamat yhteensä 1 vuorokaudessa"
+      },
+      "t5ls1htc": {
+        "name": "Salamat yhteensä 1 tunnissa"
+      },
+      "t5ls30mtc": {
+        "name": "Salamat viimeisten 30 minuutin aikana"
+      },
+      "t5ls5mtc": {
+        "name": "Salamat viimeisten 5 minuutin aikana"
+      },
+      "t5lsbat": {
+        "name": "Salama-anturin akun tila"
+      },
+      "t5lscn": {
+        "name": "Salama-anturin yhteyden tila"
+      },
+      "t5lsf": {
+        "name": "Salamat viimeisen tunnin aikana"
+      },
+      "t5lskm": {
+        "name": "Salaman etäisyys"
+      },
+      "t5lst": {
+        "name": "Viimeisimmän salaman aika"
+      },
+      "t6c1bat": {
+        "name": "CH1 vuotoanturin akun tila"
+      },
+      "t6c1cn": {
+        "name": "CH1 vuotoanturin yhteyden tila"
+      },
+      "t6c1wls": {
+        "name": "CH1 vesivuodon tila"
+      },
+      "t6c2bat": {
+        "name": "CH2 vuotoanturin akun tila"
+      },
+      "t6c2cn": {
+        "name": "CH2 vuotoanturin yhteyden tila"
+      },
+      "t6c2wls": {
+        "name": "CH2 vesivuodon tila"
+      },
+      "t6c3bat": {
+        "name": "CH3 vuotoanturin akun tila"
+      },
+      "t6c3cn": {
+        "name": "CH3 vuotoanturin yhteyden tila"
+      },
+      "t6c3wls": {
+        "name": "CH3 vesivuodon tila"
+      },
+      "t6c4bat": {
+        "name": "CH4 vuotoanturin akun tila"
+      },
+      "t6c4cn": {
+        "name": "CH4 vuotoanturin yhteyden tila"
+      },
+      "t6c4wls": {
+        "name": "CH4 vesivuodon tila"
+      },
+      "t6c5bat": {
+        "name": "CH5 vuotoanturin akun tila"
+      },
+      "t6c5cn": {
+        "name": "CH5 vuotoanturin yhteyden tila"
+      },
+      "t6c5wls": {
+        "name": "CH5 vesivuodon tila"
+      },
+      "t6c6bat": {
+        "name": "CH6 vuotoanturin akun tila"
+      },
+      "t6c6cn": {
+        "name": "CH6 vuotoanturin yhteyden tila"
+      },
+      "t6c6wls": {
+        "name": "CH6 vesivuodon tila"
+      },
+      "t6c7bat": {
+        "name": "CH7 vuotoanturin akun tila"
+      },
+      "t6c7cn": {
+        "name": "CH7 vuotoanturin yhteyden tila"
+      },
+      "t6c7wls": {
+        "name": "CH7 vesivuodon tila"
+      },
+      "t8bat": {
+        "name": "Hiukkasanturin akun taso"
+      },
+      "t8cn": {
+        "name": "Hiukkasanturin yhteyden tila"
+      },
+      "t8pm10": {
+        "name": "PM10-pitoisuus"
+      },
+      "t8pm10ai": {
+        "name": "PM10 AQI"
+      },
+      "t8pm25": {
+        "name": "PM2.5-pitoisuus"
+      },
+      "t8pm25ai": {
+        "name": "PM2.5 AQI"
+      },
+      "t9bat": {
+        "name": "HCHO/VOC-anturin akun taso"
+      },
+      "t9cn": {
+        "name": "HCHO/VOC-anturin yhteyden tila"
+      },
+      "t9hcho": {
+        "name": "HCHO-pitoisuus"
+      },
+      "t9voclv": {
+        "name": "VOC-taso",
+        "state": {
+          "very_low": "Erittäin matala",
+          "low": "Matala",
+          "moderate": "Kohtalainen",
+          "high": "Korkea",
+          "very_high": "Erittäin korkea"
+        }
+      },
+      "tempf": {
+        "name": "Ulkolämpötila"
+      },
+      "uv": {
+        "name": "UV-indeksi"
+      },
+      "visibility": {
+        "name": "Näkyvyys"
+      },
+      "weeklyrainin": {
+        "name": "Viikon sade"
+      },
+      "wind_direction_raw": {
+        "name": "Tuulen suunta (raaka)"
+      },
+      "windchillf": {
+        "name": "Pakkasen purevuus"
+      },
+      "winddir": {
+        "name": "Tuulen suunta"
+      },
+      "winddir_avg2m": {
+        "name": "Tuulen suunta ka. 2 min"
+      },
+      "windgustdir": {
+        "name": "Puuskan suunta"
+      },
+      "windgustdir_10m": {
+        "name": "Puuskan suunta ka. 10 min"
+      },
+      "windgustmph": {
+        "name": "Tuulenpuuska"
+      },
+      "windgustmph_10m": {
+        "name": "Puuskan nopeus ka. 10 min"
+      },
+      "windspdmph_avg2m": {
+        "name": "Tuulen nopeus ka. 2 min"
+      },
+      "windspeedmph": {
+        "name": "Tuulen nopeus"
+      },
+      "yearlyrainin": {
+        "name": "Vuoden sade"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Konsolin akun taso"
+      },
+      "station_online": {
+        "name": "Asema verkossa"
+      },
+      "t10cn": {
+        "name": "CO2-anturin yhteyden tila"
+      },
+      "t11cn": {
+        "name": "CO-anturin yhteyden tila"
+      },
+      "t1bat": {
+        "name": "Ulkoanturin akun tila"
+      },
+      "t1cn": {
+        "name": "Ulkoanturin yhteyden tila"
+      },
+      "t234c1bat": {
+        "name": "CH1 akun tila"
+      },
+      "t234c1cn": {
+        "name": "CH1 yhteyden tila"
+      },
+      "t234c2bat": {
+        "name": "CH2 akun tila"
+      },
+      "t234c2cn": {
+        "name": "CH2 yhteyden tila"
+      },
+      "t234c3bat": {
+        "name": "CH3 akun tila"
+      },
+      "t234c3cn": {
+        "name": "CH3 yhteyden tila"
+      },
+      "t234c4bat": {
+        "name": "CH4 akun tila"
+      },
+      "t234c4cn": {
+        "name": "CH4 yhteyden tila"
+      },
+      "t234c5bat": {
+        "name": "CH5 akun tila"
+      },
+      "t234c5cn": {
+        "name": "CH5 yhteyden tila"
+      },
+      "t234c6bat": {
+        "name": "CH6 akun tila"
+      },
+      "t234c6cn": {
+        "name": "CH6 yhteyden tila"
+      },
+      "t234c7bat": {
+        "name": "CH7 akun tila"
+      },
+      "t234c7cn": {
+        "name": "CH7 yhteyden tila"
+      },
+      "t5lsbat": {
+        "name": "Salama-anturin akun tila"
+      },
+      "t5lscn": {
+        "name": "Salama-anturin yhteyden tila"
+      },
+      "t6c1bat": {
+        "name": "CH1 vuotoanturin akun tila"
+      },
+      "t6c1cn": {
+        "name": "CH1 vuotoanturin yhteyden tila"
+      },
+      "t6c1wls": {
+        "name": "CH1 vesivuodon tila"
+      },
+      "t6c2bat": {
+        "name": "CH2 vuotoanturin akun tila"
+      },
+      "t6c2cn": {
+        "name": "CH2 vuotoanturin yhteyden tila"
+      },
+      "t6c2wls": {
+        "name": "CH2 vesivuodon tila"
+      },
+      "t6c3bat": {
+        "name": "CH3 vuotoanturin akun tila"
+      },
+      "t6c3cn": {
+        "name": "CH3 vuotoanturin yhteyden tila"
+      },
+      "t6c3wls": {
+        "name": "CH3 vesivuodon tila"
+      },
+      "t6c4bat": {
+        "name": "CH4 vuotoanturin akun tila"
+      },
+      "t6c4cn": {
+        "name": "CH4 vuotoanturin yhteyden tila"
+      },
+      "t6c4wls": {
+        "name": "CH4 vesivuodon tila"
+      },
+      "t6c5bat": {
+        "name": "CH5 vuotoanturin akun tila"
+      },
+      "t6c5cn": {
+        "name": "CH5 vuotoanturin yhteyden tila"
+      },
+      "t6c5wls": {
+        "name": "CH5 vesivuodon tila"
+      },
+      "t6c6bat": {
+        "name": "CH6 vuotoanturin akun tila"
+      },
+      "t6c6cn": {
+        "name": "CH6 vuotoanturin yhteyden tila"
+      },
+      "t6c6wls": {
+        "name": "CH6 vesivuodon tila"
+      },
+      "t6c7bat": {
+        "name": "CH7 vuotoanturin akun tila"
+      },
+      "t6c7cn": {
+        "name": "CH7 vuotoanturin yhteyden tila"
+      },
+      "t6c7wls": {
+        "name": "CH7 vesivuodon tila"
+      },
+      "t8cn": {
+        "name": "Hiukkasanturin yhteyden tila"
+      },
+      "t9cn": {
+        "name": "HCHO/VOC-anturin yhteyden tila"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Tuulen suunnan korjaus"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Nollaa korjaus"
+      },
+      "set_north": {
+        "name": "Aseta pohjoinen nykyisestä arvosta"
+      }
+    }
+  }
+}

@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Personīgā meteostacija",
+        "description": "Iestatiet šeit stacijas atslēgu, kas jūsu meteostacijām jāpārsūta, lai to dati netiktu noraidīti. Ja atstāsiet lauku tukšu, tiks pieņemti visi pieprasījumi.",
+        "data": {
+          "password": "Stacijas atslēga"
+        }
+      },
+      "station": {
+        "title": "1. solis no 5 — jūsu stacija",
+        "description": "{image}\n\nJūsu meteoroloģiskā stacija pati izveido savas ierīces un sensorus, tāpēc šeit nav nekā ko pievienot. Tālāk ir tas, kas jāievada stacijas lietotnē.\n\nAtveriet lietotni, pārbaudiet, vai stacijas aparātprogrammatūra ir aktuāla, un atveriet tās iestatījumus."
+      },
+      "settings": {
+        "title": "2. solis no 5 — laika ziņu pakalpojums",
+        "description": "{image}\n\nIzvēlieties **Weather server**."
+      },
+      "server": {
+        "title": "3. solis no 5 — cits serveris",
+        "description": "{image}\n\nIzvēlieties **Other Server**."
+      },
+      "form": {
+        "title": "4. solis no 5 — servera iestatījumi",
+        "description": "{image}\n\nAizpildiet veidlapu un nospiediet **Save**.\n\n**URL**\n{urls}\nBez `http://` un bez `https://`. Izmantojiet adresi, ko jūsu stacija var sasniegt jūsu pašu tīklā — nav nekāda iemesla tāpēc pakļaut Home Assistant internetam. Ja stacija neatrisina nosaukumus, ierakstiet IP adresi.\n\n**Station ID** — ko vien vēlaties. Tas kļūs par ierīces nosaukumu Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minūte ir laba vērtība.\n\n**API type** — *WSLink API*. *WUnderground API* izvēlieties tikai tad, ja jūsu stacija nepiedāvā WSLink: tas pārnes uz pusi mazāk rādījumu un tikai četrus kanālus.\n\n**Upload** — atstājiet ieslēgtu.\n\n> ⏱️ Dažas stacijas zaudē Wi-Fi, ja šajā ekrānā kavējaties. Turiet adresi pa rokai, ievadiet to un saglabājiet."
+      },
+      "confirm": {
+        "title": "5. solis no 5 — confirm & exit",
+        "description": "{image}\n\nDodieties atpakaļ un nospiediet **Confirm & Exit**.\n\n> ⚠️ **Tieši Confirm & Exit ieraksta iestatījumus stacijā.** Saglabāšana vien neko nemaina.\n\nKad tas izdarīts, nospiediet Tālāk."
+      },
+      "received": {
+        "title": "Jūsu stacija sarunājas ar Home Assistant",
+        "description": "**{station}** tikko nosūtīja savu pirmo sūtījumu.\n\nTās sensori parādīsies ar nākamo un tiek izveidoti no tā, ko stacija patiešām sūta — šeit nav nekā ko izvēlēties."
+      },
+      "timeout": {
+        "title": "Vēl nekas nav pienācis",
+        "description": "Pēdējās {minutes} minūtēs neviena stacija nav neko nosūtījusi.{key_hint_extra}\n\nParastie iemesli ir adrese, ko stacija nevar sasniegt, nenospiests **Confirm & Exit**, vai aparātprogrammatūra no 3.02, kas prasa HTTPS.\n\nAdreses, uz kurām to virzīt:\n{urls}\nGalapunkti, kas gaida sūtījumus:\n{endpoints}\n\nNospiediet Tālāk, lai tomēr pabeigtu — iestatījumi tiek saglabāti, galapunkti patiešām sāk klausīties, un labojums atvedīs jūs atpakaļ šurp, līdz parādīsies kāda stacija."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Jau konfigurēts. Viena vienīga instance apkalpo visas meteostacijas."
+    },
+    "progress": {
+      "waiting_for_station": "Gaida jūsu stacijas pirmo sūtījumu…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Personīgā meteostacija",
+        "menu_options": {
+          "options": "Iestatījumi",
+          "instructions": "Kā novirzīt staciju uz Home Assistant"
+        }
+      },
+      "options": {
+        "title": "Personīgā meteostacija",
+        "description": "Iestatiet šeit stacijas atslēgu, kas jūsu meteostacijām jāpārsūta, lai to dati netiktu noraidīti. Ja atstāsiet lauku tukšu, tiks pieņemti visi pieprasījumi.",
+        "data": {
+          "password": "Stacijas atslēga",
+          "availability_timeout": "Atzīmēt kā nepieejamu pēc (minūtēm)",
+          "debug": "Reģistrēt katru ienākošo pieprasījumu"
+        },
+        "data_description": {
+          "availability_timeout": "Cik ilgi stacija drīkst klusēt, pirms tās sensori tiek atzīmēti kā nepieejami. 0 nozīmē nekad tos neatzīmēt.",
+          "debug": "Ieraksta katra pieprasījuma pilnu saturu Home Assistant žurnālā. Noderīgi, iestatot staciju, vēlāk traucējoši."
+        }
+      },
+      "station": {
+        "title": "1. solis no 5 — jūsu stacija",
+        "description": "{image}\n\nJūsu meteoroloģiskā stacija pati izveido savas ierīces un sensorus, tāpēc šeit nav nekā ko pievienot. Tālāk ir tas, kas jāievada stacijas lietotnē.\n\nAtveriet lietotni, pārbaudiet, vai stacijas aparātprogrammatūra ir aktuāla, un atveriet tās iestatījumus."
+      },
+      "settings": {
+        "title": "2. solis no 5 — laika ziņu pakalpojums",
+        "description": "{image}\n\nIzvēlieties **Weather server**."
+      },
+      "server": {
+        "title": "3. solis no 5 — cits serveris",
+        "description": "{image}\n\nIzvēlieties **Other Server**."
+      },
+      "form": {
+        "title": "4. solis no 5 — servera iestatījumi",
+        "description": "{image}\n\nAizpildiet veidlapu un nospiediet **Save**.\n\n**URL**\n{urls}\nBez `http://` un bez `https://`. Izmantojiet adresi, ko jūsu stacija var sasniegt jūsu pašu tīklā — nav nekāda iemesla tāpēc pakļaut Home Assistant internetam. Ja stacija neatrisina nosaukumus, ierakstiet IP adresi.\n\n**Station ID** — ko vien vēlaties. Tas kļūs par ierīces nosaukumu Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minūte ir laba vērtība.\n\n**API type** — *WSLink API*. *WUnderground API* izvēlieties tikai tad, ja jūsu stacija nepiedāvā WSLink: tas pārnes uz pusi mazāk rādījumu un tikai četrus kanālus.\n\n**Upload** — atstājiet ieslēgtu.\n\n> ⏱️ Dažas stacijas zaudē Wi-Fi, ja šajā ekrānā kavējaties. Turiet adresi pa rokai, ievadiet to un saglabājiet."
+      },
+      "confirm": {
+        "title": "5. solis no 5 — confirm & exit",
+        "description": "{image}\n\nDodieties atpakaļ un nospiediet **Confirm & Exit**.\n\n> ⚠️ **Tieši Confirm & Exit ieraksta iestatījumus stacijā.** Saglabāšana vien neko nemaina.\n\nKad tas izdarīts, nospiediet Tālāk."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Meteostacija noraidīta: nepareiza stacijas atslēga",
+      "description": "Meteostacija ar adresi {ip} mēģināja nosūtīt datus kā `{station_id}`, nepārsūtot gaidīto stacijas atslēgu.\n\nPārbaudiet, vai stacijā vai WSLink lietotnē iestatītā atslēga sakrīt ar šajā integrācijā norādīto. Šis ziņojums pazudīs pats, tiklīdz tiks pieņemts pieprasījums no {ip}."
+    },
+    "missing_device_id": {
+      "title": "Meteostacija noraidīta: nav stacijas identifikatora",
+      "description": "Meteostacija ar adresi {ip} nosūtīja datus bez stacijas identifikatora.\n\nIestatiet Sender ID WSLink lietotnē vai ID parametru stacijas konfigurācijā. Šis ziņojums pazudīs pats, tiklīdz tiks pieņemts pieprasījums no {ip}."
+    },
+    "legacy_entity_ids": {
+      "title": "Entītiju identifikatori atkārto stacijas nosaukumu",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Saīsināt entītiju identifikatorus",
+            "description": "Līdz versijai 1.0.8 šī integrācija veidoja entītiju identifikatorus, kuros stacijas nosaukums ir divreiz, piemēram `{example_old}`. Jaunas stacijas to vairs nedara.\n\n**{count} entītijas** var pārdēvēt, piemēram, par `{example_new}`.\n\nVēsture un ilgtermiņa statistika pārdēvēšanai seko automātiski. **Automatizācijas, skripti, ainas un paneļi — nē** — viss, kas atsaucas uz vecajiem identifikatoriem, jāatjaunina pašiem.\n\nJa labāk vēlaties tos atstāt kā ir, ignorējiet šo labojumu."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Savienojuma, noplūdes un baterijas rādījumi joprojām ir skaitļi",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Pārveidot par binārajiem sensoriem",
+            "description": "Savienojuma, ūdens noplūdes un baterijas rādījumi tiek sūtīti kā 1 vai 0. Līdz versijai 1.0.8 tie tika rādīti kā skaitliski sensori, piemēram `{example}`, kurus nevar izmantot ar Home Assistant standarta noplūdes, savienojuma un tukšas baterijas kartēm. Jaunās stacijas saņem binārus sensorus, kas rāda **Slapjš / Sauss**, **Savienots / Atvienots** un **Ieslēgts / Izslēgts**.\n\nVar pārveidot **{count} vienības**. Gaisa kvalitātes sensoru 0~5 baterijas līmeņi saglabā savu procentu: seši pakāpieni ir vairāk, nekā ieslēgts/izslēgts spēj panest.\n\nPlatformas maiņa nav pārdēvēšana: vecās vienības tiek noņemtas un izveidotas no jauna kā `binary_sensor`. **To ierakstītā vēsture zūd** — šiem rādījumiem nav ilgtermiņa statistikas, tāpēc skarta tikai neapstrādātā vēsture — un **automatizācijas, skripti, ainas un paneļi, kas uz tiem norāda, ir jāatjaunina**. Jaunās vienības parādās stacijas nākamajā sūtījumā.\n\nJa labprātāk atstātu tās tādas, kādas ir, ignorējiet šo labojumu."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Neviena meteostacija vēl neko nav nosūtījusi",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Iestatiet savu meteostaciju",
+            "description": "Jūsu meteostacija izveido ierīces un sensorus — šeit nav ko pievienot.\n\nStacijas lietotnē atveriet savu staciju, pēc tam **Settings → Weather server → Other Server**, un aizpildiet:\n\n**URL**\n{urls}\nBez `http://` vai `https://`. Izmantojiet adresi, ko jūsu stacija var sasniegt jūsu pašu tīklā — nav nekāda iemesla tāpēc atvērt Home Assistant internetam. Ja jūsu stacija neatpazīst nosaukumus, ievadiet IP adresi.\n\n**Station ID** — ko vien vēlaties. Tas kļūs par ierīces nosaukumu Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minūte ir laba vērtība.\n\n**API type** — *WSLink API*.\n\n**Upload** — atstājiet ieslēgtu.\n\nNospiediet **Save**, atgriezieties atpakaļ un nospiediet **Confirm & Exit**.\n\n> ⚠️ **Tieši Confirm & Exit ieraksta iestatījumus stacijā.** Tikai saglabāšana neko nemaina. Jūsu sensori parādās sekundi vēlāk.\n\nKlausošies galapunkti ir:\n{endpoints}"
+          },
+          "received": {
+            "title": "Jūsu stacija ir izgājusi cauri",
+            "description": "**{station}** nosūtīja savu pirmo sūtījumu. Tās sensori tiek veidoti tagad, un vairāk parādīsies, stacijai par tiem ziņojot.\n\nŠis ziņojums neatgriezīsies."
+          },
+          "timeout": {
+            "title": "Vēl nekas nav saņemts",
+            "description": "{minutes} minūtēs nepienāca neviens sūtījums.\n\nPēc iespējamības:\n\n  - **Vai nospiedāt Confirm & Exit?** Tikai servera ekrāna saglabāšana stacijā neko neieraksta.\n  - **URL** jābūt {urls_inline}, bez `http://`, un stacijai sasniedzamam jūsu tīklā.\n  - Tajā ekrānā jābūt ieslēgtam **Upload**.\n  - Dažas Bresser programmaparatūras no **3.02** noraida parasto HTTP un pieprasa adresi, kas apkalpo HTTPS.\n  - Sūtīšanas intervāls, iespējams, vienkārši ir garāks par gaidīšanu.\n  - **Stacijas atslēga**: {key_hint}.\n\nJa stacija sasniedza Home Assistant, bet tika noraidīta, par to atsevišķi tiek ziņots sadaļā **Iestatījumi → Sistēma → Labojumi**.\n\nVarat aizvērt. Tas paliek šeit, līdz parādās stacija, un atvēršana no jauna sāk gaidīšanu no sākuma."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Gaida jūsu stacijas pirmo sūtījumu…"
+        },
+        "abort": {
+          "not_received": "Vēl nekas nav pienācis, tāpēc šis paliek atvērts. Tas paliek Labojumos, līdz parādās stacija, un varat to atvērt no jauna, lai atkal gaidītu."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "Stacija {station} sūta rādījumus, kas tiek atmesti",
+      "description": "**{count} parametri** no **{station}** netiek atpazīti, tāpēc to vērtības tiek atmestas katrā nosūtīšanā:\n\n{parameters}\n\nParastais iemesls ir stacija, kas ziņo vairāk, nekā spēj pārnest tās protokols. Weather Underground papildu sensoriem ir tikai **4 vietas**; ja jūsu stacija piedāvā **WSLink** kā *API type*, pāreja uz to atklāj septiņus kanālus un aptuveni divreiz vairāk rādījumu.\n\nJa iemesls nav tāds, tieši šie parametru nosaukumi ir tas, kas vajadzīgs kļūdas ziņojumam: atveriet to [kļūdu sekotājā]({issue_tracker}), un tos varēs pievienot.\n\nTo var arī ignorēt — nekas nav salūzis, vienkārši šīs konkrētās vērtības nepienāk."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "Stacija {device} vēl nav nosūtījusi vēja virzienu, tāpēc nav pēc kā kalibrēt. Pagaidiet nākamo sūtījumu un mēģiniet vēlreiz."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Absolūtais gaisa spiediens"
+      },
+      "apiver": {
+        "name": "API versija"
+      },
+      "aqbc": {
+        "name": "Melnais ogleklis"
+      },
+      "aqco": {
+        "name": "Oglekļa monoksīds"
+      },
+      "aqcot": {
+        "name": "Oglekļa monoksīds pēdās"
+      },
+      "aqec": {
+        "name": "Elementārais ogleklis"
+      },
+      "aqno": {
+        "name": "Slāpekļa monoksīds"
+      },
+      "aqno2": {
+        "name": "NO2 X aprēķināts"
+      },
+      "aqno2t": {
+        "name": "Slāpekļa dioksīds"
+      },
+      "aqno2y": {
+        "name": "NO2 Y aprēķināts"
+      },
+      "aqno3": {
+        "name": "NO3 jons"
+      },
+      "aqnox": {
+        "name": "Slāpekļa oksīdi"
+      },
+      "aqnoy": {
+        "name": "Kopējais reaktīvais slāpeklis"
+      },
+      "aqoc": {
+        "name": "Organiskais ogleklis"
+      },
+      "aqozone": {
+        "name": "Ozons"
+      },
+      "aqpm10": {
+        "name": "PM10 masa"
+      },
+      "aqpm2_5": {
+        "name": "PM2.5 masa"
+      },
+      "aqso2": {
+        "name": "Sēra dioksīds"
+      },
+      "aqso2t": {
+        "name": "Sēra dioksīds pēdās"
+      },
+      "aqso4": {
+        "name": "SO4 jons"
+      },
+      "aquv_aeth": {
+        "name": "Etalometrs 2. kanāls"
+      },
+      "baromin": {
+        "name": "Spiediens"
+      },
+      "clouds": {
+        "name": "Mākoņu segums"
+      },
+      "dailyrainin": {
+        "name": "Diennakts lietus"
+      },
+      "dewptf": {
+        "name": "Rasas punkts"
+      },
+      "humidity": {
+        "name": "Āra gaisa mitrums"
+      },
+      "inbat": {
+        "name": "Konsoles baterijas līmenis"
+      },
+      "indoorhumidity": {
+        "name": "Iekštelpu gaisa mitrums"
+      },
+      "indoortempf": {
+        "name": "Iekštelpu temperatūra"
+      },
+      "inhum": {
+        "name": "Iekštelpu gaisa mitrums"
+      },
+      "intem": {
+        "name": "Iekštelpu temperatūra"
+      },
+      "last_update": {
+        "name": "Pēdējā saņemšana"
+      },
+      "leafwetness": {
+        "name": "Lapu mitrums"
+      },
+      "leafwetness2": {
+        "name": "CH2 lapu mitrums"
+      },
+      "lowbatt": {
+        "name": "Zems baterijas līmenis"
+      },
+      "monthlyrainin": {
+        "name": "Mēneša lietus"
+      },
+      "rainin": {
+        "name": "Stundas lietus"
+      },
+      "rbar": {
+        "name": "Relatīvais gaisa spiediens"
+      },
+      "rtfreq": {
+        "name": "Atjaunināšanas biežums"
+      },
+      "soilmoisture": {
+        "name": "Augsnes mitrums"
+      },
+      "soilmoisture2": {
+        "name": "CH2 augsnes mitrums"
+      },
+      "soilmoisture3": {
+        "name": "CH3 augsnes mitrums"
+      },
+      "soilmoisture4": {
+        "name": "CH4 augsnes mitrums"
+      },
+      "soiltemp2f": {
+        "name": "CH2 augsnes temperatūra"
+      },
+      "soiltemp3f": {
+        "name": "CH3 augsnes temperatūra"
+      },
+      "soiltemp4f": {
+        "name": "CH4 augsnes temperatūra"
+      },
+      "soiltempf": {
+        "name": "Augsnes temperatūra"
+      },
+      "solarradiation": {
+        "name": "Saules starojums"
+      },
+      "t10bat": {
+        "name": "CO2 sensora baterijas līmenis"
+      },
+      "t10cn": {
+        "name": "CO2 sensora savienojuma stāvoklis"
+      },
+      "t10co2": {
+        "name": "CO2 koncentrācija"
+      },
+      "t11bat": {
+        "name": "CO sensora baterijas līmenis"
+      },
+      "t11cn": {
+        "name": "CO sensora savienojuma stāvoklis"
+      },
+      "t11co": {
+        "name": "CO koncentrācija"
+      },
+      "t1bat": {
+        "name": "Āra sensora baterijas stāvoklis"
+      },
+      "t1chill": {
+        "name": "Vēja atdzišanas temperatūra"
+      },
+      "t1cn": {
+        "name": "Āra sensora savienojuma stāvoklis"
+      },
+      "t1dew": {
+        "name": "Rasas punkta temperatūra"
+      },
+      "t1feels": {
+        "name": "Sajūtamā temperatūra"
+      },
+      "t1heat": {
+        "name": "Karstuma indekss"
+      },
+      "t1hum": {
+        "name": "Āra gaisa mitrums"
+      },
+      "t1raindy": {
+        "name": "Diennakts nokrišņi"
+      },
+      "t1rainhr": {
+        "name": "Stundas nokrišņi"
+      },
+      "t1rainmth": {
+        "name": "Mēneša nokrišņi"
+      },
+      "t1rainra": {
+        "name": "Lietus intensitāte"
+      },
+      "t1rainwy": {
+        "name": "Nedēļas nokrišņi"
+      },
+      "t1rainyr": {
+        "name": "Gada nokrišņi"
+      },
+      "t1solrad": {
+        "name": "Gaismas intensitāte"
+      },
+      "t1tem": {
+        "name": "Āra temperatūra"
+      },
+      "t1uvi": {
+        "name": "UV indekss"
+      },
+      "t1wbgt": {
+        "name": "WBGT temperatūra"
+      },
+      "t1wdir": {
+        "name": "Vēja virziens"
+      },
+      "t1wgust": {
+        "name": "Vēja brāzma"
+      },
+      "t1ws": {
+        "name": "Vēja ātrums"
+      },
+      "t1ws10mav": {
+        "name": "Vēja ātrums vid. 10 min"
+      },
+      "t234c1bat": {
+        "name": "CH1 baterijas stāvoklis"
+      },
+      "t234c1cn": {
+        "name": "CH1 savienojuma stāvoklis"
+      },
+      "t234c1hum": {
+        "name": "CH1 mitrums"
+      },
+      "t234c1tem": {
+        "name": "CH1 temperatūra"
+      },
+      "t234c1tp": {
+        "name": "CH1 sensora tips"
+      },
+      "t234c2bat": {
+        "name": "CH2 baterijas stāvoklis"
+      },
+      "t234c2cn": {
+        "name": "CH2 savienojuma stāvoklis"
+      },
+      "t234c2hum": {
+        "name": "CH2 mitrums"
+      },
+      "t234c2tem": {
+        "name": "CH2 temperatūra"
+      },
+      "t234c2tp": {
+        "name": "CH2 sensora tips"
+      },
+      "t234c3bat": {
+        "name": "CH3 baterijas stāvoklis"
+      },
+      "t234c3cn": {
+        "name": "CH3 savienojuma stāvoklis"
+      },
+      "t234c3hum": {
+        "name": "CH3 mitrums"
+      },
+      "t234c3tem": {
+        "name": "CH3 temperatūra"
+      },
+      "t234c3tp": {
+        "name": "CH3 sensora tips"
+      },
+      "t234c4bat": {
+        "name": "CH4 baterijas stāvoklis"
+      },
+      "t234c4cn": {
+        "name": "CH4 savienojuma stāvoklis"
+      },
+      "t234c4hum": {
+        "name": "CH4 mitrums"
+      },
+      "t234c4tem": {
+        "name": "CH4 temperatūra"
+      },
+      "t234c4tp": {
+        "name": "CH4 sensora tips"
+      },
+      "t234c5bat": {
+        "name": "CH5 baterijas stāvoklis"
+      },
+      "t234c5cn": {
+        "name": "CH5 savienojuma stāvoklis"
+      },
+      "t234c5hum": {
+        "name": "CH5 mitrums"
+      },
+      "t234c5tem": {
+        "name": "CH5 temperatūra"
+      },
+      "t234c5tp": {
+        "name": "CH5 sensora tips"
+      },
+      "t234c6bat": {
+        "name": "CH6 baterijas stāvoklis"
+      },
+      "t234c6cn": {
+        "name": "CH6 savienojuma stāvoklis"
+      },
+      "t234c6hum": {
+        "name": "CH6 mitrums"
+      },
+      "t234c6tem": {
+        "name": "CH6 temperatūra"
+      },
+      "t234c6tp": {
+        "name": "CH6 sensora tips"
+      },
+      "t234c7bat": {
+        "name": "CH7 baterijas stāvoklis"
+      },
+      "t234c7cn": {
+        "name": "CH7 savienojuma stāvoklis"
+      },
+      "t234c7hum": {
+        "name": "CH7 mitrums"
+      },
+      "t234c7tem": {
+        "name": "CH7 temperatūra"
+      },
+      "t234c7tp": {
+        "name": "CH7 sensora tips"
+      },
+      "t5ls1dtc": {
+        "name": "Zibens spērieni kopā 1 diennaktī"
+      },
+      "t5ls1htc": {
+        "name": "Zibens spērieni kopā 1 stundā"
+      },
+      "t5ls30mtc": {
+        "name": "Zibens spērieni pēdējās 30 minūtēs"
+      },
+      "t5ls5mtc": {
+        "name": "Zibens spērieni pēdējās 5 minūtēs"
+      },
+      "t5lsbat": {
+        "name": "Zibens sensora baterijas stāvoklis"
+      },
+      "t5lscn": {
+        "name": "Zibens sensora savienojuma stāvoklis"
+      },
+      "t5lsf": {
+        "name": "Zibens spērieni pēdējā stundā"
+      },
+      "t5lskm": {
+        "name": "Zibens attālums"
+      },
+      "t5lst": {
+        "name": "Pēdējā zibens spēriena laiks"
+      },
+      "t6c1bat": {
+        "name": "CH1 noplūdes sensora baterijas stāvoklis"
+      },
+      "t6c1cn": {
+        "name": "CH1 noplūdes sensora savienojuma stāvoklis"
+      },
+      "t6c1wls": {
+        "name": "CH1 ūdens noplūdes stāvoklis"
+      },
+      "t6c2bat": {
+        "name": "CH2 noplūdes sensora baterijas stāvoklis"
+      },
+      "t6c2cn": {
+        "name": "CH2 noplūdes sensora savienojuma stāvoklis"
+      },
+      "t6c2wls": {
+        "name": "CH2 ūdens noplūdes stāvoklis"
+      },
+      "t6c3bat": {
+        "name": "CH3 noplūdes sensora baterijas stāvoklis"
+      },
+      "t6c3cn": {
+        "name": "CH3 noplūdes sensora savienojuma stāvoklis"
+      },
+      "t6c3wls": {
+        "name": "CH3 ūdens noplūdes stāvoklis"
+      },
+      "t6c4bat": {
+        "name": "CH4 noplūdes sensora baterijas stāvoklis"
+      },
+      "t6c4cn": {
+        "name": "CH4 noplūdes sensora savienojuma stāvoklis"
+      },
+      "t6c4wls": {
+        "name": "CH4 ūdens noplūdes stāvoklis"
+      },
+      "t6c5bat": {
+        "name": "CH5 noplūdes sensora baterijas stāvoklis"
+      },
+      "t6c5cn": {
+        "name": "CH5 noplūdes sensora savienojuma stāvoklis"
+      },
+      "t6c5wls": {
+        "name": "CH5 ūdens noplūdes stāvoklis"
+      },
+      "t6c6bat": {
+        "name": "CH6 noplūdes sensora baterijas stāvoklis"
+      },
+      "t6c6cn": {
+        "name": "CH6 noplūdes sensora savienojuma stāvoklis"
+      },
+      "t6c6wls": {
+        "name": "CH6 ūdens noplūdes stāvoklis"
+      },
+      "t6c7bat": {
+        "name": "CH7 noplūdes sensora baterijas stāvoklis"
+      },
+      "t6c7cn": {
+        "name": "CH7 noplūdes sensora savienojuma stāvoklis"
+      },
+      "t6c7wls": {
+        "name": "CH7 ūdens noplūdes stāvoklis"
+      },
+      "t8bat": {
+        "name": "Daļiņu sensora baterijas līmenis"
+      },
+      "t8cn": {
+        "name": "Daļiņu sensora savienojuma stāvoklis"
+      },
+      "t8pm10": {
+        "name": "PM10 koncentrācija"
+      },
+      "t8pm10ai": {
+        "name": "PM10 AQI"
+      },
+      "t8pm25": {
+        "name": "PM2.5 koncentrācija"
+      },
+      "t8pm25ai": {
+        "name": "PM2.5 AQI"
+      },
+      "t9bat": {
+        "name": "HCHO/GOS sensora baterijas līmenis"
+      },
+      "t9cn": {
+        "name": "HCHO/GOS sensora savienojuma stāvoklis"
+      },
+      "t9hcho": {
+        "name": "HCHO koncentrācija"
+      },
+      "t9voclv": {
+        "name": "GOS līmenis",
+        "state": {
+          "very_low": "Ļoti zems",
+          "low": "Zems",
+          "moderate": "Vidējs",
+          "high": "Augsts",
+          "very_high": "Ļoti augsts"
+        }
+      },
+      "tempf": {
+        "name": "Āra temperatūra"
+      },
+      "uv": {
+        "name": "UV indekss"
+      },
+      "visibility": {
+        "name": "Redzamība"
+      },
+      "weeklyrainin": {
+        "name": "Nedēļas lietus"
+      },
+      "wind_direction_raw": {
+        "name": "Vēja virziens (neapstrādāts)"
+      },
+      "windchillf": {
+        "name": "Vēja radītā atdzišana"
+      },
+      "winddir": {
+        "name": "Vēja virziens"
+      },
+      "winddir_avg2m": {
+        "name": "Vēja virziens vid. 2 min"
+      },
+      "windgustdir": {
+        "name": "Brāzmas virziens"
+      },
+      "windgustdir_10m": {
+        "name": "Brāzmas virziens vid. 10 min"
+      },
+      "windgustmph": {
+        "name": "Vēja brāzma"
+      },
+      "windgustmph_10m": {
+        "name": "Brāzmas ātrums vid. 10 min"
+      },
+      "windspdmph_avg2m": {
+        "name": "Vēja ātrums vid. 2 min"
+      },
+      "windspeedmph": {
+        "name": "Vēja ātrums"
+      },
+      "yearlyrainin": {
+        "name": "Gada lietus"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Konsoles baterijas līmenis"
+      },
+      "station_online": {
+        "name": "Stacija tiešsaistē"
+      },
+      "t10cn": {
+        "name": "CO2 sensora savienojuma stāvoklis"
+      },
+      "t11cn": {
+        "name": "CO sensora savienojuma stāvoklis"
+      },
+      "t1bat": {
+        "name": "Āra sensora baterijas stāvoklis"
+      },
+      "t1cn": {
+        "name": "Āra sensora savienojuma stāvoklis"
+      },
+      "t234c1bat": {
+        "name": "CH1 baterijas stāvoklis"
+      },
+      "t234c1cn": {
+        "name": "CH1 savienojuma stāvoklis"
+      },
+      "t234c2bat": {
+        "name": "CH2 baterijas stāvoklis"
+      },
+      "t234c2cn": {
+        "name": "CH2 savienojuma stāvoklis"
+      },
+      "t234c3bat": {
+        "name": "CH3 baterijas stāvoklis"
+      },
+      "t234c3cn": {
+        "name": "CH3 savienojuma stāvoklis"
+      },
+      "t234c4bat": {
+        "name": "CH4 baterijas stāvoklis"
+      },
+      "t234c4cn": {
+        "name": "CH4 savienojuma stāvoklis"
+      },
+      "t234c5bat": {
+        "name": "CH5 baterijas stāvoklis"
+      },
+      "t234c5cn": {
+        "name": "CH5 savienojuma stāvoklis"
+      },
+      "t234c6bat": {
+        "name": "CH6 baterijas stāvoklis"
+      },
+      "t234c6cn": {
+        "name": "CH6 savienojuma stāvoklis"
+      },
+      "t234c7bat": {
+        "name": "CH7 baterijas stāvoklis"
+      },
+      "t234c7cn": {
+        "name": "CH7 savienojuma stāvoklis"
+      },
+      "t5lsbat": {
+        "name": "Zibens sensora baterijas stāvoklis"
+      },
+      "t5lscn": {
+        "name": "Zibens sensora savienojuma stāvoklis"
+      },
+      "t6c1bat": {
+        "name": "CH1 noplūdes sensora baterijas stāvoklis"
+      },
+      "t6c1cn": {
+        "name": "CH1 noplūdes sensora savienojuma stāvoklis"
+      },
+      "t6c1wls": {
+        "name": "CH1 ūdens noplūdes stāvoklis"
+      },
+      "t6c2bat": {
+        "name": "CH2 noplūdes sensora baterijas stāvoklis"
+      },
+      "t6c2cn": {
+        "name": "CH2 noplūdes sensora savienojuma stāvoklis"
+      },
+      "t6c2wls": {
+        "name": "CH2 ūdens noplūdes stāvoklis"
+      },
+      "t6c3bat": {
+        "name": "CH3 noplūdes sensora baterijas stāvoklis"
+      },
+      "t6c3cn": {
+        "name": "CH3 noplūdes sensora savienojuma stāvoklis"
+      },
+      "t6c3wls": {
+        "name": "CH3 ūdens noplūdes stāvoklis"
+      },
+      "t6c4bat": {
+        "name": "CH4 noplūdes sensora baterijas stāvoklis"
+      },
+      "t6c4cn": {
+        "name": "CH4 noplūdes sensora savienojuma stāvoklis"
+      },
+      "t6c4wls": {
+        "name": "CH4 ūdens noplūdes stāvoklis"
+      },
+      "t6c5bat": {
+        "name": "CH5 noplūdes sensora baterijas stāvoklis"
+      },
+      "t6c5cn": {
+        "name": "CH5 noplūdes sensora savienojuma stāvoklis"
+      },
+      "t6c5wls": {
+        "name": "CH5 ūdens noplūdes stāvoklis"
+      },
+      "t6c6bat": {
+        "name": "CH6 noplūdes sensora baterijas stāvoklis"
+      },
+      "t6c6cn": {
+        "name": "CH6 noplūdes sensora savienojuma stāvoklis"
+      },
+      "t6c6wls": {
+        "name": "CH6 ūdens noplūdes stāvoklis"
+      },
+      "t6c7bat": {
+        "name": "CH7 noplūdes sensora baterijas stāvoklis"
+      },
+      "t6c7cn": {
+        "name": "CH7 noplūdes sensora savienojuma stāvoklis"
+      },
+      "t6c7wls": {
+        "name": "CH7 ūdens noplūdes stāvoklis"
+      },
+      "t8cn": {
+        "name": "Daļiņu sensora savienojuma stāvoklis"
+      },
+      "t9cn": {
+        "name": "HCHO/GOS sensora savienojuma stāvoklis"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Vēja virziena nobīde"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Atiestatīt nobīdi"
+      },
+      "set_north": {
+        "name": "Iestatīt ziemeļus pēc pašreizējās vērtības"
+      }
+    }
+  }
+}

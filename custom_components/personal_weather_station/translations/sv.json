@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Personlig väderstation",
+        "description": "Ange här en stationsnyckel som dina väderstationer måste skicka med för att deras data inte ska avvisas. Lämnar du fältet tomt accepteras alla förfrågningar.",
+        "data": {
+          "password": "Stationsnyckel"
+        }
+      },
+      "station": {
+        "title": "Steg 1 av 5 — din station",
+        "description": "{image}\n\nDin väderstation skapar själv sina enheter och sensorer, så här finns inget att lägga till. Det som följer är det du skriver in i stationens app.\n\nÖppna appen, kontrollera att stationens fasta programvara är uppdaterad och öppna sedan dess inställningar."
+      },
+      "settings": {
+        "title": "Steg 2 av 5 — vädertjänst",
+        "description": "{image}\n\nVälj **Weather server**."
+      },
+      "server": {
+        "title": "Steg 3 av 5 — annan server",
+        "description": "{image}\n\nVälj **Other Server**."
+      },
+      "form": {
+        "title": "Steg 4 av 5 — serverinställningar",
+        "description": "{image}\n\nFyll i formuläret och tryck sedan på **Save**.\n\n**URL**\n{urls}\nUtan `http://` eller `https://`. Använd en adress som din station når på ditt eget nät — det finns ingen anledning att exponera Home Assistant mot internet för detta. Om din station inte slår upp namn, använd IP-adressen.\n\n**Station ID** — vad du vill. Det blir enhetens namn i Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minut är ett bra värde.\n\n**API type** — *WSLink API*. Välj *WUnderground API* bara om din station inte erbjuder WSLink: den bär hälften så många mätvärden och bara fyra kanaler.\n\n**Upload** — låt den vara på.\n\n> ⏱️ Vissa stationer tappar wifi om du dröjer kvar på den här skärmen. Ha adressen redo, fyll i den och spara."
+      },
+      "confirm": {
+        "title": "Steg 5 av 5 — confirm & exit",
+        "description": "{image}\n\nGå tillbaka och tryck sedan på **Confirm & Exit**.\n\n> ⚠️ **Det är Confirm & Exit som skriver inställningarna till stationen.** Att bara spara ändrar ingenting.\n\nTryck på Nästa så snart du har gjort det."
+      },
+      "received": {
+        "title": "Din station pratar med Home Assistant",
+        "description": "**{station}** skickade just sin första uppladdning.\n\nDess sensorer dyker upp vid nästa och skapas utifrån det stationen faktiskt skickar — här finns inget att välja."
+      },
+      "timeout": {
+        "title": "Inget har kommit fram ännu",
+        "description": "Ingen station har skickat något de senaste {minutes} minuterna.{key_hint_extra}\n\nDe vanliga orsakerna är en adress som stationen inte når, **Confirm & Exit** som inte tryckts, eller fast programvara från 3.02 och framåt, som kräver HTTPS.\n\nAdresserna att peka den mot är:\n{urls}\nSlutpunkterna som lyssnar efter uppladdningar är:\n{endpoints}\n\nTryck på Nästa för att slutföra ändå — inställningen behålls, slutpunkterna börjar verkligen lyssna, och en reparation tar dig tillbaka hit tills en station dyker upp."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Redan konfigurerad. En enda instans betjänar alla väderstationer."
+    },
+    "progress": {
+      "waiting_for_station": "Väntar på din stations första uppladdning…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Personlig väderstation",
+        "menu_options": {
+          "options": "Inställningar",
+          "instructions": "Så här riktar du en station mot Home Assistant"
+        }
+      },
+      "options": {
+        "title": "Personlig väderstation",
+        "description": "Ange här en stationsnyckel som dina väderstationer måste skicka med för att deras data inte ska avvisas. Lämnar du fältet tomt accepteras alla förfrågningar.",
+        "data": {
+          "password": "Stationsnyckel",
+          "availability_timeout": "Markera som otillgänglig efter (minuter)",
+          "debug": "Logga varje inkommande förfrågan"
+        },
+        "data_description": {
+          "availability_timeout": "Hur länge en station får vara tyst innan dess sensorer markeras som otillgängliga. 0 för att aldrig markera dem.",
+          "debug": "Skriver hela innehållet i varje förfrågan till Home Assistants logg. Användbart när en station ställs in, störande efteråt."
+        }
+      },
+      "station": {
+        "title": "Steg 1 av 5 — din station",
+        "description": "{image}\n\nDin väderstation skapar själv sina enheter och sensorer, så här finns inget att lägga till. Det som följer är det du skriver in i stationens app.\n\nÖppna appen, kontrollera att stationens fasta programvara är uppdaterad och öppna sedan dess inställningar."
+      },
+      "settings": {
+        "title": "Steg 2 av 5 — vädertjänst",
+        "description": "{image}\n\nVälj **Weather server**."
+      },
+      "server": {
+        "title": "Steg 3 av 5 — annan server",
+        "description": "{image}\n\nVälj **Other Server**."
+      },
+      "form": {
+        "title": "Steg 4 av 5 — serverinställningar",
+        "description": "{image}\n\nFyll i formuläret och tryck sedan på **Save**.\n\n**URL**\n{urls}\nUtan `http://` eller `https://`. Använd en adress som din station når på ditt eget nät — det finns ingen anledning att exponera Home Assistant mot internet för detta. Om din station inte slår upp namn, använd IP-adressen.\n\n**Station ID** — vad du vill. Det blir enhetens namn i Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minut är ett bra värde.\n\n**API type** — *WSLink API*. Välj *WUnderground API* bara om din station inte erbjuder WSLink: den bär hälften så många mätvärden och bara fyra kanaler.\n\n**Upload** — låt den vara på.\n\n> ⏱️ Vissa stationer tappar wifi om du dröjer kvar på den här skärmen. Ha adressen redo, fyll i den och spara."
+      },
+      "confirm": {
+        "title": "Steg 5 av 5 — confirm & exit",
+        "description": "{image}\n\nGå tillbaka och tryck sedan på **Confirm & Exit**.\n\n> ⚠️ **Det är Confirm & Exit som skriver inställningarna till stationen.** Att bara spara ändrar ingenting.\n\nTryck på Nästa så snart du har gjort det."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Väderstation avvisad: fel stationsnyckel",
+      "description": "En väderstation på {ip} försökte skicka data som `{station_id}` utan att skicka med den förväntade stationsnyckeln.\n\nKontrollera att nyckeln som är inställd i stationen eller i WSLink-appen stämmer med den som angetts i den här integrationen. Meddelandet försvinner av sig självt så snart en förfrågan från {ip} accepteras."
+    },
+    "missing_device_id": {
+      "title": "Väderstation avvisad: ingen stationsidentifierare",
+      "description": "En väderstation på {ip} skickade data utan stationsidentifierare.\n\nAnge ett Sender ID i WSLink-appen, eller en ID-parameter i stationens konfiguration. Meddelandet försvinner av sig självt så snart en förfrågan från {ip} accepteras."
+    },
+    "legacy_entity_ids": {
+      "title": "Entitets-ID:n upprepar stationsnamnet",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Förkorta entitets-ID:na",
+            "description": "Fram till version 1.0.8 byggde den här integrationen entitets-ID:n som bär stationsnamnet två gånger, som `{example_old}`. Nya stationer gör inte längre det.\n\n**{count} entiteter** kan byta namn, till exempel till `{example_new}`.\n\nHistorik och långtidsstatistik följer namnbytet automatiskt. **Automationer, skript, scener och instrumentpaneler gör det inte** — allt som pekar på de gamla ID:na måste du uppdatera själv.\n\nVill du hellre behålla dem som de är, ignorera den här reparationen."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Anslutnings-, läckage- och batterivärden är fortfarande tal",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Konvertera till binära sensorer",
+            "description": "Anslutnings-, vattenläckage- och batterivärden skickas som 1 eller 0. Fram till version 1.0.8 visades de som numeriska sensorer, till exempel `{example}`, som inte går att använda med Home Assistants standardkort för läckage, anslutning och lågt batteri. Nya stationer får binära sensorer som visar **Blött / Torrt**, **Ansluten / Frånkopplad** och **På / Av**.\n\n**{count} entiteter** kan konverteras. De 0~5 batterinivåerna på luftkvalitetssensorerna behåller sin procent: sex steg är mer än vad ett på/av orkar bära.\n\nAtt byta plattform är inte en omdöpning: de gamla entiteterna tas bort och skapas om som `binary_sensor`. **Deras registrerade historik går förlorad** — dessa värden har ingen långtidsstatistik, så bara råhistoriken berörs — och **automationer, skript, scener och instrumentpaneler som pekar på dem måste uppdateras**. De nya entiteterna dyker upp vid stationens nästa uppladdning.\n\nVill du hellre låta dem vara som de är, strunta i den här reparationen."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Ingen väderstation har skickat något ännu",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Ställ in din väderstation",
+            "description": "Det är din väderstation som skapar enheterna och sensorerna — här finns inget att lägga till.\n\nÖppna din station i stationens app, sedan **Settings → Weather server → Other Server**, och fyll i:\n\n**URL**\n{urls}\nUtan `http://` eller `https://`. Använd en adress som din station når på ditt eget nätverk — det finns ingen anledning att exponera Home Assistant mot internet för det här. Kan din station inte slå upp namn, använd IP-adressen.\n\n**Station ID** — vad du vill. Det blir enhetsnamnet i Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minut är ett bra värde.\n\n**API type** — *WSLink API*.\n\n**Upload** — låt den vara på.\n\nTryck **Save**, gå tillbaka och tryck sedan **Confirm & Exit**.\n\n> ⚠️ **Det är Confirm & Exit som skriver inställningarna till stationen.** Att bara spara ändrar ingenting. Dina sensorer dyker upp en sekund senare.\n\nDe slutpunkter som lyssnar är:\n{endpoints}"
+          },
+          "received": {
+            "title": "Din station kom fram",
+            "description": "**{station}** har skickat sin första sändning. Dess sensorer skapas nu, och fler dyker upp allteftersom stationen rapporterar dem.\n\nDetta meddelande kommer inte tillbaka."
+          },
+          "timeout": {
+            "title": "Inget mottaget ännu",
+            "description": "Ingen sändning kom in på {minutes} minuter.\n\nEfter sannolikhet:\n\n  - **Tryckte du Confirm & Exit?** Att bara spara serverskärmen skriver ingenting till stationen.\n  - **URL** måste vara {urls_inline}, utan `http://`, och nåbar för stationen på ditt nätverk.\n  - **Upload** måste vara på i den skärmen.\n  - Vissa Bresser-firmware från **3.02** och framåt avvisar vanlig HTTP och kräver en adress som levererar HTTPS.\n  - Sändningsintervallet kan helt enkelt vara längre än väntetiden.\n  - **Stationsnyckel**: {key_hint}.\n\nOm stationen nådde Home Assistant men avvisades rapporteras det separat i **Inställningar → System → Reparationer**.\n\nDu kan stänga. Det ligger kvar här tills en station dyker upp, och att öppna det igen startar väntan på nytt."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Väntar på stationens första sändning…"
+        },
+        "abort": {
+          "not_received": "Inget har kommit ännu, så detta lämnas öppet. Det ligger kvar i Reparationer tills en station dyker upp, och du kan öppna det igen för att vänta på nytt."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "Stationen {station} skickar mätvärden som kastas bort",
+      "description": "**{count} parametrar** från **{station}** känns inte igen, så deras värden kastas bort vid varje sändning:\n\n{parameters}\n\nDen vanliga orsaken är en station som rapporterar mer än vad dess protokoll klarar av att bära. Weather Underground har bara **4 platser** för extra sensorer; om din station erbjuder **WSLink** som *API type* ger ett byte dit sju kanaler och ungefär dubbelt så många mätvärden.\n\nÄr det inte förklaringen är just dessa parameternamn vad en felrapport behöver: öppna en i [ärendehanteraren]({issue_tracker}), så kan de läggas till.\n\nDu kan också strunta i det här — inget är trasigt, just de här värdena kommer bara inte fram."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "Stationen {device} har ännu inte skickat någon vindriktning, så det finns inget att kalibrera mot. Vänta på nästa sändning och försök igen."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Absolut lufttryck"
+      },
+      "apiver": {
+        "name": "API-version"
+      },
+      "aqbc": {
+        "name": "Sotpartiklar"
+      },
+      "aqco": {
+        "name": "Kolmonoxid"
+      },
+      "aqcot": {
+        "name": "Kolmonoxid i spårmängd"
+      },
+      "aqec": {
+        "name": "Elementärt kol"
+      },
+      "aqno": {
+        "name": "Kvävemonoxid"
+      },
+      "aqno2": {
+        "name": "NO2 X beräknat"
+      },
+      "aqno2t": {
+        "name": "Kvävedioxid"
+      },
+      "aqno2y": {
+        "name": "NO2 Y beräknat"
+      },
+      "aqno3": {
+        "name": "NO3-jon"
+      },
+      "aqnox": {
+        "name": "Kväveoxider"
+      },
+      "aqnoy": {
+        "name": "Totalt reaktivt kväve"
+      },
+      "aqoc": {
+        "name": "Organiskt kol"
+      },
+      "aqozone": {
+        "name": "Ozon"
+      },
+      "aqpm10": {
+        "name": "PM10-massa"
+      },
+      "aqpm2_5": {
+        "name": "PM2.5-massa"
+      },
+      "aqso2": {
+        "name": "Svaveldioxid"
+      },
+      "aqso2t": {
+        "name": "Svaveldioxid i spårmängd"
+      },
+      "aqso4": {
+        "name": "SO4-jon"
+      },
+      "aquv_aeth": {
+        "name": "Aethalometer kanal 2"
+      },
+      "baromin": {
+        "name": "Tryck"
+      },
+      "clouds": {
+        "name": "Molntäcke"
+      },
+      "dailyrainin": {
+        "name": "Nederbörd per dygn"
+      },
+      "dewptf": {
+        "name": "Daggpunkt"
+      },
+      "humidity": {
+        "name": "Utomhusluftfuktighet"
+      },
+      "inbat": {
+        "name": "Batterinivå för konsol"
+      },
+      "indoorhumidity": {
+        "name": "Inomhusluftfuktighet"
+      },
+      "indoortempf": {
+        "name": "Inomhustemperatur"
+      },
+      "inhum": {
+        "name": "Inomhusluftfuktighet"
+      },
+      "intem": {
+        "name": "Inomhustemperatur"
+      },
+      "last_update": {
+        "name": "Senaste mottagning"
+      },
+      "leafwetness": {
+        "name": "Bladväta"
+      },
+      "leafwetness2": {
+        "name": "CH2 bladväta"
+      },
+      "lowbatt": {
+        "name": "Lågt batteri"
+      },
+      "monthlyrainin": {
+        "name": "Nederbörd per månad"
+      },
+      "rainin": {
+        "name": "Nederbörd per timme"
+      },
+      "rbar": {
+        "name": "Relativt lufttryck"
+      },
+      "rtfreq": {
+        "name": "Uppdateringsfrekvens"
+      },
+      "soilmoisture": {
+        "name": "Markfuktighet"
+      },
+      "soilmoisture2": {
+        "name": "CH2 markfuktighet"
+      },
+      "soilmoisture3": {
+        "name": "CH3 markfuktighet"
+      },
+      "soilmoisture4": {
+        "name": "CH4 markfuktighet"
+      },
+      "soiltemp2f": {
+        "name": "CH2 marktemperatur"
+      },
+      "soiltemp3f": {
+        "name": "CH3 marktemperatur"
+      },
+      "soiltemp4f": {
+        "name": "CH4 marktemperatur"
+      },
+      "soiltempf": {
+        "name": "Marktemperatur"
+      },
+      "solarradiation": {
+        "name": "Solstrålning"
+      },
+      "t10bat": {
+        "name": "Batterinivå för CO2-givare"
+      },
+      "t10cn": {
+        "name": "Anslutningsstatus för CO2-givare"
+      },
+      "t10co2": {
+        "name": "CO2-koncentration"
+      },
+      "t11bat": {
+        "name": "Batterinivå för CO-givare"
+      },
+      "t11cn": {
+        "name": "Anslutningsstatus för CO-givare"
+      },
+      "t11co": {
+        "name": "CO-koncentration"
+      },
+      "t1bat": {
+        "name": "Batteristatus för utomhusgivare"
+      },
+      "t1chill": {
+        "name": "Vindavkylningstemperatur"
+      },
+      "t1cn": {
+        "name": "Anslutningsstatus för utomhusgivare"
+      },
+      "t1dew": {
+        "name": "Daggpunktstemperatur"
+      },
+      "t1feels": {
+        "name": "Upplevd temperatur"
+      },
+      "t1heat": {
+        "name": "Värmeindex"
+      },
+      "t1hum": {
+        "name": "Utomhusluftfuktighet"
+      },
+      "t1raindy": {
+        "name": "Dygnsnederbörd"
+      },
+      "t1rainhr": {
+        "name": "Timnederbörd"
+      },
+      "t1rainmth": {
+        "name": "Månadsnederbörd"
+      },
+      "t1rainra": {
+        "name": "Nederbördsintensitet"
+      },
+      "t1rainwy": {
+        "name": "Veckonederbörd"
+      },
+      "t1rainyr": {
+        "name": "Årsnederbörd"
+      },
+      "t1solrad": {
+        "name": "Ljusstyrka"
+      },
+      "t1tem": {
+        "name": "Utomhustemperatur"
+      },
+      "t1uvi": {
+        "name": "UV-index"
+      },
+      "t1wbgt": {
+        "name": "WBGT-temperatur"
+      },
+      "t1wdir": {
+        "name": "Vindriktning"
+      },
+      "t1wgust": {
+        "name": "Vindby"
+      },
+      "t1ws": {
+        "name": "Vindhastighet"
+      },
+      "t1ws10mav": {
+        "name": "Vindhastighet medel 10 min"
+      },
+      "t234c1bat": {
+        "name": "CH1 batteristatus"
+      },
+      "t234c1cn": {
+        "name": "CH1 anslutningsstatus"
+      },
+      "t234c1hum": {
+        "name": "CH1 luftfuktighet"
+      },
+      "t234c1tem": {
+        "name": "CH1 temperatur"
+      },
+      "t234c1tp": {
+        "name": "CH1 givartyp"
+      },
+      "t234c2bat": {
+        "name": "CH2 batteristatus"
+      },
+      "t234c2cn": {
+        "name": "CH2 anslutningsstatus"
+      },
+      "t234c2hum": {
+        "name": "CH2 luftfuktighet"
+      },
+      "t234c2tem": {
+        "name": "CH2 temperatur"
+      },
+      "t234c2tp": {
+        "name": "CH2 givartyp"
+      },
+      "t234c3bat": {
+        "name": "CH3 batteristatus"
+      },
+      "t234c3cn": {
+        "name": "CH3 anslutningsstatus"
+      },
+      "t234c3hum": {
+        "name": "CH3 luftfuktighet"
+      },
+      "t234c3tem": {
+        "name": "CH3 temperatur"
+      },
+      "t234c3tp": {
+        "name": "CH3 givartyp"
+      },
+      "t234c4bat": {
+        "name": "CH4 batteristatus"
+      },
+      "t234c4cn": {
+        "name": "CH4 anslutningsstatus"
+      },
+      "t234c4hum": {
+        "name": "CH4 luftfuktighet"
+      },
+      "t234c4tem": {
+        "name": "CH4 temperatur"
+      },
+      "t234c4tp": {
+        "name": "CH4 givartyp"
+      },
+      "t234c5bat": {
+        "name": "CH5 batteristatus"
+      },
+      "t234c5cn": {
+        "name": "CH5 anslutningsstatus"
+      },
+      "t234c5hum": {
+        "name": "CH5 luftfuktighet"
+      },
+      "t234c5tem": {
+        "name": "CH5 temperatur"
+      },
+      "t234c5tp": {
+        "name": "CH5 givartyp"
+      },
+      "t234c6bat": {
+        "name": "CH6 batteristatus"
+      },
+      "t234c6cn": {
+        "name": "CH6 anslutningsstatus"
+      },
+      "t234c6hum": {
+        "name": "CH6 luftfuktighet"
+      },
+      "t234c6tem": {
+        "name": "CH6 temperatur"
+      },
+      "t234c6tp": {
+        "name": "CH6 givartyp"
+      },
+      "t234c7bat": {
+        "name": "CH7 batteristatus"
+      },
+      "t234c7cn": {
+        "name": "CH7 anslutningsstatus"
+      },
+      "t234c7hum": {
+        "name": "CH7 luftfuktighet"
+      },
+      "t234c7tem": {
+        "name": "CH7 temperatur"
+      },
+      "t234c7tp": {
+        "name": "CH7 givartyp"
+      },
+      "t5ls1dtc": {
+        "name": "Blixtnedslag totalt under 1 dygn"
+      },
+      "t5ls1htc": {
+        "name": "Blixtnedslag totalt under 1 timme"
+      },
+      "t5ls30mtc": {
+        "name": "Blixtnedslag senaste 30 minuterna"
+      },
+      "t5ls5mtc": {
+        "name": "Blixtnedslag senaste 5 minuterna"
+      },
+      "t5lsbat": {
+        "name": "Batteristatus för blixtgivare"
+      },
+      "t5lscn": {
+        "name": "Anslutningsstatus för blixtgivare"
+      },
+      "t5lsf": {
+        "name": "Blixtnedslag senaste timmen"
+      },
+      "t5lskm": {
+        "name": "Blixtavstånd"
+      },
+      "t5lst": {
+        "name": "Tidpunkt för senaste blixtnedslag"
+      },
+      "t6c1bat": {
+        "name": "CH1 batteristatus för läckagegivare"
+      },
+      "t6c1cn": {
+        "name": "CH1 anslutningsstatus för läckagegivare"
+      },
+      "t6c1wls": {
+        "name": "CH1 vattenläckagestatus"
+      },
+      "t6c2bat": {
+        "name": "CH2 batteristatus för läckagegivare"
+      },
+      "t6c2cn": {
+        "name": "CH2 anslutningsstatus för läckagegivare"
+      },
+      "t6c2wls": {
+        "name": "CH2 vattenläckagestatus"
+      },
+      "t6c3bat": {
+        "name": "CH3 batteristatus för läckagegivare"
+      },
+      "t6c3cn": {
+        "name": "CH3 anslutningsstatus för läckagegivare"
+      },
+      "t6c3wls": {
+        "name": "CH3 vattenläckagestatus"
+      },
+      "t6c4bat": {
+        "name": "CH4 batteristatus för läckagegivare"
+      },
+      "t6c4cn": {
+        "name": "CH4 anslutningsstatus för läckagegivare"
+      },
+      "t6c4wls": {
+        "name": "CH4 vattenläckagestatus"
+      },
+      "t6c5bat": {
+        "name": "CH5 batteristatus för läckagegivare"
+      },
+      "t6c5cn": {
+        "name": "CH5 anslutningsstatus för läckagegivare"
+      },
+      "t6c5wls": {
+        "name": "CH5 vattenläckagestatus"
+      },
+      "t6c6bat": {
+        "name": "CH6 batteristatus för läckagegivare"
+      },
+      "t6c6cn": {
+        "name": "CH6 anslutningsstatus för läckagegivare"
+      },
+      "t6c6wls": {
+        "name": "CH6 vattenläckagestatus"
+      },
+      "t6c7bat": {
+        "name": "CH7 batteristatus för läckagegivare"
+      },
+      "t6c7cn": {
+        "name": "CH7 anslutningsstatus för läckagegivare"
+      },
+      "t6c7wls": {
+        "name": "CH7 vattenläckagestatus"
+      },
+      "t8bat": {
+        "name": "Batterinivå för partikelgivare"
+      },
+      "t8cn": {
+        "name": "Anslutningsstatus för partikelgivare"
+      },
+      "t8pm10": {
+        "name": "PM10-koncentration"
+      },
+      "t8pm10ai": {
+        "name": "PM10 AQI"
+      },
+      "t8pm25": {
+        "name": "PM2.5-koncentration"
+      },
+      "t8pm25ai": {
+        "name": "PM2.5 AQI"
+      },
+      "t9bat": {
+        "name": "Batterinivå för HCHO/VOC-givare"
+      },
+      "t9cn": {
+        "name": "Anslutningsstatus för HCHO/VOC-givare"
+      },
+      "t9hcho": {
+        "name": "HCHO-koncentration"
+      },
+      "t9voclv": {
+        "name": "VOC-nivå",
+        "state": {
+          "very_low": "Mycket låg",
+          "low": "Låg",
+          "moderate": "Måttlig",
+          "high": "Hög",
+          "very_high": "Mycket hög"
+        }
+      },
+      "tempf": {
+        "name": "Utomhustemperatur"
+      },
+      "uv": {
+        "name": "UV-index"
+      },
+      "visibility": {
+        "name": "Sikt"
+      },
+      "weeklyrainin": {
+        "name": "Nederbörd per vecka"
+      },
+      "wind_direction_raw": {
+        "name": "Vindriktning (rå)"
+      },
+      "windchillf": {
+        "name": "Vindavkylning"
+      },
+      "winddir": {
+        "name": "Vindriktning"
+      },
+      "winddir_avg2m": {
+        "name": "Vindriktning medel 2 min"
+      },
+      "windgustdir": {
+        "name": "Byriktning"
+      },
+      "windgustdir_10m": {
+        "name": "Byriktning medel 10 min"
+      },
+      "windgustmph": {
+        "name": "Vindby"
+      },
+      "windgustmph_10m": {
+        "name": "Byhastighet medel 10 min"
+      },
+      "windspdmph_avg2m": {
+        "name": "Vindhastighet medel 2 min"
+      },
+      "windspeedmph": {
+        "name": "Vindhastighet"
+      },
+      "yearlyrainin": {
+        "name": "Nederbörd per år"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Batterinivå för konsol"
+      },
+      "station_online": {
+        "name": "Station ansluten"
+      },
+      "t10cn": {
+        "name": "Anslutningsstatus för CO2-givare"
+      },
+      "t11cn": {
+        "name": "Anslutningsstatus för CO-givare"
+      },
+      "t1bat": {
+        "name": "Batteristatus för utomhusgivare"
+      },
+      "t1cn": {
+        "name": "Anslutningsstatus för utomhusgivare"
+      },
+      "t234c1bat": {
+        "name": "CH1 batteristatus"
+      },
+      "t234c1cn": {
+        "name": "CH1 anslutningsstatus"
+      },
+      "t234c2bat": {
+        "name": "CH2 batteristatus"
+      },
+      "t234c2cn": {
+        "name": "CH2 anslutningsstatus"
+      },
+      "t234c3bat": {
+        "name": "CH3 batteristatus"
+      },
+      "t234c3cn": {
+        "name": "CH3 anslutningsstatus"
+      },
+      "t234c4bat": {
+        "name": "CH4 batteristatus"
+      },
+      "t234c4cn": {
+        "name": "CH4 anslutningsstatus"
+      },
+      "t234c5bat": {
+        "name": "CH5 batteristatus"
+      },
+      "t234c5cn": {
+        "name": "CH5 anslutningsstatus"
+      },
+      "t234c6bat": {
+        "name": "CH6 batteristatus"
+      },
+      "t234c6cn": {
+        "name": "CH6 anslutningsstatus"
+      },
+      "t234c7bat": {
+        "name": "CH7 batteristatus"
+      },
+      "t234c7cn": {
+        "name": "CH7 anslutningsstatus"
+      },
+      "t5lsbat": {
+        "name": "Batteristatus för blixtgivare"
+      },
+      "t5lscn": {
+        "name": "Anslutningsstatus för blixtgivare"
+      },
+      "t6c1bat": {
+        "name": "CH1 batteristatus för läckagegivare"
+      },
+      "t6c1cn": {
+        "name": "CH1 anslutningsstatus för läckagegivare"
+      },
+      "t6c1wls": {
+        "name": "CH1 vattenläckagestatus"
+      },
+      "t6c2bat": {
+        "name": "CH2 batteristatus för läckagegivare"
+      },
+      "t6c2cn": {
+        "name": "CH2 anslutningsstatus för läckagegivare"
+      },
+      "t6c2wls": {
+        "name": "CH2 vattenläckagestatus"
+      },
+      "t6c3bat": {
+        "name": "CH3 batteristatus för läckagegivare"
+      },
+      "t6c3cn": {
+        "name": "CH3 anslutningsstatus för läckagegivare"
+      },
+      "t6c3wls": {
+        "name": "CH3 vattenläckagestatus"
+      },
+      "t6c4bat": {
+        "name": "CH4 batteristatus för läckagegivare"
+      },
+      "t6c4cn": {
+        "name": "CH4 anslutningsstatus för läckagegivare"
+      },
+      "t6c4wls": {
+        "name": "CH4 vattenläckagestatus"
+      },
+      "t6c5bat": {
+        "name": "CH5 batteristatus för läckagegivare"
+      },
+      "t6c5cn": {
+        "name": "CH5 anslutningsstatus för läckagegivare"
+      },
+      "t6c5wls": {
+        "name": "CH5 vattenläckagestatus"
+      },
+      "t6c6bat": {
+        "name": "CH6 batteristatus för läckagegivare"
+      },
+      "t6c6cn": {
+        "name": "CH6 anslutningsstatus för läckagegivare"
+      },
+      "t6c6wls": {
+        "name": "CH6 vattenläckagestatus"
+      },
+      "t6c7bat": {
+        "name": "CH7 batteristatus för läckagegivare"
+      },
+      "t6c7cn": {
+        "name": "CH7 anslutningsstatus för läckagegivare"
+      },
+      "t6c7wls": {
+        "name": "CH7 vattenläckagestatus"
+      },
+      "t8cn": {
+        "name": "Anslutningsstatus för partikelgivare"
+      },
+      "t9cn": {
+        "name": "Anslutningsstatus för HCHO/VOC-givare"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Förskjutning av vindriktning"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Nollställ förskjutningen"
+      },
+      "set_north": {
+        "name": "Ställ in norr efter aktuellt värde"
+      }
+    }
+  }
+}

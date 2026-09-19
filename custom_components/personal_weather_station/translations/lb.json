@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Perséinlech Wiederstatioun",
+        "description": "Setzt hei e Statiounsschlëssel, deen Är Wiederstatiounen muss matschécken, fir datt hir Donnéeë net refuséiert ginn. Wann Dir d'Feld eidel loosst, ginn all Ufroe akzeptéiert.",
+        "data": {
+          "password": "Statiounsschlëssel"
+        }
+      },
+      "station": {
+        "title": "Schrëtt 1 vu 5 — Är Statioun",
+        "description": "{image}\n\nÄr Wetterstatioun leet hir Apparater a Sensoren selwer un, hei ass also näischt derbäizesetzen. Wat elo kënnt, ass dat, wat Dir an der App vun der Statioun agitt.\n\nMaacht d'App op, kuckt, ob d'Firmware vun der Statioun aktuell ass, a maacht dann hir Astellungen op."
+      },
+      "settings": {
+        "title": "Schrëtt 2 vu 5 — Wetterdéngscht",
+        "description": "{image}\n\nWielt **Weather server**."
+      },
+      "server": {
+        "title": "Schrëtt 3 vu 5 — anere Server",
+        "description": "{image}\n\nWielt **Other Server**."
+      },
+      "form": {
+        "title": "Schrëtt 4 vu 5 — Serverastellungen",
+        "description": "{image}\n\nFëllt de Formulaire aus a dréckt dann **Save**.\n\n**URL**\n{urls}\nOuni `http://` oder `https://`. Benotzt eng Adress, déi Är Statioun an Ärem eegene Netz erreeche kann — et gëtt kee Grond, Home Assistant dofir un den Internet ze setzen. Wann Är Statioun keng Nimm opléise kann, huelt d'IP-Adress.\n\n**Station ID** — wat Dir wëllt. Doraus gëtt den Apparatsnumm am Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 Minutt ass e gudde Wäert.\n\n**API type** — *WSLink API*. Wielt *WUnderground API* nëmmen, wann Är Statioun kee WSLink ubitt: et dréit hallef sou vill Miessungen an nëmme véier Kanäl.\n\n**Upload** — loosst et un.\n\n> ⏱️ E puer Statiounen verléieren de Wi-Fi, wann Dir op dësem Ecran hänke bleift. Haalt d'Adress prett, gitt se an, a späichert."
+      },
+      "confirm": {
+        "title": "Schrëtt 5 vu 5 — confirm & exit",
+        "description": "{image}\n\nGitt zréck an dréckt dann **Confirm & Exit**.\n\n> ⚠️ **Et ass Confirm & Exit, wat d'Astellungen an d'Statioun schreift.** Nëmme späicheren ännert näischt.\n\nDréckt op Weider, soubal dat gemaach ass."
+      },
+      "received": {
+        "title": "Är Statioun schwätzt mam Home Assistant",
+        "description": "**{station}** huet just säin éischten Envoi geschéckt.\n\nHir Sensoren erschéngen beim nächsten a gi aus deem gemaach, wat d'Statioun wierklech schéckt — hei ass näischt auszewielen."
+      },
+      "timeout": {
+        "title": "Et ass nach näischt ukomm",
+        "description": "An de leschte {minutes} Minutten huet keng Statioun eppes geschéckt.{key_hint_extra}\n\nDéi üblech Ursaachen sinn eng Adress, déi d'Statioun net erreecht, en net gedréckte **Confirm & Exit**, oder eng Firmware vun 3.02 un, déi HTTPS verlaangt.\n\nD'Adressen, op déi Dir se riicht, sinn:\n{urls}\nD'Endpunkten, déi op Envoien lauschteren, sinn:\n{endpoints}\n\nDréckt op Weider, fir trotzdem ofzeschléissen — d'Configuratioun bleift erhalen, d'Endpunkte fänken wierklech u ze lauschteren, an eng Reparatur bréngt Iech hei zréck, bis eng Statioun opdaucht."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Scho konfiguréiert. Eng eenzeg Instanz bedéngt all Wiederstatiounen."
+    },
+    "progress": {
+      "waiting_for_station": "Waarden op den éischten Envoi vun Ärer Statioun…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Perséinlech Wiederstatioun",
+        "menu_options": {
+          "options": "Astellungen",
+          "instructions": "Wéi ee Statioun op Home Assistant riicht"
+        }
+      },
+      "options": {
+        "title": "Perséinlech Wiederstatioun",
+        "description": "Setzt hei e Statiounsschlëssel, deen Är Wiederstatiounen muss matschécken, fir datt hir Donnéeë net refuséiert ginn. Wann Dir d'Feld eidel loosst, ginn all Ufroe akzeptéiert.",
+        "data": {
+          "password": "Statiounsschlëssel",
+          "availability_timeout": "Als net verfügbar markéieren no (Minutten)",
+          "debug": "All erakommend Ufro protokolléieren"
+        },
+        "data_description": {
+          "availability_timeout": "Wéi laang eng Statioun stomm bleiwe kann, ier hir Sensore als net verfügbar markéiert ginn. 0 heescht ni markéieren.",
+          "debug": "Schreift de ganzen Inhalt vun all Ufro an de Home-Assistant-Protokoll. Nëtzlech beim Ariichte vun enger Statioun, stéierend duerno."
+        }
+      },
+      "station": {
+        "title": "Schrëtt 1 vu 5 — Är Statioun",
+        "description": "{image}\n\nÄr Wetterstatioun leet hir Apparater a Sensoren selwer un, hei ass also näischt derbäizesetzen. Wat elo kënnt, ass dat, wat Dir an der App vun der Statioun agitt.\n\nMaacht d'App op, kuckt, ob d'Firmware vun der Statioun aktuell ass, a maacht dann hir Astellungen op."
+      },
+      "settings": {
+        "title": "Schrëtt 2 vu 5 — Wetterdéngscht",
+        "description": "{image}\n\nWielt **Weather server**."
+      },
+      "server": {
+        "title": "Schrëtt 3 vu 5 — anere Server",
+        "description": "{image}\n\nWielt **Other Server**."
+      },
+      "form": {
+        "title": "Schrëtt 4 vu 5 — Serverastellungen",
+        "description": "{image}\n\nFëllt de Formulaire aus a dréckt dann **Save**.\n\n**URL**\n{urls}\nOuni `http://` oder `https://`. Benotzt eng Adress, déi Är Statioun an Ärem eegene Netz erreeche kann — et gëtt kee Grond, Home Assistant dofir un den Internet ze setzen. Wann Är Statioun keng Nimm opléise kann, huelt d'IP-Adress.\n\n**Station ID** — wat Dir wëllt. Doraus gëtt den Apparatsnumm am Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 Minutt ass e gudde Wäert.\n\n**API type** — *WSLink API*. Wielt *WUnderground API* nëmmen, wann Är Statioun kee WSLink ubitt: et dréit hallef sou vill Miessungen an nëmme véier Kanäl.\n\n**Upload** — loosst et un.\n\n> ⏱️ E puer Statiounen verléieren de Wi-Fi, wann Dir op dësem Ecran hänke bleift. Haalt d'Adress prett, gitt se an, a späichert."
+      },
+      "confirm": {
+        "title": "Schrëtt 5 vu 5 — confirm & exit",
+        "description": "{image}\n\nGitt zréck an dréckt dann **Confirm & Exit**.\n\n> ⚠️ **Et ass Confirm & Exit, wat d'Astellungen an d'Statioun schreift.** Nëmme späicheren ännert näischt.\n\nDréckt op Weider, soubal dat gemaach ass."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Wiederstatioun refuséiert: falsche Statiounsschlëssel",
+      "description": "Eng Wiederstatioun op {ip} huet probéiert, Donnéeën als `{station_id}` ze schécken, ouni de erwaarte Statiounsschlëssel matzeschécken.\n\nKontrolléiert, ob de Schlëssel an der Statioun oder an der WSLink-App mat deem iwwereneestëmmt, deen hei agestallt ass. Dës Meldung verschwënnt vu selwer, soubal eng Ufro vun {ip} akzeptéiert gëtt."
+    },
+    "missing_device_id": {
+      "title": "Wiederstatioun refuséiert: keng Statiounskennung",
+      "description": "Eng Wiederstatioun op {ip} huet Donnéeën ouni Statiounskennung geschéckt.\n\nSetzt an der WSLink-App eng Sender ID, oder en ID-Parameter an der Konfiguratioun vun der Statioun. Dës Meldung verschwënnt vu selwer, soubal eng Ufro vun {ip} akzeptéiert gëtt."
+    },
+    "legacy_entity_ids": {
+      "title": "D'Entitéits-IDe widderhuelen den Numm vun der Statioun",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "D'Entitéits-IDe kierzen",
+            "description": "Bis zur Versioun 1.0.8 huet dës Integratioun Entitéits-IDe gebaut, déi den Numm vun der Statioun zweemol droen, wéi `{example_old}`. Nei Statioune maachen dat net méi.\n\n**{count} Entitéiten** kënnen ëmbenannt ginn, zum Beispill op `{example_new}`.\n\nD'Historique an d'Laangzäitstatistike follegen der Ëmbenennung automatesch. **Automatiséierungen, Skripten, Zeenen an Dashboards net** — alles, wat op déi al IDe verweist, musst Dir selwer upassen.\n\nWann Dir se léiwer esou loosst, ignoréiert dës Reparatur."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Verbindungs-, Leck- a Batteriewäerter sinn nach Zuelen",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "An binär Sensoren ëmwandelen",
+            "description": "Verbindungs-, Waasserleck- a Batteriewäerter ginn als 1 oder 0 geschéckt. Bis Versioun 1.0.8 goufe se als numeresch Sensoren ugewisen, wéi `{example}`, déi sech mat de Standardkaarte fir Leck, Verbindung a schwaach Batterie am Home Assistant net notze loossen. Nei Statioune kréien binär Sensoren, déi **Naass / Dréche**, **Verbonnen / Getrennt** an **Un / Aus** weisen.\n\n**{count} Entitéiten** kënnen ëmgestallt ginn. D'Batteriestufe 0~5 vun de Loftqualitéitssensore behalen hire Prozentwäert: sechs Stufe si méi, wéi en Un/Aus droe kann.\n\nE Plattformwiessel ass keng Ëmbenennung: déi al Entitéite gi geläscht an als `binary_sensor` nei ugeluecht. **Hir opgezeechent Geschicht geet verluer** — dës Wäerter hu keng Laangzäitstatistik, dofir ass nëmmen déi roh Geschicht betraff — an **Automatisatiounen, Skripten, Zeenen an Dashboards, déi op si weisen, mussen ugepasst ginn**. Déi nei Entitéiten erschéngen beim nächsten Envoi vun der Statioun.\n\nWann Dir se léiwer esou loosse wëllt, ignoréiert dës Reparatur."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Nach keng Wiederstatioun huet eppes geschéckt",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Riicht Är Wiederstatioun an",
+            "description": "Är Wiederstatioun erstellt d'Apparater an d'Sensoren — hei gëtt et näischt bäizesetzen.\n\nMaacht an der App vun der Statioun Är Statioun op, dann **Settings → Weather server → Other Server**, a fëllt aus:\n\n**URL**\n{urls}\nOuni `http://` oder `https://`. Benotzt eng Adress, déi Är Statioun an Ärem eegene Netz erreeche kann — et gëtt kee Grond, Home Assistant dofir un den Internet ze setzen. Wann Är Statioun keng Nimm opléise kann, huelt d'IP-Adress.\n\n**Station ID** — wat Dir wëllt. Dat gëtt den Apparatsnumm am Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 Minutt ass e gudde Wäert.\n\n**API type** — *WSLink API*.\n\n**Upload** — loosst et un.\n\nDréckt **Save**, gitt zréck, an dréckt dann **Confirm & Exit**.\n\n> ⚠️ **Et ass Confirm & Exit, deen d'Astellungen an d'Statioun schreift.** Nëmme späicheren ännert näischt. Är Sensoren erschéngen eng Sekonn duerno.\n\nD'Endpunkten, déi nolauschteren:\n{endpoints}"
+          },
+          "received": {
+            "title": "Är Statioun ass duerchkomm",
+            "description": "**{station}** huet hir éischt Iwwerdroung geschéckt. Hir Sensore gi grad ugeluecht, a méi kommen dobäi, wéi d'Statioun se mellt.\n\nDëse Message kënnt net zréck."
+          },
+          "timeout": {
+            "title": "Nach näischt kritt",
+            "description": "An {minutes} Minutte koum keng Iwwerdroung.\n\nNo Wahrscheinlechkeet:\n\n  - **Hutt Dir Confirm & Exit gedréckt?** Nëmmen de Serverbildschierm späicheren schreift näischt an d'Statioun.\n  - D'**URL** muss {urls_inline} sinn, ouni `http://`, an fir d'Statioun an Ärem Netz erreechbar.\n  - **Upload** muss op deem Bildschierm un sinn.\n  - E puer Bresser-Firmwaren ab **3.02** refuséieren einfache HTTP a brauchen eng Adress mat HTTPS.\n  - D'Iwwerdroungsintervall ass vläicht einfach méi laang wéi d'Waardezäit.\n  - **Statiounsschlëssel**: {key_hint}.\n\nWann d'Statioun Home Assistant erreecht huet, awer refuséiert gouf, gëtt dat getrennt an **Astellungen → System → Reparaturen** gemellt.\n\nDir kënnt zoumaachen. Et bleift hei, bis eng Statioun optaucht, an et nach eng Kéier opzemaachen fänkt d'Waardezäit vun neiem un."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Waarden op déi éischt Iwwerdroung vun Ärer Statioun…"
+        },
+        "abort": {
+          "not_received": "Et ass nach näischt komm, dofir bleift dëst op. Et bleift an de Reparaturen, bis eng Statioun optaucht, an Dir kënnt et nach eng Kéier opmaachen fir erëm ze waarden."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "D'Statioun {station} schéckt Miessungen, déi ewechgehäit ginn",
+      "description": "**{count} Parameter** vun **{station}** gi net erkannt, dofir ginn hir Wäerter bei all Iwwerdroung ewechgehäit:\n\n{parameters}\n\nDéi gewéinlech Ursaach ass eng Statioun, déi méi mellt, wéi hire Protokoll droe kann. Weather Underground huet nëmmen **4 Plazen** fir zousätzlech Sensoren; wann Är Statioun **WSLink** als *API type* ubitt, mécht e Wiessel dohinner siwe Kanäl an ongeféier duebel sou vill Miessungen zougänglech.\n\nWann et dat net ass, sinn dës Parameternimm genee dat, wat e Feelerrapport brauch: maacht een um [Issue-Tracker]({issue_tracker}) op, da kënne se derbäigesat ginn.\n\nDir kënnt dat och ignoréieren — et ass näischt futti, dës bestëmmte Wäerter kommen einfach net un."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "D'Statioun {device} huet nach keng Wandrichtung geschéckt, dofir gëtt et näischt fir ze kalibréieren. Waart op den nächsten Upload a probéiert et nach eng Kéier."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Absoluten Loftdrock"
+      },
+      "apiver": {
+        "name": "API-Versioun"
+      },
+      "aqbc": {
+        "name": "Schwaarze Kuelestoff"
+      },
+      "aqco": {
+        "name": "Kuelemonoxid"
+      },
+      "aqcot": {
+        "name": "Kuelemonoxid a Spueren"
+      },
+      "aqec": {
+        "name": "Elementare Kuelestoff"
+      },
+      "aqno": {
+        "name": "Stéckstoffmonoxid"
+      },
+      "aqno2": {
+        "name": "NO2 X berechent"
+      },
+      "aqno2t": {
+        "name": "Stéckstoffdioxid"
+      },
+      "aqno2y": {
+        "name": "NO2 Y berechent"
+      },
+      "aqno3": {
+        "name": "NO3-Ion"
+      },
+      "aqnox": {
+        "name": "Stéckoxiden"
+      },
+      "aqnoy": {
+        "name": "Reaktive Gesamtstéckstoff"
+      },
+      "aqoc": {
+        "name": "Organesche Kuelestoff"
+      },
+      "aqozone": {
+        "name": "Ozon"
+      },
+      "aqpm10": {
+        "name": "PM10-Mass"
+      },
+      "aqpm2_5": {
+        "name": "PM2.5-Mass"
+      },
+      "aqso2": {
+        "name": "Schwiewelsdioxid"
+      },
+      "aqso2t": {
+        "name": "Schwiewelsdioxid a Spueren"
+      },
+      "aqso4": {
+        "name": "SO4-Ion"
+      },
+      "aquv_aeth": {
+        "name": "Aethalometer Kanal 2"
+      },
+      "baromin": {
+        "name": "Drock"
+      },
+      "clouds": {
+        "name": "Bewölkung"
+      },
+      "dailyrainin": {
+        "name": "Deegleche Reen"
+      },
+      "dewptf": {
+        "name": "Taupunkt"
+      },
+      "humidity": {
+        "name": "Baussefiichtegkeet"
+      },
+      "inbat": {
+        "name": "Batterieniveau vun der Konsol"
+      },
+      "indoorhumidity": {
+        "name": "Bannefiichtegkeet"
+      },
+      "indoortempf": {
+        "name": "Bannentemperatur"
+      },
+      "inhum": {
+        "name": "Bannefiichtegkeet"
+      },
+      "intem": {
+        "name": "Bannentemperatur"
+      },
+      "last_update": {
+        "name": "Leschten Empfang"
+      },
+      "leafwetness": {
+        "name": "Blaatfiichtegkeet"
+      },
+      "leafwetness2": {
+        "name": "CH2 blaatfiichtegkeet"
+      },
+      "lowbatt": {
+        "name": "Schwaach Batterie"
+      },
+      "monthlyrainin": {
+        "name": "Monatleche Reen"
+      },
+      "rainin": {
+        "name": "Stënnleche Reen"
+      },
+      "rbar": {
+        "name": "Relativen Loftdrock"
+      },
+      "rtfreq": {
+        "name": "Aktualiséierungsfrequenz"
+      },
+      "soilmoisture": {
+        "name": "Buedemfiichtegkeet"
+      },
+      "soilmoisture2": {
+        "name": "CH2 buedemfiichtegkeet"
+      },
+      "soilmoisture3": {
+        "name": "CH3 buedemfiichtegkeet"
+      },
+      "soilmoisture4": {
+        "name": "CH4 buedemfiichtegkeet"
+      },
+      "soiltemp2f": {
+        "name": "CH2 buedemtemperatur"
+      },
+      "soiltemp3f": {
+        "name": "CH3 buedemtemperatur"
+      },
+      "soiltemp4f": {
+        "name": "CH4 buedemtemperatur"
+      },
+      "soiltempf": {
+        "name": "Buedemtemperatur"
+      },
+      "solarradiation": {
+        "name": "Sonnestralung"
+      },
+      "t10bat": {
+        "name": "Batterieniveau vum CO2-Sensor"
+      },
+      "t10cn": {
+        "name": "Verbindungszoustand vum CO2-Sensor"
+      },
+      "t10co2": {
+        "name": "CO2-Konzentratioun"
+      },
+      "t11bat": {
+        "name": "Batterieniveau vum CO-Sensor"
+      },
+      "t11cn": {
+        "name": "Verbindungszoustand vum CO-Sensor"
+      },
+      "t11co": {
+        "name": "CO-Konzentratioun"
+      },
+      "t1bat": {
+        "name": "Batteriezoustand vum Baussesensor"
+      },
+      "t1chill": {
+        "name": "Wandkillttemperatur"
+      },
+      "t1cn": {
+        "name": "Verbindungszoustand vum Baussesensor"
+      },
+      "t1dew": {
+        "name": "Taupunkttemperatur"
+      },
+      "t1feels": {
+        "name": "Gefillten Temperatur"
+      },
+      "t1heat": {
+        "name": "Hëtztindex"
+      },
+      "t1hum": {
+        "name": "Baussefiichtegkeet"
+      },
+      "t1raindy": {
+        "name": "Deeglech Nidderschlagsmengt"
+      },
+      "t1rainhr": {
+        "name": "Stënnlech Nidderschlagsmengt"
+      },
+      "t1rainmth": {
+        "name": "Monatlech Nidderschlagsmengt"
+      },
+      "t1rainra": {
+        "name": "Reenintensitéit"
+      },
+      "t1rainwy": {
+        "name": "Wëchentlech Nidderschlagsmengt"
+      },
+      "t1rainyr": {
+        "name": "Jäerlech Nidderschlagsmengt"
+      },
+      "t1solrad": {
+        "name": "Luuchtintensitéit"
+      },
+      "t1tem": {
+        "name": "Baussentemperatur"
+      },
+      "t1uvi": {
+        "name": "UV-Index"
+      },
+      "t1wbgt": {
+        "name": "WBGT-Temperatur"
+      },
+      "t1wdir": {
+        "name": "Wandrichtung"
+      },
+      "t1wgust": {
+        "name": "Wandstouss"
+      },
+      "t1ws": {
+        "name": "Wandgeschwindegkeet"
+      },
+      "t1ws10mav": {
+        "name": "Wandgeschwindegkeet 10 Min. Moyenne"
+      },
+      "t234c1bat": {
+        "name": "CH1 batteriezoustand"
+      },
+      "t234c1cn": {
+        "name": "CH1 verbindungszoustand"
+      },
+      "t234c1hum": {
+        "name": "CH1 fiichtegkeet"
+      },
+      "t234c1tem": {
+        "name": "CH1 temperatur"
+      },
+      "t234c1tp": {
+        "name": "CH1 sensortyp"
+      },
+      "t234c2bat": {
+        "name": "CH2 batteriezoustand"
+      },
+      "t234c2cn": {
+        "name": "CH2 verbindungszoustand"
+      },
+      "t234c2hum": {
+        "name": "CH2 fiichtegkeet"
+      },
+      "t234c2tem": {
+        "name": "CH2 temperatur"
+      },
+      "t234c2tp": {
+        "name": "CH2 sensortyp"
+      },
+      "t234c3bat": {
+        "name": "CH3 batteriezoustand"
+      },
+      "t234c3cn": {
+        "name": "CH3 verbindungszoustand"
+      },
+      "t234c3hum": {
+        "name": "CH3 fiichtegkeet"
+      },
+      "t234c3tem": {
+        "name": "CH3 temperatur"
+      },
+      "t234c3tp": {
+        "name": "CH3 sensortyp"
+      },
+      "t234c4bat": {
+        "name": "CH4 batteriezoustand"
+      },
+      "t234c4cn": {
+        "name": "CH4 verbindungszoustand"
+      },
+      "t234c4hum": {
+        "name": "CH4 fiichtegkeet"
+      },
+      "t234c4tem": {
+        "name": "CH4 temperatur"
+      },
+      "t234c4tp": {
+        "name": "CH4 sensortyp"
+      },
+      "t234c5bat": {
+        "name": "CH5 batteriezoustand"
+      },
+      "t234c5cn": {
+        "name": "CH5 verbindungszoustand"
+      },
+      "t234c5hum": {
+        "name": "CH5 fiichtegkeet"
+      },
+      "t234c5tem": {
+        "name": "CH5 temperatur"
+      },
+      "t234c5tp": {
+        "name": "CH5 sensortyp"
+      },
+      "t234c6bat": {
+        "name": "CH6 batteriezoustand"
+      },
+      "t234c6cn": {
+        "name": "CH6 verbindungszoustand"
+      },
+      "t234c6hum": {
+        "name": "CH6 fiichtegkeet"
+      },
+      "t234c6tem": {
+        "name": "CH6 temperatur"
+      },
+      "t234c6tp": {
+        "name": "CH6 sensortyp"
+      },
+      "t234c7bat": {
+        "name": "CH7 batteriezoustand"
+      },
+      "t234c7cn": {
+        "name": "CH7 verbindungszoustand"
+      },
+      "t234c7hum": {
+        "name": "CH7 fiichtegkeet"
+      },
+      "t234c7tem": {
+        "name": "CH7 temperatur"
+      },
+      "t234c7tp": {
+        "name": "CH7 sensortyp"
+      },
+      "t5ls1dtc": {
+        "name": "Blëtzer am Ganzen an 1 Dag"
+      },
+      "t5ls1htc": {
+        "name": "Blëtzer am Ganzen an 1 Stonn"
+      },
+      "t5ls30mtc": {
+        "name": "Blëtzer an de leschte 30 Minutten"
+      },
+      "t5ls5mtc": {
+        "name": "Blëtzer an de leschte 5 Minutten"
+      },
+      "t5lsbat": {
+        "name": "Batteriezoustand vum Blëtzsensor"
+      },
+      "t5lscn": {
+        "name": "Verbindungszoustand vum Blëtzsensor"
+      },
+      "t5lsf": {
+        "name": "Blëtzer an der leschter Stonn"
+      },
+      "t5lskm": {
+        "name": "Distanz vum Blëtz"
+      },
+      "t5lst": {
+        "name": "Zäit vum leschte Blëtz"
+      },
+      "t6c1bat": {
+        "name": "CH1 batteriezoustand vum Lecksensor"
+      },
+      "t6c1cn": {
+        "name": "CH1 verbindungszoustand vum Lecksensor"
+      },
+      "t6c1wls": {
+        "name": "CH1 zoustand vum Waasserleck"
+      },
+      "t6c2bat": {
+        "name": "CH2 batteriezoustand vum Lecksensor"
+      },
+      "t6c2cn": {
+        "name": "CH2 verbindungszoustand vum Lecksensor"
+      },
+      "t6c2wls": {
+        "name": "CH2 zoustand vum Waasserleck"
+      },
+      "t6c3bat": {
+        "name": "CH3 batteriezoustand vum Lecksensor"
+      },
+      "t6c3cn": {
+        "name": "CH3 verbindungszoustand vum Lecksensor"
+      },
+      "t6c3wls": {
+        "name": "CH3 zoustand vum Waasserleck"
+      },
+      "t6c4bat": {
+        "name": "CH4 batteriezoustand vum Lecksensor"
+      },
+      "t6c4cn": {
+        "name": "CH4 verbindungszoustand vum Lecksensor"
+      },
+      "t6c4wls": {
+        "name": "CH4 zoustand vum Waasserleck"
+      },
+      "t6c5bat": {
+        "name": "CH5 batteriezoustand vum Lecksensor"
+      },
+      "t6c5cn": {
+        "name": "CH5 verbindungszoustand vum Lecksensor"
+      },
+      "t6c5wls": {
+        "name": "CH5 zoustand vum Waasserleck"
+      },
+      "t6c6bat": {
+        "name": "CH6 batteriezoustand vum Lecksensor"
+      },
+      "t6c6cn": {
+        "name": "CH6 verbindungszoustand vum Lecksensor"
+      },
+      "t6c6wls": {
+        "name": "CH6 zoustand vum Waasserleck"
+      },
+      "t6c7bat": {
+        "name": "CH7 batteriezoustand vum Lecksensor"
+      },
+      "t6c7cn": {
+        "name": "CH7 verbindungszoustand vum Lecksensor"
+      },
+      "t6c7wls": {
+        "name": "CH7 zoustand vum Waasserleck"
+      },
+      "t8bat": {
+        "name": "Batterieniveau vum Feinstëbssensor"
+      },
+      "t8cn": {
+        "name": "Verbindungszoustand vum Feinstëbssensor"
+      },
+      "t8pm10": {
+        "name": "PM10-Konzentratioun"
+      },
+      "t8pm10ai": {
+        "name": "PM10 AQI"
+      },
+      "t8pm25": {
+        "name": "PM2.5-Konzentratioun"
+      },
+      "t8pm25ai": {
+        "name": "PM2.5 AQI"
+      },
+      "t9bat": {
+        "name": "Batterieniveau vum HCHO/VOC-Sensor"
+      },
+      "t9cn": {
+        "name": "Verbindungszoustand vum HCHO/VOC-Sensor"
+      },
+      "t9hcho": {
+        "name": "HCHO-Konzentratioun"
+      },
+      "t9voclv": {
+        "name": "VOC-Niveau",
+        "state": {
+          "very_low": "Ganz niddreg",
+          "low": "Niddreg",
+          "moderate": "Moderat",
+          "high": "Héich",
+          "very_high": "Ganz héich"
+        }
+      },
+      "tempf": {
+        "name": "Baussentemperatur"
+      },
+      "uv": {
+        "name": "UV-Index"
+      },
+      "visibility": {
+        "name": "Siichtwäit"
+      },
+      "weeklyrainin": {
+        "name": "Wëchentleche Reen"
+      },
+      "wind_direction_raw": {
+        "name": "Wandrichtung (roh)"
+      },
+      "windchillf": {
+        "name": "Wandkillt"
+      },
+      "winddir": {
+        "name": "Wandrichtung"
+      },
+      "winddir_avg2m": {
+        "name": "Wandrichtung 2 Min. Moyenne"
+      },
+      "windgustdir": {
+        "name": "Richtung vum Stouss"
+      },
+      "windgustdir_10m": {
+        "name": "Richtung vum Stouss 10 Min. Moyenne"
+      },
+      "windgustmph": {
+        "name": "Wandstouss"
+      },
+      "windgustmph_10m": {
+        "name": "Stousgeschwindegkeet 10 Min. Moyenne"
+      },
+      "windspdmph_avg2m": {
+        "name": "Wandgeschwindegkeet 2 Min. Moyenne"
+      },
+      "windspeedmph": {
+        "name": "Wandgeschwindegkeet"
+      },
+      "yearlyrainin": {
+        "name": "Jäerleche Reen"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Batterieniveau vun der Konsol"
+      },
+      "station_online": {
+        "name": "Statioun online"
+      },
+      "t10cn": {
+        "name": "Verbindungszoustand vum CO2-Sensor"
+      },
+      "t11cn": {
+        "name": "Verbindungszoustand vum CO-Sensor"
+      },
+      "t1bat": {
+        "name": "Batteriezoustand vum Baussesensor"
+      },
+      "t1cn": {
+        "name": "Verbindungszoustand vum Baussesensor"
+      },
+      "t234c1bat": {
+        "name": "CH1 batteriezoustand"
+      },
+      "t234c1cn": {
+        "name": "CH1 verbindungszoustand"
+      },
+      "t234c2bat": {
+        "name": "CH2 batteriezoustand"
+      },
+      "t234c2cn": {
+        "name": "CH2 verbindungszoustand"
+      },
+      "t234c3bat": {
+        "name": "CH3 batteriezoustand"
+      },
+      "t234c3cn": {
+        "name": "CH3 verbindungszoustand"
+      },
+      "t234c4bat": {
+        "name": "CH4 batteriezoustand"
+      },
+      "t234c4cn": {
+        "name": "CH4 verbindungszoustand"
+      },
+      "t234c5bat": {
+        "name": "CH5 batteriezoustand"
+      },
+      "t234c5cn": {
+        "name": "CH5 verbindungszoustand"
+      },
+      "t234c6bat": {
+        "name": "CH6 batteriezoustand"
+      },
+      "t234c6cn": {
+        "name": "CH6 verbindungszoustand"
+      },
+      "t234c7bat": {
+        "name": "CH7 batteriezoustand"
+      },
+      "t234c7cn": {
+        "name": "CH7 verbindungszoustand"
+      },
+      "t5lsbat": {
+        "name": "Batteriezoustand vum Blëtzsensor"
+      },
+      "t5lscn": {
+        "name": "Verbindungszoustand vum Blëtzsensor"
+      },
+      "t6c1bat": {
+        "name": "CH1 batteriezoustand vum Lecksensor"
+      },
+      "t6c1cn": {
+        "name": "CH1 verbindungszoustand vum Lecksensor"
+      },
+      "t6c1wls": {
+        "name": "CH1 zoustand vum Waasserleck"
+      },
+      "t6c2bat": {
+        "name": "CH2 batteriezoustand vum Lecksensor"
+      },
+      "t6c2cn": {
+        "name": "CH2 verbindungszoustand vum Lecksensor"
+      },
+      "t6c2wls": {
+        "name": "CH2 zoustand vum Waasserleck"
+      },
+      "t6c3bat": {
+        "name": "CH3 batteriezoustand vum Lecksensor"
+      },
+      "t6c3cn": {
+        "name": "CH3 verbindungszoustand vum Lecksensor"
+      },
+      "t6c3wls": {
+        "name": "CH3 zoustand vum Waasserleck"
+      },
+      "t6c4bat": {
+        "name": "CH4 batteriezoustand vum Lecksensor"
+      },
+      "t6c4cn": {
+        "name": "CH4 verbindungszoustand vum Lecksensor"
+      },
+      "t6c4wls": {
+        "name": "CH4 zoustand vum Waasserleck"
+      },
+      "t6c5bat": {
+        "name": "CH5 batteriezoustand vum Lecksensor"
+      },
+      "t6c5cn": {
+        "name": "CH5 verbindungszoustand vum Lecksensor"
+      },
+      "t6c5wls": {
+        "name": "CH5 zoustand vum Waasserleck"
+      },
+      "t6c6bat": {
+        "name": "CH6 batteriezoustand vum Lecksensor"
+      },
+      "t6c6cn": {
+        "name": "CH6 verbindungszoustand vum Lecksensor"
+      },
+      "t6c6wls": {
+        "name": "CH6 zoustand vum Waasserleck"
+      },
+      "t6c7bat": {
+        "name": "CH7 batteriezoustand vum Lecksensor"
+      },
+      "t6c7cn": {
+        "name": "CH7 verbindungszoustand vum Lecksensor"
+      },
+      "t6c7wls": {
+        "name": "CH7 zoustand vum Waasserleck"
+      },
+      "t8cn": {
+        "name": "Verbindungszoustand vum Feinstëbssensor"
+      },
+      "t9cn": {
+        "name": "Verbindungszoustand vum HCHO/VOC-Sensor"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Verschibung vun der Wandrichtung"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Verschibung zrécksetzen"
+      },
+      "set_north": {
+        "name": "Norden op den aktuelle Wäert setzen"
+      }
+    }
+  }
+}

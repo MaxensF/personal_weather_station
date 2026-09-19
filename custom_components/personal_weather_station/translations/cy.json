@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Gorsaf dywydd bersonol",
+        "description": "Gosodwch allwedd gorsaf yma y mae'n rhaid i'ch gorsafoedd tywydd ei throsglwyddo fel na chaiff eu data ei wrthod. Os gadewch y maes yn wag, derbynnir pob cais.",
+        "data": {
+          "password": "Allwedd yr orsaf"
+        }
+      },
+      "station": {
+        "title": "Cam 1 o 5 — eich gorsaf",
+        "description": "{image}\n\nEich gorsaf dywydd sy'n creu ei dyfeisiau a'i synwyryddion ei hun, felly nid oes dim i'w ychwanegu yma. Yr hyn sy'n dilyn yw'r hyn i'w deipio i mewn i ap yr orsaf.\n\nAgorwch yr ap, gwiriwch fod cadarnwedd yr orsaf yn gyfredol, ac yna agorwch ei gosodiadau."
+      },
+      "settings": {
+        "title": "Cam 2 o 5 — gwasanaeth tywydd",
+        "description": "{image}\n\nDewiswch **Weather server**."
+      },
+      "server": {
+        "title": "Cam 3 o 5 — gweinydd arall",
+        "description": "{image}\n\nDewiswch **Other Server**."
+      },
+      "form": {
+        "title": "Cam 4 o 5 — gosodiadau'r gweinydd",
+        "description": "{image}\n\nLlenwch y ffurflen, yna pwyswch **Save**.\n\n**URL**\n{urls}\nHeb `http://` na `https://`. Defnyddiwch gyfeiriad y gall eich gorsaf ei gyrraedd ar eich rhwydwaith eich hun — nid oes rheswm i ddatgelu Home Assistant i'r rhyngrwyd ar gyfer hyn. Os na all eich gorsaf ddatrys enwau, defnyddiwch y cyfeiriad IP.\n\n**Station ID** — beth bynnag a fynnoch. Dyma fydd enw'r ddyfais yn Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — mae 1 munud yn werth da.\n\n**API type** — *WSLink API*. Dewiswch *WUnderground API* dim ond os nad yw eich gorsaf yn cynnig WSLink: mae'n cario hanner cymaint o ddarlleniadau a dim ond pedair sianel.\n\n**Upload** — gadewch ef ymlaen.\n\n> ⏱️ Mae rhai gorsafoedd yn colli'r Wi-Fi os arhoswch ar y sgrin hon. Cadwch y cyfeiriad wrth law, llenwch ef, a chadwch."
+      },
+      "confirm": {
+        "title": "Cam 5 o 5 — confirm & exit",
+        "description": "{image}\n\nEwch yn ôl, yna pwyswch **Confirm & Exit**.\n\n> ⚠️ **Confirm & Exit sy'n ysgrifennu'r gosodiadau i'r orsaf.** Nid yw cadw ar ei ben ei hun yn newid dim.\n\nPwyswch Nesaf unwaith y byddwch wedi gwneud hynny."
+      },
+      "received": {
+        "title": "Mae eich gorsaf yn siarad â Home Assistant",
+        "description": "Mae **{station}** newydd anfon ei llwythiad cyntaf.\n\nBydd ei synwyryddion yn ymddangos ar y nesaf, ac maent yn cael eu creu o'r hyn y mae'r orsaf yn ei anfon mewn gwirionedd — nid oes dim i'w ddewis yma."
+      },
+      "timeout": {
+        "title": "Nid oes dim wedi cyrraedd eto",
+        "description": "Nid oes yr un orsaf wedi anfon dim yn ystod y {minutes} munud diwethaf.{key_hint_extra}\n\nYr achosion arferol yw cyfeiriad na all yr orsaf ei gyrraedd, **Confirm & Exit** heb ei bwyso, neu gadarnwedd o 3.02 ymlaen, sy'n mynnu HTTPS.\n\nY cyfeiriadau i'w chyfeirio atynt yw:\n{urls}\nY pwyntiau terfyn sy'n gwrando am lwythiadau yw:\n{endpoints}\n\nPwyswch Nesaf i orffen beth bynnag — cedwir y gosodiad, mae'r pwyntiau terfyn yn dechrau gwrando o ddifrif, a bydd atgyweiriad yn dod â chi yn ôl yma nes i orsaf ymddangos."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Wedi'i ffurfweddu eisoes. Mae un enghraifft yn gwasanaethu pob gorsaf dywydd."
+    },
+    "progress": {
+      "waiting_for_station": "Yn aros am lwythiad cyntaf eich gorsaf…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Gorsaf dywydd bersonol",
+        "menu_options": {
+          "options": "Gosodiadau",
+          "instructions": "Sut i gyfeirio gorsaf at Home Assistant"
+        }
+      },
+      "options": {
+        "title": "Gorsaf dywydd bersonol",
+        "description": "Gosodwch allwedd gorsaf yma y mae'n rhaid i'ch gorsafoedd tywydd ei throsglwyddo fel na chaiff eu data ei wrthod. Os gadewch y maes yn wag, derbynnir pob cais.",
+        "data": {
+          "password": "Allwedd yr orsaf",
+          "availability_timeout": "Marcio fel anghyraeddadwy ar ôl (munud)",
+          "debug": "Cofnodi pob cais sy'n dod i mewn"
+        },
+        "data_description": {
+          "availability_timeout": "Pa mor hir y caiff gorsaf fod yn dawel cyn i'w synwyryddion gael eu marcio'n anghyraeddadwy. Mae 0 yn golygu peidio byth â'u marcio.",
+          "debug": "Yn ysgrifennu cynnwys llawn pob cais i log Home Assistant. Defnyddiol wrth sefydlu gorsaf, swnllyd wedyn."
+        }
+      },
+      "station": {
+        "title": "Cam 1 o 5 — eich gorsaf",
+        "description": "{image}\n\nEich gorsaf dywydd sy'n creu ei dyfeisiau a'i synwyryddion ei hun, felly nid oes dim i'w ychwanegu yma. Yr hyn sy'n dilyn yw'r hyn i'w deipio i mewn i ap yr orsaf.\n\nAgorwch yr ap, gwiriwch fod cadarnwedd yr orsaf yn gyfredol, ac yna agorwch ei gosodiadau."
+      },
+      "settings": {
+        "title": "Cam 2 o 5 — gwasanaeth tywydd",
+        "description": "{image}\n\nDewiswch **Weather server**."
+      },
+      "server": {
+        "title": "Cam 3 o 5 — gweinydd arall",
+        "description": "{image}\n\nDewiswch **Other Server**."
+      },
+      "form": {
+        "title": "Cam 4 o 5 — gosodiadau'r gweinydd",
+        "description": "{image}\n\nLlenwch y ffurflen, yna pwyswch **Save**.\n\n**URL**\n{urls}\nHeb `http://` na `https://`. Defnyddiwch gyfeiriad y gall eich gorsaf ei gyrraedd ar eich rhwydwaith eich hun — nid oes rheswm i ddatgelu Home Assistant i'r rhyngrwyd ar gyfer hyn. Os na all eich gorsaf ddatrys enwau, defnyddiwch y cyfeiriad IP.\n\n**Station ID** — beth bynnag a fynnoch. Dyma fydd enw'r ddyfais yn Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — mae 1 munud yn werth da.\n\n**API type** — *WSLink API*. Dewiswch *WUnderground API* dim ond os nad yw eich gorsaf yn cynnig WSLink: mae'n cario hanner cymaint o ddarlleniadau a dim ond pedair sianel.\n\n**Upload** — gadewch ef ymlaen.\n\n> ⏱️ Mae rhai gorsafoedd yn colli'r Wi-Fi os arhoswch ar y sgrin hon. Cadwch y cyfeiriad wrth law, llenwch ef, a chadwch."
+      },
+      "confirm": {
+        "title": "Cam 5 o 5 — confirm & exit",
+        "description": "{image}\n\nEwch yn ôl, yna pwyswch **Confirm & Exit**.\n\n> ⚠️ **Confirm & Exit sy'n ysgrifennu'r gosodiadau i'r orsaf.** Nid yw cadw ar ei ben ei hun yn newid dim.\n\nPwyswch Nesaf unwaith y byddwch wedi gwneud hynny."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Gwrthodwyd yr orsaf dywydd: allwedd gorsaf anghywir",
+      "description": "Ceisiodd gorsaf dywydd yn {ip} anfon data fel `{station_id}` heb drosglwyddo'r allwedd gorsaf ddisgwyliedig.\n\nGwiriwch fod yr allwedd a ffurfweddwyd yn yr orsaf neu yn ap WSLink yn cyfateb i'r un a osodwyd yn yr integreiddiad hwn. Bydd y neges hon yn diflannu ohoni ei hun cyn gynted ag y derbynnir cais o {ip}."
+    },
+    "missing_device_id": {
+      "title": "Gwrthodwyd yr orsaf dywydd: dim dynodwr gorsaf",
+      "description": "Anfonodd gorsaf dywydd yn {ip} ddata heb ddynodwr gorsaf.\n\nGosodwch Sender ID yn ap WSLink, neu baramedr ID yn ffurfweddiad yr orsaf. Bydd y neges hon yn diflannu ohoni ei hun cyn gynted ag y derbynnir cais o {ip}."
+    },
+    "legacy_entity_ids": {
+      "title": "Mae IDau endidau'n ailadrodd enw'r orsaf",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Byrhau'r IDau endidau",
+            "description": "Hyd at fersiwn 1.0.8 roedd yr integreiddiad hwn yn adeiladu IDau endidau sy'n cynnwys enw'r orsaf ddwywaith, fel `{example_old}`. Nid yw gorsafoedd newydd yn gwneud hynny mwyach.\n\nGellir ailenwi **{count} endid**, er enghraifft i `{example_new}`.\n\nMae'r hanes a'r ystadegau hirdymor yn dilyn yr ailenwi'n awtomatig. **Nid yw awtomeiddiadau, sgriptiau, golygfeydd a byrddau gwaith** — bydd rhaid i chi ddiweddaru unrhyw beth sy'n cyfeirio at yr hen IDau eich hun.\n\nOs byddai'n well gennych eu cadw fel y maent, anwybyddwch yr atgyweiriad hwn."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Mae darlleniadau cysylltiad, gollyngiad a batri yn rhifau o hyd",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Trosi'n synwyryddion deuaidd",
+            "description": "Anfonir darlleniadau cysylltiad, gollyngiad dŵr a batri fel 1 neu 0. Hyd at fersiwn 1.0.8 fe'u dangosid fel synwyryddion rhifol, megis `{example}`, nad ydynt yn gweithio gyda cherdyn safonol gollyngiad, cysylltedd a batri isel Home Assistant. Mae gorsafoedd newydd yn cael synwyryddion deuaidd sy'n dangos **Gwlyb / Sych**, **Cysylltiedig / Datgysylltiedig** a **Ymlaen / I ffwrdd**.\n\nGellir trosi **{count} endid**. Mae lefelau batri 0~5 y synwyryddion ansawdd aer yn cadw eu canran: mae chwe gris yn fwy nag y gall ymlaen/i ffwrdd ei gario.\n\nNid ailenwi yw newid platfform: caiff yr hen endidau eu dileu a'u hailgreu fel `binary_sensor`. **Collir eu hanes cofnodedig** — nid oes ystadegau hirdymor i'r darlleniadau hyn, felly dim ond yr hanes crai a effeithir — a **rhaid diweddaru unrhyw awtomeiddio, sgriptiau, golygfeydd a dangosfyrddau sy'n pwyntio atynt**. Bydd yr endidau newydd yn ymddangos ar lwythiad nesaf yr orsaf.\n\nOs byddai'n well gennych eu gadael fel y maent, anwybyddwch yr atgyweiriad hwn."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Nid oes unrhyw orsaf dywydd wedi anfon dim eto",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Gosodwch eich gorsaf dywydd",
+            "description": "Eich gorsaf dywydd sy'n creu'r dyfeisiau a'r synwyryddion — does dim byd i'w ychwanegu yma.\n\nYn ap yr orsaf, agorwch eich gorsaf, yna **Settings → Weather server → Other Server**, a llenwch:\n\n**URL**\n{urls}\nHeb `http://` na `https://`. Defnyddiwch gyfeiriad y gall eich gorsaf ei gyrraedd ar eich rhwydwaith eich hun — nid oes unrhyw reswm i amlygu Home Assistant i'r rhyngrwyd ar gyfer hyn. Os na all eich gorsaf ddatrys enwau, defnyddiwch y cyfeiriad IP.\n\n**Station ID** — beth bynnag a fynnoch. Daw'n enw'r ddyfais yn Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — mae 1 funud yn werth da.\n\n**API type** — *WSLink API*.\n\n**Upload** — gadewch ef ymlaen.\n\nPwyswch **Save**, ewch yn ôl, yna pwyswch **Confirm & Exit**.\n\n> ⚠️ **Confirm & Exit sy'n ysgrifennu'r gosodiadau i'r orsaf.** Nid yw cadw yn unig yn newid dim. Mae eich synwyryddion yn ymddangos eiliad ar ôl i chi ei bwyso.\n\nY pwyntiau terfyn sy'n gwrando yw:\n{endpoints}"
+          },
+          "received": {
+            "title": "Mae eich gorsaf wedi cyrraedd",
+            "description": "Mae **{station}** wedi anfon ei huwchlwythiad cyntaf. Mae ei synwyryddion yn cael eu creu nawr, a bydd rhagor yn ymddangos wrth i'r orsaf eu hadrodd.\n\nNi fydd y neges hon yn dod yn ôl."
+          },
+          "timeout": {
+            "title": "Dim wedi'i dderbyn eto",
+            "description": "Ni chyrhaeddodd unrhyw uwchlwythiad o fewn {minutes} munud.\n\nYn nhrefn tebygolrwydd:\n\n  - **A wnaethoch chi bwyso Confirm & Exit?** Nid yw cadw sgrin y gweinydd yn unig yn ysgrifennu dim i'r orsaf.\n  - Rhaid i'r **URL** fod yn {urls_inline}, heb `http://`, ac yn gyraeddadwy gan yr orsaf ar eich rhwydwaith.\n  - Rhaid i **Upload** fod ymlaen ar y sgrin honno.\n  - Mae rhai cadarnwedd Bresser o **3.02** ymlaen yn gwrthod HTTP plaen ac angen cyfeiriad sy'n gweini HTTPS.\n  - Efallai fod y cyfnod uwchlwytho'n hirach na'r aros yn syml.\n  - **Allwedd yr orsaf**: {key_hint}.\n\nOs cyrhaeddodd yr orsaf Home Assistant ond cael ei gwrthod, adroddir hynny ar wahân yn **Gosodiadau → System → Atgyweiriadau**.\n\nGallwch gau hwn. Mae'n aros yma nes i orsaf ymddangos, ac mae ei ailagor yn dechrau'r aros eto."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Yn aros am uwchlwythiad cyntaf eich gorsaf…"
+        },
+        "abort": {
+          "not_received": "Nid oes dim wedi cyrraedd eto, felly gadewir hwn ar agor. Mae'n aros yn Atgyweiriadau nes i orsaf ymddangos, a gallwch ei ailagor i aros eto."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "Mae'r orsaf {station} yn anfon darlleniadau sy'n cael eu taflu",
+      "description": "Nid yw **{count} paramedr** o **{station}** yn cael eu hadnabod, felly caiff eu gwerthoedd eu taflu bob tro y cânt eu huwchlwytho:\n\n{parameters}\n\nYr achos arferol yw gorsaf sy'n adrodd mwy nag y gall ei phrotocol ei gario. Dim ond **4 lle** sydd gan Weather Underground ar gyfer synwyryddion ychwanegol; os yw eich gorsaf yn cynnig **WSLink** fel *API type*, mae newid iddo yn datgelu saith sianel a thua dwywaith cymaint o ddarlleniadau.\n\nOs nad dyna'r achos, dyma'n union yr enwau paramedr sydd eu hangen ar adroddiad nam: agorwch un ar y [tracier materion]({issue_tracker}) ac fe ellir eu hychwanegu.\n\nGallwch anwybyddu hyn hefyd — nid oes dim wedi torri, dim ond nad yw'r gwerthoedd penodol hyn yn cyrraedd."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "Nid yw gorsaf {device} wedi anfon cyfeiriad gwynt eto, felly nid oes dim i galibradu yn ei erbyn. Arhoswch am yr uwchlwythiad nesaf a rhowch gynnig arall arni."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Pwysedd aer absoliwt"
+      },
+      "apiver": {
+        "name": "Fersiwn yr API"
+      },
+      "aqbc": {
+        "name": "Carbon du"
+      },
+      "aqco": {
+        "name": "Carbon monocsid"
+      },
+      "aqcot": {
+        "name": "Carbon monocsid ar lefel olion"
+      },
+      "aqec": {
+        "name": "Carbon elfennol"
+      },
+      "aqno": {
+        "name": "Nitrig ocsid"
+      },
+      "aqno2": {
+        "name": "NO2 X cyfrifedig"
+      },
+      "aqno2t": {
+        "name": "Nitrogen deuocsid"
+      },
+      "aqno2y": {
+        "name": "NO2 Y cyfrifedig"
+      },
+      "aqno3": {
+        "name": "Ïon NO3"
+      },
+      "aqnox": {
+        "name": "Ocsidau nitrogen"
+      },
+      "aqnoy": {
+        "name": "Cyfanswm nitrogen adweithiol"
+      },
+      "aqoc": {
+        "name": "Carbon organig"
+      },
+      "aqozone": {
+        "name": "Oson"
+      },
+      "aqpm10": {
+        "name": "Màs PM10"
+      },
+      "aqpm2_5": {
+        "name": "Màs PM2.5"
+      },
+      "aqso2": {
+        "name": "Sylffwr deuocsid"
+      },
+      "aqso2t": {
+        "name": "Sylffwr deuocsid ar lefel olion"
+      },
+      "aqso4": {
+        "name": "Ïon SO4"
+      },
+      "aquv_aeth": {
+        "name": "Aethalomedr sianel 2"
+      },
+      "baromin": {
+        "name": "Pwysedd"
+      },
+      "clouds": {
+        "name": "Gorchudd cwmwl"
+      },
+      "dailyrainin": {
+        "name": "Glaw dyddiol"
+      },
+      "dewptf": {
+        "name": "Gwlithbwynt"
+      },
+      "humidity": {
+        "name": "Lleithder allanol"
+      },
+      "inbat": {
+        "name": "Lefel batri'r consol"
+      },
+      "indoorhumidity": {
+        "name": "Lleithder mewnol"
+      },
+      "indoortempf": {
+        "name": "Tymheredd mewnol"
+      },
+      "inhum": {
+        "name": "Lleithder mewnol"
+      },
+      "intem": {
+        "name": "Tymheredd mewnol"
+      },
+      "last_update": {
+        "name": "Derbyniad diwethaf"
+      },
+      "leafwetness": {
+        "name": "Gwlybaniaeth dail"
+      },
+      "leafwetness2": {
+        "name": "CH2 gwlybaniaeth dail"
+      },
+      "lowbatt": {
+        "name": "Batri isel"
+      },
+      "monthlyrainin": {
+        "name": "Glaw misol"
+      },
+      "rainin": {
+        "name": "Glaw bob awr"
+      },
+      "rbar": {
+        "name": "Pwysedd aer cymharol"
+      },
+      "rtfreq": {
+        "name": "Amlder diweddaru"
+      },
+      "soilmoisture": {
+        "name": "Lleithder y pridd"
+      },
+      "soilmoisture2": {
+        "name": "CH2 lleithder y pridd"
+      },
+      "soilmoisture3": {
+        "name": "CH3 lleithder y pridd"
+      },
+      "soilmoisture4": {
+        "name": "CH4 lleithder y pridd"
+      },
+      "soiltemp2f": {
+        "name": "CH2 tymheredd y pridd"
+      },
+      "soiltemp3f": {
+        "name": "CH3 tymheredd y pridd"
+      },
+      "soiltemp4f": {
+        "name": "CH4 tymheredd y pridd"
+      },
+      "soiltempf": {
+        "name": "Tymheredd y pridd"
+      },
+      "solarradiation": {
+        "name": "Ymbelydredd solar"
+      },
+      "t10bat": {
+        "name": "Lefel batri'r synhwyrydd CO2"
+      },
+      "t10cn": {
+        "name": "Cyflwr cysylltiad y synhwyrydd CO2"
+      },
+      "t10co2": {
+        "name": "Crynodiad CO2"
+      },
+      "t11bat": {
+        "name": "Lefel batri'r synhwyrydd CO"
+      },
+      "t11cn": {
+        "name": "Cyflwr cysylltiad y synhwyrydd CO"
+      },
+      "t11co": {
+        "name": "Crynodiad CO"
+      },
+      "t1bat": {
+        "name": "Cyflwr batri'r synhwyrydd allanol"
+      },
+      "t1chill": {
+        "name": "Tymheredd oeri gan wynt"
+      },
+      "t1cn": {
+        "name": "Cyflwr cysylltiad y synhwyrydd allanol"
+      },
+      "t1dew": {
+        "name": "Tymheredd y gwlithbwynt"
+      },
+      "t1feels": {
+        "name": "Tymheredd teimlo"
+      },
+      "t1heat": {
+        "name": "Mynegai gwres"
+      },
+      "t1hum": {
+        "name": "Lleithder allanol"
+      },
+      "t1raindy": {
+        "name": "Glawiad dyddiol"
+      },
+      "t1rainhr": {
+        "name": "Glawiad bob awr"
+      },
+      "t1rainmth": {
+        "name": "Glawiad misol"
+      },
+      "t1rainra": {
+        "name": "Dwysedd y glaw"
+      },
+      "t1rainwy": {
+        "name": "Glawiad wythnosol"
+      },
+      "t1rainyr": {
+        "name": "Glawiad blynyddol"
+      },
+      "t1solrad": {
+        "name": "Dwysedd golau"
+      },
+      "t1tem": {
+        "name": "Tymheredd allanol"
+      },
+      "t1uvi": {
+        "name": "Mynegai UV"
+      },
+      "t1wbgt": {
+        "name": "Tymheredd WBGT"
+      },
+      "t1wdir": {
+        "name": "Cyfeiriad y gwynt"
+      },
+      "t1wgust": {
+        "name": "Hyrddwynt"
+      },
+      "t1ws": {
+        "name": "Cyflymder y gwynt"
+      },
+      "t1ws10mav": {
+        "name": "Cyflymder y gwynt cyf. 10 mun"
+      },
+      "t234c1bat": {
+        "name": "CH1 cyflwr y batri"
+      },
+      "t234c1cn": {
+        "name": "CH1 cyflwr y cysylltiad"
+      },
+      "t234c1hum": {
+        "name": "CH1 lleithder"
+      },
+      "t234c1tem": {
+        "name": "CH1 tymheredd"
+      },
+      "t234c1tp": {
+        "name": "CH1 math o synhwyrydd"
+      },
+      "t234c2bat": {
+        "name": "CH2 cyflwr y batri"
+      },
+      "t234c2cn": {
+        "name": "CH2 cyflwr y cysylltiad"
+      },
+      "t234c2hum": {
+        "name": "CH2 lleithder"
+      },
+      "t234c2tem": {
+        "name": "CH2 tymheredd"
+      },
+      "t234c2tp": {
+        "name": "CH2 math o synhwyrydd"
+      },
+      "t234c3bat": {
+        "name": "CH3 cyflwr y batri"
+      },
+      "t234c3cn": {
+        "name": "CH3 cyflwr y cysylltiad"
+      },
+      "t234c3hum": {
+        "name": "CH3 lleithder"
+      },
+      "t234c3tem": {
+        "name": "CH3 tymheredd"
+      },
+      "t234c3tp": {
+        "name": "CH3 math o synhwyrydd"
+      },
+      "t234c4bat": {
+        "name": "CH4 cyflwr y batri"
+      },
+      "t234c4cn": {
+        "name": "CH4 cyflwr y cysylltiad"
+      },
+      "t234c4hum": {
+        "name": "CH4 lleithder"
+      },
+      "t234c4tem": {
+        "name": "CH4 tymheredd"
+      },
+      "t234c4tp": {
+        "name": "CH4 math o synhwyrydd"
+      },
+      "t234c5bat": {
+        "name": "CH5 cyflwr y batri"
+      },
+      "t234c5cn": {
+        "name": "CH5 cyflwr y cysylltiad"
+      },
+      "t234c5hum": {
+        "name": "CH5 lleithder"
+      },
+      "t234c5tem": {
+        "name": "CH5 tymheredd"
+      },
+      "t234c5tp": {
+        "name": "CH5 math o synhwyrydd"
+      },
+      "t234c6bat": {
+        "name": "CH6 cyflwr y batri"
+      },
+      "t234c6cn": {
+        "name": "CH6 cyflwr y cysylltiad"
+      },
+      "t234c6hum": {
+        "name": "CH6 lleithder"
+      },
+      "t234c6tem": {
+        "name": "CH6 tymheredd"
+      },
+      "t234c6tp": {
+        "name": "CH6 math o synhwyrydd"
+      },
+      "t234c7bat": {
+        "name": "CH7 cyflwr y batri"
+      },
+      "t234c7cn": {
+        "name": "CH7 cyflwr y cysylltiad"
+      },
+      "t234c7hum": {
+        "name": "CH7 lleithder"
+      },
+      "t234c7tem": {
+        "name": "CH7 tymheredd"
+      },
+      "t234c7tp": {
+        "name": "CH7 math o synhwyrydd"
+      },
+      "t5ls1dtc": {
+        "name": "Cyfanswm y mellt mewn 1 diwrnod"
+      },
+      "t5ls1htc": {
+        "name": "Cyfanswm y mellt mewn 1 awr"
+      },
+      "t5ls30mtc": {
+        "name": "Mellt yn y 30 munud diwethaf"
+      },
+      "t5ls5mtc": {
+        "name": "Mellt yn y 5 munud diwethaf"
+      },
+      "t5lsbat": {
+        "name": "Cyflwr batri'r synhwyrydd mellt"
+      },
+      "t5lscn": {
+        "name": "Cyflwr cysylltiad y synhwyrydd mellt"
+      },
+      "t5lsf": {
+        "name": "Mellt yn yr awr ddiwethaf"
+      },
+      "t5lskm": {
+        "name": "Pellter y fellten"
+      },
+      "t5lst": {
+        "name": "Amser y fellten ddiwethaf"
+      },
+      "t6c1bat": {
+        "name": "CH1 cyflwr batri'r synhwyrydd gollwng"
+      },
+      "t6c1cn": {
+        "name": "CH1 cyflwr cysylltiad y synhwyrydd gollwng"
+      },
+      "t6c1wls": {
+        "name": "CH1 cyflwr gollyngiad dŵr"
+      },
+      "t6c2bat": {
+        "name": "CH2 cyflwr batri'r synhwyrydd gollwng"
+      },
+      "t6c2cn": {
+        "name": "CH2 cyflwr cysylltiad y synhwyrydd gollwng"
+      },
+      "t6c2wls": {
+        "name": "CH2 cyflwr gollyngiad dŵr"
+      },
+      "t6c3bat": {
+        "name": "CH3 cyflwr batri'r synhwyrydd gollwng"
+      },
+      "t6c3cn": {
+        "name": "CH3 cyflwr cysylltiad y synhwyrydd gollwng"
+      },
+      "t6c3wls": {
+        "name": "CH3 cyflwr gollyngiad dŵr"
+      },
+      "t6c4bat": {
+        "name": "CH4 cyflwr batri'r synhwyrydd gollwng"
+      },
+      "t6c4cn": {
+        "name": "CH4 cyflwr cysylltiad y synhwyrydd gollwng"
+      },
+      "t6c4wls": {
+        "name": "CH4 cyflwr gollyngiad dŵr"
+      },
+      "t6c5bat": {
+        "name": "CH5 cyflwr batri'r synhwyrydd gollwng"
+      },
+      "t6c5cn": {
+        "name": "CH5 cyflwr cysylltiad y synhwyrydd gollwng"
+      },
+      "t6c5wls": {
+        "name": "CH5 cyflwr gollyngiad dŵr"
+      },
+      "t6c6bat": {
+        "name": "CH6 cyflwr batri'r synhwyrydd gollwng"
+      },
+      "t6c6cn": {
+        "name": "CH6 cyflwr cysylltiad y synhwyrydd gollwng"
+      },
+      "t6c6wls": {
+        "name": "CH6 cyflwr gollyngiad dŵr"
+      },
+      "t6c7bat": {
+        "name": "CH7 cyflwr batri'r synhwyrydd gollwng"
+      },
+      "t6c7cn": {
+        "name": "CH7 cyflwr cysylltiad y synhwyrydd gollwng"
+      },
+      "t6c7wls": {
+        "name": "CH7 cyflwr gollyngiad dŵr"
+      },
+      "t8bat": {
+        "name": "Lefel batri'r synhwyrydd gronynnau"
+      },
+      "t8cn": {
+        "name": "Cyflwr cysylltiad y synhwyrydd gronynnau"
+      },
+      "t8pm10": {
+        "name": "Crynodiad PM10"
+      },
+      "t8pm10ai": {
+        "name": "AQI PM10"
+      },
+      "t8pm25": {
+        "name": "Crynodiad PM2.5"
+      },
+      "t8pm25ai": {
+        "name": "AQI PM2.5"
+      },
+      "t9bat": {
+        "name": "Lefel batri'r synhwyrydd HCHO/VOC"
+      },
+      "t9cn": {
+        "name": "Cyflwr cysylltiad y synhwyrydd HCHO/VOC"
+      },
+      "t9hcho": {
+        "name": "Crynodiad HCHO"
+      },
+      "t9voclv": {
+        "name": "Lefel VOC",
+        "state": {
+          "very_low": "Isel iawn",
+          "low": "Isel",
+          "moderate": "Cymedrol",
+          "high": "Uchel",
+          "very_high": "Uchel iawn"
+        }
+      },
+      "tempf": {
+        "name": "Tymheredd allanol"
+      },
+      "uv": {
+        "name": "Mynegai UV"
+      },
+      "visibility": {
+        "name": "Gwelededd"
+      },
+      "weeklyrainin": {
+        "name": "Glaw wythnosol"
+      },
+      "wind_direction_raw": {
+        "name": "Cyfeiriad y gwynt (crai)"
+      },
+      "windchillf": {
+        "name": "Oeri gan wynt"
+      },
+      "winddir": {
+        "name": "Cyfeiriad y gwynt"
+      },
+      "winddir_avg2m": {
+        "name": "Cyfeiriad y gwynt cyf. 2 fun"
+      },
+      "windgustdir": {
+        "name": "Cyfeiriad yr hyrddwynt"
+      },
+      "windgustdir_10m": {
+        "name": "Cyfeiriad yr hyrddwynt cyf. 10 mun"
+      },
+      "windgustmph": {
+        "name": "Hyrddwynt"
+      },
+      "windgustmph_10m": {
+        "name": "Cyflymder yr hyrddwynt cyf. 10 mun"
+      },
+      "windspdmph_avg2m": {
+        "name": "Cyflymder y gwynt cyf. 2 fun"
+      },
+      "windspeedmph": {
+        "name": "Cyflymder y gwynt"
+      },
+      "yearlyrainin": {
+        "name": "Glaw blynyddol"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Lefel batri'r consol"
+      },
+      "station_online": {
+        "name": "Gorsaf ar-lein"
+      },
+      "t10cn": {
+        "name": "Cyflwr cysylltiad y synhwyrydd CO2"
+      },
+      "t11cn": {
+        "name": "Cyflwr cysylltiad y synhwyrydd CO"
+      },
+      "t1bat": {
+        "name": "Cyflwr batri'r synhwyrydd allanol"
+      },
+      "t1cn": {
+        "name": "Cyflwr cysylltiad y synhwyrydd allanol"
+      },
+      "t234c1bat": {
+        "name": "CH1 cyflwr y batri"
+      },
+      "t234c1cn": {
+        "name": "CH1 cyflwr y cysylltiad"
+      },
+      "t234c2bat": {
+        "name": "CH2 cyflwr y batri"
+      },
+      "t234c2cn": {
+        "name": "CH2 cyflwr y cysylltiad"
+      },
+      "t234c3bat": {
+        "name": "CH3 cyflwr y batri"
+      },
+      "t234c3cn": {
+        "name": "CH3 cyflwr y cysylltiad"
+      },
+      "t234c4bat": {
+        "name": "CH4 cyflwr y batri"
+      },
+      "t234c4cn": {
+        "name": "CH4 cyflwr y cysylltiad"
+      },
+      "t234c5bat": {
+        "name": "CH5 cyflwr y batri"
+      },
+      "t234c5cn": {
+        "name": "CH5 cyflwr y cysylltiad"
+      },
+      "t234c6bat": {
+        "name": "CH6 cyflwr y batri"
+      },
+      "t234c6cn": {
+        "name": "CH6 cyflwr y cysylltiad"
+      },
+      "t234c7bat": {
+        "name": "CH7 cyflwr y batri"
+      },
+      "t234c7cn": {
+        "name": "CH7 cyflwr y cysylltiad"
+      },
+      "t5lsbat": {
+        "name": "Cyflwr batri'r synhwyrydd mellt"
+      },
+      "t5lscn": {
+        "name": "Cyflwr cysylltiad y synhwyrydd mellt"
+      },
+      "t6c1bat": {
+        "name": "CH1 cyflwr batri'r synhwyrydd gollwng"
+      },
+      "t6c1cn": {
+        "name": "CH1 cyflwr cysylltiad y synhwyrydd gollwng"
+      },
+      "t6c1wls": {
+        "name": "CH1 cyflwr gollyngiad dŵr"
+      },
+      "t6c2bat": {
+        "name": "CH2 cyflwr batri'r synhwyrydd gollwng"
+      },
+      "t6c2cn": {
+        "name": "CH2 cyflwr cysylltiad y synhwyrydd gollwng"
+      },
+      "t6c2wls": {
+        "name": "CH2 cyflwr gollyngiad dŵr"
+      },
+      "t6c3bat": {
+        "name": "CH3 cyflwr batri'r synhwyrydd gollwng"
+      },
+      "t6c3cn": {
+        "name": "CH3 cyflwr cysylltiad y synhwyrydd gollwng"
+      },
+      "t6c3wls": {
+        "name": "CH3 cyflwr gollyngiad dŵr"
+      },
+      "t6c4bat": {
+        "name": "CH4 cyflwr batri'r synhwyrydd gollwng"
+      },
+      "t6c4cn": {
+        "name": "CH4 cyflwr cysylltiad y synhwyrydd gollwng"
+      },
+      "t6c4wls": {
+        "name": "CH4 cyflwr gollyngiad dŵr"
+      },
+      "t6c5bat": {
+        "name": "CH5 cyflwr batri'r synhwyrydd gollwng"
+      },
+      "t6c5cn": {
+        "name": "CH5 cyflwr cysylltiad y synhwyrydd gollwng"
+      },
+      "t6c5wls": {
+        "name": "CH5 cyflwr gollyngiad dŵr"
+      },
+      "t6c6bat": {
+        "name": "CH6 cyflwr batri'r synhwyrydd gollwng"
+      },
+      "t6c6cn": {
+        "name": "CH6 cyflwr cysylltiad y synhwyrydd gollwng"
+      },
+      "t6c6wls": {
+        "name": "CH6 cyflwr gollyngiad dŵr"
+      },
+      "t6c7bat": {
+        "name": "CH7 cyflwr batri'r synhwyrydd gollwng"
+      },
+      "t6c7cn": {
+        "name": "CH7 cyflwr cysylltiad y synhwyrydd gollwng"
+      },
+      "t6c7wls": {
+        "name": "CH7 cyflwr gollyngiad dŵr"
+      },
+      "t8cn": {
+        "name": "Cyflwr cysylltiad y synhwyrydd gronynnau"
+      },
+      "t9cn": {
+        "name": "Cyflwr cysylltiad y synhwyrydd HCHO/VOC"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Gwrthbwyso cyfeiriad y gwynt"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Ailosod y gwrthbwysiad"
+      },
+      "set_north": {
+        "name": "Gosod y gogledd yn ôl y gwerth presennol"
+      }
+    }
+  }
+}

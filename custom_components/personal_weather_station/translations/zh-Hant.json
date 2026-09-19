@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "個人氣象站",
+        "description": "在此設定一組氣象站金鑰，您的氣象站必須傳送該金鑰，其資料才不會被拒絕。若留空，則接受所有請求。",
+        "data": {
+          "password": "氣象站金鑰"
+        }
+      },
+      "station": {
+        "title": "第 1 步，共 5 步 — 您的氣象站",
+        "description": "{image}\n\n您的氣象站會自行建立裝置與感測器，因此這一側無需新增任何內容。以下是需要在氣象站應用程式中填寫的內容。\n\n開啟應用程式，確認氣象站韌體為最新版，然後開啟它的設定。"
+      },
+      "settings": {
+        "title": "第 2 步，共 5 步 — 氣象服務",
+        "description": "{image}\n\n選擇 **Weather server**。"
+      },
+      "server": {
+        "title": "第 3 步，共 5 步 — 其他伺服器",
+        "description": "{image}\n\n選擇 **Other Server**。"
+      },
+      "form": {
+        "title": "第 4 步，共 5 步 — 伺服器設定",
+        "description": "{image}\n\n填寫表單，然後按 **Save**。\n\n**URL**\n{urls}\n不要帶 `http://` 或 `https://`。請使用氣象站在您自己網路中能夠連到的位址 — 沒有任何理由為此把 Home Assistant 暴露到網際網路上。若氣象站無法解析名稱，請填寫 IP 位址。\n\n**Station ID** — 隨您喜好。它將成為 Home Assistant 中的裝置名稱。\n\n**Station key** — {key_hint}。\n\n**Upload interval** — 1 分鐘是個合適的值。\n\n**API type** — *WSLink API*。只有當您的氣象站不提供 WSLink 時才選 *WUnderground API*：它承載的讀數只有一半，通道也只有四個。\n\n**Upload** — 保持啟用。\n\n> ⏱️ 在此畫面停留過久，有些氣象站會斷線。請先備妥位址，一次填完並儲存。"
+      },
+      "confirm": {
+        "title": "第 5 步，共 5 步 — confirm & exit",
+        "description": "{image}\n\n返回上一層，然後按 **Confirm & Exit**。\n\n> ⚠️ **把設定寫入氣象站的是 Confirm & Exit。** 僅僅儲存不會改變任何東西。\n\n完成後請點選「下一步」。"
+      },
+      "received": {
+        "title": "您的氣象站正在與 Home Assistant 通訊",
+        "description": "**{station}** 剛剛送出第一次上傳。\n\n它的感測器會在下一次上傳時出現，並且是依據氣象站實際送出的內容建立的 — 這裡沒有需要選擇的東西。"
+      },
+      "timeout": {
+        "title": "目前還沒有任何資料抵達",
+        "description": "過去 {minutes} 分鐘內沒有任何氣象站送出資料。{key_hint_extra}\n\n常見原因是氣象站無法連到的位址、未按下 **Confirm & Exit**，或者 3.02 以上的韌體，它要求使用 HTTPS。\n\n可以指向的位址為：\n{urls}\n正在等待上傳的接入點為：\n{endpoints}\n\n點選「下一步」即可照常完成 — 設定會被保留，接入點將真正開始接聽，並且在氣象站出現之前，會有一個修復項把您帶回此處。"
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "已設定。單一實例即可服務所有氣象站。"
+    },
+    "progress": {
+      "waiting_for_station": "正在等待您的氣象站首次上傳…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "個人氣象站",
+        "menu_options": {
+          "options": "設定",
+          "instructions": "如何將氣象站指向 Home Assistant"
+        }
+      },
+      "options": {
+        "title": "個人氣象站",
+        "description": "在此設定一組氣象站金鑰，您的氣象站必須傳送該金鑰，其資料才不會被拒絕。若留空，則接受所有請求。",
+        "data": {
+          "password": "氣象站金鑰",
+          "availability_timeout": "多久後標記為無法使用（分鐘）",
+          "debug": "記錄每個收到的請求"
+        },
+        "data_description": {
+          "availability_timeout": "氣象站可以保持靜默多久，之後其感測器會被標記為無法使用。設為 0 則永不標記。",
+          "debug": "將每個請求的完整內容寫入 Home Assistant 記錄檔。設定氣象站時很有用，之後會很吵雜。"
+        }
+      },
+      "station": {
+        "title": "第 1 步，共 5 步 — 您的氣象站",
+        "description": "{image}\n\n您的氣象站會自行建立裝置與感測器，因此這一側無需新增任何內容。以下是需要在氣象站應用程式中填寫的內容。\n\n開啟應用程式，確認氣象站韌體為最新版，然後開啟它的設定。"
+      },
+      "settings": {
+        "title": "第 2 步，共 5 步 — 氣象服務",
+        "description": "{image}\n\n選擇 **Weather server**。"
+      },
+      "server": {
+        "title": "第 3 步，共 5 步 — 其他伺服器",
+        "description": "{image}\n\n選擇 **Other Server**。"
+      },
+      "form": {
+        "title": "第 4 步，共 5 步 — 伺服器設定",
+        "description": "{image}\n\n填寫表單，然後按 **Save**。\n\n**URL**\n{urls}\n不要帶 `http://` 或 `https://`。請使用氣象站在您自己網路中能夠連到的位址 — 沒有任何理由為此把 Home Assistant 暴露到網際網路上。若氣象站無法解析名稱，請填寫 IP 位址。\n\n**Station ID** — 隨您喜好。它將成為 Home Assistant 中的裝置名稱。\n\n**Station key** — {key_hint}。\n\n**Upload interval** — 1 分鐘是個合適的值。\n\n**API type** — *WSLink API*。只有當您的氣象站不提供 WSLink 時才選 *WUnderground API*：它承載的讀數只有一半，通道也只有四個。\n\n**Upload** — 保持啟用。\n\n> ⏱️ 在此畫面停留過久，有些氣象站會斷線。請先備妥位址，一次填完並儲存。"
+      },
+      "confirm": {
+        "title": "第 5 步，共 5 步 — confirm & exit",
+        "description": "{image}\n\n返回上一層，然後按 **Confirm & Exit**。\n\n> ⚠️ **把設定寫入氣象站的是 Confirm & Exit。** 僅僅儲存不會改變任何東西。\n\n完成後請點選「下一步」。"
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "氣象站遭拒絕：氣象站金鑰錯誤",
+      "description": "位於 {ip} 的氣象站嘗試以 `{station_id}` 的身分傳送資料，但未傳送預期的氣象站金鑰。\n\n請檢查氣象站或 WSLink 應用程式中設定的金鑰是否與本整合中設定的一致。一旦來自 {ip} 的請求被接受，此訊息會自動消失。"
+    },
+    "missing_device_id": {
+      "title": "氣象站遭拒絕：缺少氣象站識別碼",
+      "description": "位於 {ip} 的氣象站傳送資料時未附上氣象站識別碼。\n\n請在 WSLink 應用程式中設定 Sender ID，或在氣象站設定中設定 ID 參數。一旦來自 {ip} 的請求被接受，此訊息會自動消失。"
+    },
+    "legacy_entity_ids": {
+      "title": "實體 ID 中氣象站名稱重複了兩次",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "縮短實體 ID",
+            "description": "在 1.0.8 版本之前，本整合產生的實體 ID 會包含兩次氣象站名稱，例如 `{example_old}`。新氣象站不再如此。\n\n可以重新命名 **{count} 個實體**，例如改為 `{example_new}`。\n\n歷史紀錄與長期統計會自動跟隨重新命名。**自動化、腳本、場景與儀表板則不會** —— 所有引用舊 ID 的地方都需要您自行更新。\n\n若您比較想維持原樣，請忽略此修復項目。"
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "連線、漏水和電池讀數仍然是數字",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "轉換為二元感測器",
+            "description": "連線、漏水和電池讀數以 1 或 0 的形式送出。在 1.0.8 版之前，它們以數值感測器的形式呈現，例如 `{example}`，無法搭配 Home Assistant 標準的漏水、連線與低電量卡片使用。新的氣象站會取得二元感測器，顯示 **潮濕 / 乾燥**、**已連線 / 已中斷** 和 **開 / 關**。\n\n可以轉換 **{count} 個實體**。空氣品質感測器的 0~5 電池等級仍保留百分比：六個級距超出開/關所能承載的範圍。\n\n更換平台並不是重新命名：舊實體會被移除並以 `binary_sensor` 重新建立。**它們記錄的歷史會遺失** — 這些讀數沒有長期統計資料，因此只影響原始歷史 — 並且 **指向它們的自動化、指令碼、場景和儀表板必須更新**。新實體會在氣象站下一次上傳時出現。\n\n若您比較想維持原樣，請忽略此修復項。"
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "還沒有任何氣象站傳送過資料",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "設定您的氣象站",
+            "description": "建立裝置與感測器的是您的氣象站——這裡沒有什麼需要新增。\n\n在氣象站的應用程式中開啟您的氣象站，接著進入 **Settings → Weather server → Other Server**，填入：\n\n**URL**\n{urls}\n不要加 `http://` 或 `https://`。請使用氣象站在您自己網路內可以連到的位址——沒有任何理由為此把 Home Assistant 暴露到網際網路。若您的氣象站無法解析名稱，請填 IP 位址。\n\n**Station ID** — 隨您喜好。它會成為 Home Assistant 中的裝置名稱。\n\n**Station key** — {key_hint}。\n\n**Upload interval** — 1 分鐘是不錯的值。\n\n**API type** — *WSLink API*。\n\n**Upload** — 保持開啟。\n\n按 **Save**，返回，然後按 **Confirm & Exit**。\n\n> ⚠️ **真正把設定寫入氣象站的是 Confirm & Exit。** 僅僅儲存不會改變任何東西。您的感測器會在一秒後出現。\n\n正在接聽的端點：\n{endpoints}"
+          },
+          "received": {
+            "title": "您的氣象站已接上",
+            "description": "**{station}** 已完成首次上傳。它的感測器正在建立，隨著氣象站陸續回報，還會出現更多。\n\n此訊息不會再次出現。"
+          },
+          "timeout": {
+            "title": "尚未收到任何資料",
+            "description": "{minutes} 分鐘內沒有收到任何上傳。\n\n依可能性排序：\n\n  - **您按過 Confirm & Exit 嗎？** 只儲存伺服器頁面並不會寫入任何東西到氣象站。\n  - **URL** 必須是 {urls_inline}，不帶 `http://`，且氣象站在您的網路中能夠連到。\n  - 該頁面上的 **Upload** 必須開啟。\n  - **3.02** 之後的部分 Bresser 韌體拒絕純文字 HTTP，需要一個提供 HTTPS 的位址。\n  - 上傳間隔可能只是比等待時間更長。\n  - **氣象站金鑰**：{key_hint}。\n\n若氣象站已連到 Home Assistant 卻遭拒絕，會在 **設定 → 系統 → 修復** 中另行回報。\n\n您可以關閉。在氣象站出現之前它會一直留在這裡，重新開啟會重新開始等待。"
+          }
+        },
+        "progress": {
+          "waiting_for_station": "正在等待氣象站的首次上傳…"
+        },
+        "abort": {
+          "not_received": "目前還沒有收到任何資料，因此此項保持開啟。在氣象站出現之前它會留在修復中，您可以重新開啟以再次等待。"
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "氣象站 {station} 傳送的讀數正被捨棄",
+      "description": "來自 **{station}** 的 **{count} 個參數** 無法辨識，因此每次上傳時其數值都會被捨棄：\n\n{parameters}\n\n常見原因是氣象站回報的內容超出其通訊協定所能承載的範圍。Weather Underground 只有 **4 個** 額外感測器的位置；若您的氣象站在 *API type* 中提供 **WSLink**，切換過去可取得七個通道以及大約兩倍的讀數。\n\n若原因並非如此，這些參數名稱正是一份錯誤回報所需要的：請至 [問題追蹤器]({issue_tracker}) 提交，之後即可將它們加入。\n\n您也可以忽略此提示 — 沒有任何東西損壞，只是這些特定數值沒有送達。"
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "氣象站 {device} 尚未回報風向，因此沒有可校正的基準。請等待下次上傳後再試一次。"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "絕對氣壓"
+      },
+      "apiver": {
+        "name": "API 版本"
+      },
+      "aqbc": {
+        "name": "黑碳"
+      },
+      "aqco": {
+        "name": "一氧化碳"
+      },
+      "aqcot": {
+        "name": "痕量一氧化碳"
+      },
+      "aqec": {
+        "name": "元素碳"
+      },
+      "aqno": {
+        "name": "一氧化氮"
+      },
+      "aqno2": {
+        "name": "NO2 X 計算值"
+      },
+      "aqno2t": {
+        "name": "二氧化氮"
+      },
+      "aqno2y": {
+        "name": "NO2 Y 計算值"
+      },
+      "aqno3": {
+        "name": "NO3 離子"
+      },
+      "aqnox": {
+        "name": "氮氧化物"
+      },
+      "aqnoy": {
+        "name": "總活性氮"
+      },
+      "aqoc": {
+        "name": "有機碳"
+      },
+      "aqozone": {
+        "name": "臭氧"
+      },
+      "aqpm10": {
+        "name": "PM10 質量"
+      },
+      "aqpm2_5": {
+        "name": "PM2.5 質量"
+      },
+      "aqso2": {
+        "name": "二氧化硫"
+      },
+      "aqso2t": {
+        "name": "痕量二氧化硫"
+      },
+      "aqso4": {
+        "name": "SO4 離子"
+      },
+      "aquv_aeth": {
+        "name": "黑碳儀通道 2"
+      },
+      "baromin": {
+        "name": "氣壓"
+      },
+      "clouds": {
+        "name": "雲量"
+      },
+      "dailyrainin": {
+        "name": "日雨量"
+      },
+      "dewptf": {
+        "name": "露點"
+      },
+      "humidity": {
+        "name": "室外濕度"
+      },
+      "inbat": {
+        "name": "主機電池電量"
+      },
+      "indoorhumidity": {
+        "name": "室內濕度"
+      },
+      "indoortempf": {
+        "name": "室內溫度"
+      },
+      "inhum": {
+        "name": "室內濕度"
+      },
+      "intem": {
+        "name": "室內溫度"
+      },
+      "last_update": {
+        "name": "最後接收"
+      },
+      "leafwetness": {
+        "name": "葉面濕度"
+      },
+      "leafwetness2": {
+        "name": "CH2 葉面濕度"
+      },
+      "lowbatt": {
+        "name": "電量不足"
+      },
+      "monthlyrainin": {
+        "name": "月雨量"
+      },
+      "rainin": {
+        "name": "小時雨量"
+      },
+      "rbar": {
+        "name": "相對氣壓"
+      },
+      "rtfreq": {
+        "name": "更新頻率"
+      },
+      "soilmoisture": {
+        "name": "土壤濕度"
+      },
+      "soilmoisture2": {
+        "name": "CH2 土壤濕度"
+      },
+      "soilmoisture3": {
+        "name": "CH3 土壤濕度"
+      },
+      "soilmoisture4": {
+        "name": "CH4 土壤濕度"
+      },
+      "soiltemp2f": {
+        "name": "CH2 土壤溫度"
+      },
+      "soiltemp3f": {
+        "name": "CH3 土壤溫度"
+      },
+      "soiltemp4f": {
+        "name": "CH4 土壤溫度"
+      },
+      "soiltempf": {
+        "name": "土壤溫度"
+      },
+      "solarradiation": {
+        "name": "太陽輻射"
+      },
+      "t10bat": {
+        "name": "CO2 感測器電池電量"
+      },
+      "t10cn": {
+        "name": "CO2 感測器連線狀態"
+      },
+      "t10co2": {
+        "name": "CO2 濃度"
+      },
+      "t11bat": {
+        "name": "CO 感測器電池電量"
+      },
+      "t11cn": {
+        "name": "CO 感測器連線狀態"
+      },
+      "t11co": {
+        "name": "CO 濃度"
+      },
+      "t1bat": {
+        "name": "室外感測器電池狀態"
+      },
+      "t1chill": {
+        "name": "風寒溫度"
+      },
+      "t1cn": {
+        "name": "室外感測器連線狀態"
+      },
+      "t1dew": {
+        "name": "露點溫度"
+      },
+      "t1feels": {
+        "name": "體感溫度"
+      },
+      "t1heat": {
+        "name": "熱指數"
+      },
+      "t1hum": {
+        "name": "室外濕度"
+      },
+      "t1raindy": {
+        "name": "日降水量"
+      },
+      "t1rainhr": {
+        "name": "小時降水量"
+      },
+      "t1rainmth": {
+        "name": "月降水量"
+      },
+      "t1rainra": {
+        "name": "降雨強度"
+      },
+      "t1rainwy": {
+        "name": "週降水量"
+      },
+      "t1rainyr": {
+        "name": "年降水量"
+      },
+      "t1solrad": {
+        "name": "光照強度"
+      },
+      "t1tem": {
+        "name": "室外溫度"
+      },
+      "t1uvi": {
+        "name": "紫外線指數"
+      },
+      "t1wbgt": {
+        "name": "WBGT 溫度"
+      },
+      "t1wdir": {
+        "name": "風向"
+      },
+      "t1wgust": {
+        "name": "陣風"
+      },
+      "t1ws": {
+        "name": "風速"
+      },
+      "t1ws10mav": {
+        "name": "風速 10 分鐘平均"
+      },
+      "t234c1bat": {
+        "name": "CH1 電池狀態"
+      },
+      "t234c1cn": {
+        "name": "CH1 連線狀態"
+      },
+      "t234c1hum": {
+        "name": "CH1 濕度"
+      },
+      "t234c1tem": {
+        "name": "CH1 溫度"
+      },
+      "t234c1tp": {
+        "name": "CH1 感測器類型"
+      },
+      "t234c2bat": {
+        "name": "CH2 電池狀態"
+      },
+      "t234c2cn": {
+        "name": "CH2 連線狀態"
+      },
+      "t234c2hum": {
+        "name": "CH2 濕度"
+      },
+      "t234c2tem": {
+        "name": "CH2 溫度"
+      },
+      "t234c2tp": {
+        "name": "CH2 感測器類型"
+      },
+      "t234c3bat": {
+        "name": "CH3 電池狀態"
+      },
+      "t234c3cn": {
+        "name": "CH3 連線狀態"
+      },
+      "t234c3hum": {
+        "name": "CH3 濕度"
+      },
+      "t234c3tem": {
+        "name": "CH3 溫度"
+      },
+      "t234c3tp": {
+        "name": "CH3 感測器類型"
+      },
+      "t234c4bat": {
+        "name": "CH4 電池狀態"
+      },
+      "t234c4cn": {
+        "name": "CH4 連線狀態"
+      },
+      "t234c4hum": {
+        "name": "CH4 濕度"
+      },
+      "t234c4tem": {
+        "name": "CH4 溫度"
+      },
+      "t234c4tp": {
+        "name": "CH4 感測器類型"
+      },
+      "t234c5bat": {
+        "name": "CH5 電池狀態"
+      },
+      "t234c5cn": {
+        "name": "CH5 連線狀態"
+      },
+      "t234c5hum": {
+        "name": "CH5 濕度"
+      },
+      "t234c5tem": {
+        "name": "CH5 溫度"
+      },
+      "t234c5tp": {
+        "name": "CH5 感測器類型"
+      },
+      "t234c6bat": {
+        "name": "CH6 電池狀態"
+      },
+      "t234c6cn": {
+        "name": "CH6 連線狀態"
+      },
+      "t234c6hum": {
+        "name": "CH6 濕度"
+      },
+      "t234c6tem": {
+        "name": "CH6 溫度"
+      },
+      "t234c6tp": {
+        "name": "CH6 感測器類型"
+      },
+      "t234c7bat": {
+        "name": "CH7 電池狀態"
+      },
+      "t234c7cn": {
+        "name": "CH7 連線狀態"
+      },
+      "t234c7hum": {
+        "name": "CH7 濕度"
+      },
+      "t234c7tem": {
+        "name": "CH7 溫度"
+      },
+      "t234c7tp": {
+        "name": "CH7 感測器類型"
+      },
+      "t5ls1dtc": {
+        "name": "1 天雷擊總數"
+      },
+      "t5ls1htc": {
+        "name": "1 小時雷擊總數"
+      },
+      "t5ls30mtc": {
+        "name": "最近 30 分鐘雷擊"
+      },
+      "t5ls5mtc": {
+        "name": "最近 5 分鐘雷擊"
+      },
+      "t5lsbat": {
+        "name": "雷電感測器電池狀態"
+      },
+      "t5lscn": {
+        "name": "雷電感測器連線狀態"
+      },
+      "t5lsf": {
+        "name": "最近 1 小時雷擊"
+      },
+      "t5lskm": {
+        "name": "雷擊距離"
+      },
+      "t5lst": {
+        "name": "上次雷擊時間"
+      },
+      "t6c1bat": {
+        "name": "CH1 漏水感測器電池狀態"
+      },
+      "t6c1cn": {
+        "name": "CH1 漏水感測器連線狀態"
+      },
+      "t6c1wls": {
+        "name": "CH1 漏水狀態"
+      },
+      "t6c2bat": {
+        "name": "CH2 漏水感測器電池狀態"
+      },
+      "t6c2cn": {
+        "name": "CH2 漏水感測器連線狀態"
+      },
+      "t6c2wls": {
+        "name": "CH2 漏水狀態"
+      },
+      "t6c3bat": {
+        "name": "CH3 漏水感測器電池狀態"
+      },
+      "t6c3cn": {
+        "name": "CH3 漏水感測器連線狀態"
+      },
+      "t6c3wls": {
+        "name": "CH3 漏水狀態"
+      },
+      "t6c4bat": {
+        "name": "CH4 漏水感測器電池狀態"
+      },
+      "t6c4cn": {
+        "name": "CH4 漏水感測器連線狀態"
+      },
+      "t6c4wls": {
+        "name": "CH4 漏水狀態"
+      },
+      "t6c5bat": {
+        "name": "CH5 漏水感測器電池狀態"
+      },
+      "t6c5cn": {
+        "name": "CH5 漏水感測器連線狀態"
+      },
+      "t6c5wls": {
+        "name": "CH5 漏水狀態"
+      },
+      "t6c6bat": {
+        "name": "CH6 漏水感測器電池狀態"
+      },
+      "t6c6cn": {
+        "name": "CH6 漏水感測器連線狀態"
+      },
+      "t6c6wls": {
+        "name": "CH6 漏水狀態"
+      },
+      "t6c7bat": {
+        "name": "CH7 漏水感測器電池狀態"
+      },
+      "t6c7cn": {
+        "name": "CH7 漏水感測器連線狀態"
+      },
+      "t6c7wls": {
+        "name": "CH7 漏水狀態"
+      },
+      "t8bat": {
+        "name": "微粒感測器電池電量"
+      },
+      "t8cn": {
+        "name": "微粒感測器連線狀態"
+      },
+      "t8pm10": {
+        "name": "PM10 濃度"
+      },
+      "t8pm10ai": {
+        "name": "PM10 AQI"
+      },
+      "t8pm25": {
+        "name": "PM2.5 濃度"
+      },
+      "t8pm25ai": {
+        "name": "PM2.5 AQI"
+      },
+      "t9bat": {
+        "name": "HCHO/VOC 感測器電池電量"
+      },
+      "t9cn": {
+        "name": "HCHO/VOC 感測器連線狀態"
+      },
+      "t9hcho": {
+        "name": "HCHO 濃度"
+      },
+      "t9voclv": {
+        "name": "VOC 等級",
+        "state": {
+          "very_low": "極低",
+          "low": "低",
+          "moderate": "中等",
+          "high": "高",
+          "very_high": "極高"
+        }
+      },
+      "tempf": {
+        "name": "室外溫度"
+      },
+      "uv": {
+        "name": "紫外線指數"
+      },
+      "visibility": {
+        "name": "能見度"
+      },
+      "weeklyrainin": {
+        "name": "週雨量"
+      },
+      "wind_direction_raw": {
+        "name": "風向（原始值）"
+      },
+      "windchillf": {
+        "name": "風寒指數"
+      },
+      "winddir": {
+        "name": "風向"
+      },
+      "winddir_avg2m": {
+        "name": "風向 2 分鐘平均"
+      },
+      "windgustdir": {
+        "name": "陣風風向"
+      },
+      "windgustdir_10m": {
+        "name": "陣風風向 10 分鐘平均"
+      },
+      "windgustmph": {
+        "name": "陣風"
+      },
+      "windgustmph_10m": {
+        "name": "陣風風速 10 分鐘平均"
+      },
+      "windspdmph_avg2m": {
+        "name": "風速 2 分鐘平均"
+      },
+      "windspeedmph": {
+        "name": "風速"
+      },
+      "yearlyrainin": {
+        "name": "年雨量"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "主機電池電量"
+      },
+      "station_online": {
+        "name": "氣象站上線"
+      },
+      "t10cn": {
+        "name": "CO2 感測器連線狀態"
+      },
+      "t11cn": {
+        "name": "CO 感測器連線狀態"
+      },
+      "t1bat": {
+        "name": "室外感測器電池狀態"
+      },
+      "t1cn": {
+        "name": "室外感測器連線狀態"
+      },
+      "t234c1bat": {
+        "name": "CH1 電池狀態"
+      },
+      "t234c1cn": {
+        "name": "CH1 連線狀態"
+      },
+      "t234c2bat": {
+        "name": "CH2 電池狀態"
+      },
+      "t234c2cn": {
+        "name": "CH2 連線狀態"
+      },
+      "t234c3bat": {
+        "name": "CH3 電池狀態"
+      },
+      "t234c3cn": {
+        "name": "CH3 連線狀態"
+      },
+      "t234c4bat": {
+        "name": "CH4 電池狀態"
+      },
+      "t234c4cn": {
+        "name": "CH4 連線狀態"
+      },
+      "t234c5bat": {
+        "name": "CH5 電池狀態"
+      },
+      "t234c5cn": {
+        "name": "CH5 連線狀態"
+      },
+      "t234c6bat": {
+        "name": "CH6 電池狀態"
+      },
+      "t234c6cn": {
+        "name": "CH6 連線狀態"
+      },
+      "t234c7bat": {
+        "name": "CH7 電池狀態"
+      },
+      "t234c7cn": {
+        "name": "CH7 連線狀態"
+      },
+      "t5lsbat": {
+        "name": "雷電感測器電池狀態"
+      },
+      "t5lscn": {
+        "name": "雷電感測器連線狀態"
+      },
+      "t6c1bat": {
+        "name": "CH1 漏水感測器電池狀態"
+      },
+      "t6c1cn": {
+        "name": "CH1 漏水感測器連線狀態"
+      },
+      "t6c1wls": {
+        "name": "CH1 漏水狀態"
+      },
+      "t6c2bat": {
+        "name": "CH2 漏水感測器電池狀態"
+      },
+      "t6c2cn": {
+        "name": "CH2 漏水感測器連線狀態"
+      },
+      "t6c2wls": {
+        "name": "CH2 漏水狀態"
+      },
+      "t6c3bat": {
+        "name": "CH3 漏水感測器電池狀態"
+      },
+      "t6c3cn": {
+        "name": "CH3 漏水感測器連線狀態"
+      },
+      "t6c3wls": {
+        "name": "CH3 漏水狀態"
+      },
+      "t6c4bat": {
+        "name": "CH4 漏水感測器電池狀態"
+      },
+      "t6c4cn": {
+        "name": "CH4 漏水感測器連線狀態"
+      },
+      "t6c4wls": {
+        "name": "CH4 漏水狀態"
+      },
+      "t6c5bat": {
+        "name": "CH5 漏水感測器電池狀態"
+      },
+      "t6c5cn": {
+        "name": "CH5 漏水感測器連線狀態"
+      },
+      "t6c5wls": {
+        "name": "CH5 漏水狀態"
+      },
+      "t6c6bat": {
+        "name": "CH6 漏水感測器電池狀態"
+      },
+      "t6c6cn": {
+        "name": "CH6 漏水感測器連線狀態"
+      },
+      "t6c6wls": {
+        "name": "CH6 漏水狀態"
+      },
+      "t6c7bat": {
+        "name": "CH7 漏水感測器電池狀態"
+      },
+      "t6c7cn": {
+        "name": "CH7 漏水感測器連線狀態"
+      },
+      "t6c7wls": {
+        "name": "CH7 漏水狀態"
+      },
+      "t8cn": {
+        "name": "微粒感測器連線狀態"
+      },
+      "t9cn": {
+        "name": "HCHO/VOC 感測器連線狀態"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "風向偏移"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "重設偏移"
+      },
+      "set_north": {
+        "name": "將目前值設為正北"
+      }
+    }
+  }
+}

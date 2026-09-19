@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Personleg vêrstasjon",
+        "description": "Oppgi her ein stasjonsnøkkel som vêrstasjonane dine må sende med for at dataa deira ikkje skal bli avviste. Lèt du feltet stå tomt, blir alle førespurnader godtekne.",
+        "data": {
+          "password": "Stasjonsnøkkel"
+        }
+      },
+      "station": {
+        "title": "Steg 1 av 5 — stasjonen din",
+        "description": "{image}\n\nVêrstasjonen din opprettar sjølv einingane og sensorane sine, så her er det ingenting å leggje til. Det som følgjer er det du skriv inn i appen til stasjonen.\n\nOpna appen, sjå etter at fastvara til stasjonen er oppdatert, og opna så innstillingane."
+      },
+      "settings": {
+        "title": "Steg 2 av 5 — vêrteneste",
+        "description": "{image}\n\nVel **Weather server**."
+      },
+      "server": {
+        "title": "Steg 3 av 5 — annan tenar",
+        "description": "{image}\n\nVel **Other Server**."
+      },
+      "form": {
+        "title": "Steg 4 av 5 — tenarinnstillingar",
+        "description": "{image}\n\nFyll ut skjemaet, og trykk så **Save**.\n\n**URL**\n{urls}\nUtan `http://` eller `https://`. Bruk ei adresse stasjonen din når på ditt eige nett — det er ingen grunn til å eksponere Home Assistant mot internett for dette. Om stasjonen ikkje slår opp namn, bruk IP-adressa.\n\n**Station ID** — kva du vil. Det blir einingsnamnet i Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minutt er ein god verdi.\n\n**API type** — *WSLink API*. Vel *WUnderground API* berre om stasjonen din ikkje tilbyr WSLink: han ber halvparten så mange målingar og berre fire kanalar.\n\n**Upload** — lat han stå på.\n\n> ⏱️ Somme stasjonar misser wifi om du blir verande på denne skjermen. Ha adressa klar, fyll henne inn, og lagre."
+      },
+      "confirm": {
+        "title": "Steg 5 av 5 — confirm & exit",
+        "description": "{image}\n\nGå tilbake, og trykk så **Confirm & Exit**.\n\n> ⚠️ **Det er Confirm & Exit som skriv innstillingane til stasjonen.** Å lagre åleine endrar ingenting.\n\nTrykk Neste når du har gjort det."
+      },
+      "received": {
+        "title": "Stasjonen din snakkar med Home Assistant",
+        "description": "**{station}** sende nett den fyrste opplastinga si.\n\nSensorane dukkar opp ved den neste, og blir laga ut frå det stasjonen faktisk sender — her er det ingenting å velje."
+      },
+      "timeout": {
+        "title": "Ingenting har kome enno",
+        "description": "Ingen stasjon har sendt noko dei siste {minutes} minutta.{key_hint_extra}\n\nDei vanlege årsakene er ei adresse stasjonen ikkje når, **Confirm & Exit** som ikkje er trykt, eller fastvare frå 3.02 og nyare, som krev HTTPS.\n\nAdressene å peike han mot er:\n{urls}\nEndepunkta som lyttar etter opplastingar er:\n{endpoints}\n\nTrykk Neste for å fullføre likevel — oppsettet blir teke vare på, endepunkta byrjar verkeleg å lytte, og ein reparasjon hentar deg tilbake hit til ein stasjon dukkar opp."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Allereie konfigurert. Éin einaste instans betener alle vêrstasjonar."
+    },
+    "progress": {
+      "waiting_for_station": "Ventar på den fyrste opplastinga frå stasjonen din…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Personleg vêrstasjon",
+        "menu_options": {
+          "options": "Innstillingar",
+          "instructions": "Slik peikar du ein stasjon mot Home Assistant"
+        }
+      },
+      "options": {
+        "title": "Personleg vêrstasjon",
+        "description": "Oppgi her ein stasjonsnøkkel som vêrstasjonane dine må sende med for at dataa deira ikkje skal bli avviste. Lèt du feltet stå tomt, blir alle førespurnader godtekne.",
+        "data": {
+          "password": "Stasjonsnøkkel",
+          "availability_timeout": "Merk som utilgjengeleg etter (minutt)",
+          "debug": "Logg kvar innkomande førespurnad"
+        },
+        "data_description": {
+          "availability_timeout": "Kor lenge ein stasjon kan vere tagal før sensorane blir merkte som utilgjengelege. 0 for aldri å merke dei.",
+          "debug": "Skriv heile innhaldet i kvar førespurnad til Home Assistant-loggen. Nyttig medan ein stasjon blir sett opp, støyande etterpå."
+        }
+      },
+      "station": {
+        "title": "Steg 1 av 5 — stasjonen din",
+        "description": "{image}\n\nVêrstasjonen din opprettar sjølv einingane og sensorane sine, så her er det ingenting å leggje til. Det som følgjer er det du skriv inn i appen til stasjonen.\n\nOpna appen, sjå etter at fastvara til stasjonen er oppdatert, og opna så innstillingane."
+      },
+      "settings": {
+        "title": "Steg 2 av 5 — vêrteneste",
+        "description": "{image}\n\nVel **Weather server**."
+      },
+      "server": {
+        "title": "Steg 3 av 5 — annan tenar",
+        "description": "{image}\n\nVel **Other Server**."
+      },
+      "form": {
+        "title": "Steg 4 av 5 — tenarinnstillingar",
+        "description": "{image}\n\nFyll ut skjemaet, og trykk så **Save**.\n\n**URL**\n{urls}\nUtan `http://` eller `https://`. Bruk ei adresse stasjonen din når på ditt eige nett — det er ingen grunn til å eksponere Home Assistant mot internett for dette. Om stasjonen ikkje slår opp namn, bruk IP-adressa.\n\n**Station ID** — kva du vil. Det blir einingsnamnet i Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minutt er ein god verdi.\n\n**API type** — *WSLink API*. Vel *WUnderground API* berre om stasjonen din ikkje tilbyr WSLink: han ber halvparten så mange målingar og berre fire kanalar.\n\n**Upload** — lat han stå på.\n\n> ⏱️ Somme stasjonar misser wifi om du blir verande på denne skjermen. Ha adressa klar, fyll henne inn, og lagre."
+      },
+      "confirm": {
+        "title": "Steg 5 av 5 — confirm & exit",
+        "description": "{image}\n\nGå tilbake, og trykk så **Confirm & Exit**.\n\n> ⚠️ **Det er Confirm & Exit som skriv innstillingane til stasjonen.** Å lagre åleine endrar ingenting.\n\nTrykk Neste når du har gjort det."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Vêrstasjon avvist: feil stasjonsnøkkel",
+      "description": "Ein vêrstasjon på {ip} prøvde å sende data som `{station_id}` utan å sende med forventa stasjonsnøkkel.\n\nKontroller at nøkkelen som er sett i stasjonen eller i WSLink-appen stemmer med den som er oppgitt i denne integrasjonen. Meldinga forsvinn av seg sjølv så snart ein førespurnad frå {ip} blir godteken."
+    },
+    "missing_device_id": {
+      "title": "Vêrstasjon avvist: ingen stasjonsidentifikator",
+      "description": "Ein vêrstasjon på {ip} sende data utan stasjonsidentifikator.\n\nOppgi ein Sender ID i WSLink-appen, eller ein ID-parameter i konfigurasjonen til stasjonen. Meldinga forsvinn av seg sjølv så snart ein førespurnad frå {ip} blir godteken."
+    },
+    "legacy_entity_ids": {
+      "title": "Entitets-ID-ane gjentek stasjonsnamnet",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Forkort entitets-ID-ane",
+            "description": "Fram til versjon 1.0.8 bygde denne integrasjonen entitets-ID-ar som ber stasjonsnamnet to gonger, som `{example_old}`. Nye stasjonar gjer ikkje det lenger.\n\n**{count} entitetar** kan få nytt namn, til dømes til `{example_new}`.\n\nHistorikk og langtidsstatistikk følgjer namnebytet automatisk. **Automasjonar, skript, scener og dashbord gjer ikkje det** — alt som viser til dei gamle ID-ane må du oppdatere sjølv.\n\nVil du heller behalde dei som dei er, ignorer denne reparasjonen."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Sambands-, lekkasje- og batteriverdiar er framleis tal",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Konverter til binære sensorar",
+            "description": "Sambands-, vasslekkasje- og batteriverdiar blir sende som 1 eller 0. Fram til versjon 1.0.8 blei dei viste som numeriske sensorar, som `{example}`, som ikkje kan brukast med standardkorta i Home Assistant for lekkasje, samband og lågt batteri. Nye stasjonar får binære sensorar som viser **Vått / Tørt**, **Tilkopla / Fråkopla** og **På / Av**.\n\n**{count} einingar** kan konverterast. Dei 0~5 batterinivåa på luftkvalitetssensorane held på prosenten sin: seks steg er meir enn eit på/av greier å bere.\n\nÅ byte plattform er ikkje ei omdøyping: dei gamle einingane blir fjerna og laga på nytt som `binary_sensor`. **Den registrerte historikken deira går tapt** — desse verdiane har ingen langtidsstatistikk, så berre råhistorikken blir råka — og **automasjonar, skript, scener og dashbord som peikar på dei må oppdaterast**. Dei nye einingane dukkar opp ved neste opplasting frå stasjonen.\n\nVil du heller la dei vere som dei er, kan du sjå bort frå denne reparasjonen."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Ingen vêrstasjon har sendt noko enno",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Set opp vêrstasjonen din",
+            "description": "Det er vêrstasjonen din som lagar einingane og sensorane — her er det ingenting å leggje til.\n\nOpne stasjonen din i appen til stasjonen, så **Settings → Weather server → Other Server**, og fyll ut:\n\n**URL**\n{urls}\nUtan `http://` eller `https://`. Bruk ei adresse stasjonen din kan nå på ditt eige nettverk — det er ingen grunn til å eksponere Home Assistant mot internett for dette. Kan ikkje stasjonen din slå opp namn, bruk IP-adressa.\n\n**Station ID** — kva du vil. Det blir einingsnamnet i Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minutt er ein god verdi.\n\n**API type** — *WSLink API*.\n\n**Upload** — lat han stå på.\n\nTrykk **Save**, gå tilbake, og trykk så **Confirm & Exit**.\n\n> ⚠️ **Det er Confirm & Exit som skriv innstillingane til stasjonen.** Å lagre åleine endrar ingenting. Sensorane dine dukkar opp eit sekund etterpå.\n\nEndepunkta som lyttar er:\n{endpoints}"
+          },
+          "received": {
+            "title": "Stasjonen din kom gjennom",
+            "description": "**{station}** har sendt si fyrste opplasting. Sensorane blir laga no, og fleire kjem til etter kvart som stasjonen rapporterer dei.\n\nDenne meldinga kjem ikkje tilbake."
+          },
+          "timeout": {
+            "title": "Ingenting motteke enno",
+            "description": "Det kom inga opplasting på {minutes} minutt.\n\nEtter sannsyn:\n\n  - **Trykte du Confirm & Exit?** Å lagre serverskjermen åleine skriv ingenting til stasjonen.\n  - **URL** må vere {urls_inline}, utan `http://`, og nåbar for stasjonen på nettverket ditt.\n  - **Upload** må vere på i den skjermen.\n  - Nokre Bresser-fastvarer frå **3.02** og utover avviser vanleg HTTP og krev ei adresse som serverer HTTPS.\n  - Opplastingsintervallet er kanskje rett og slett lengre enn ventetida.\n  - **Stasjonsnøkkel**: {key_hint}.\n\nOm stasjonen nådde Home Assistant, men vart avvist, blir det meldt separat i **Innstillingar → System → Reparasjonar**.\n\nDu kan lukke. Det blir ståande her til ein stasjon dukkar opp, og å opne det att startar ventetida på nytt."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Ventar på den fyrste opplastinga til stasjonen din…"
+        },
+        "abort": {
+          "not_received": "Ingenting har kome enno, så dette står ope. Det blir i Reparasjonar til ein stasjon dukkar opp, og du kan opne det att for å vente på nytt."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "Stasjonen {station} sender målingar som blir kasta",
+      "description": "**{count} parametrar** frå **{station}** blir ikkje kjende att, så verdiane deira blir kasta ved kvar opplasting:\n\n{parameters}\n\nDen vanlege årsaka er ein stasjon som rapporterer meir enn protokollen hans klarer å bere. Weather Underground har berre **4 plassar** til ekstra sensorar; om stasjonen din tilbyr **WSLink** som *API type*, gjev eit byte dit sju kanalar og om lag dobbelt så mange målingar.\n\nEr det ikkje forklaringa, er nettopp desse parameternamna det ein feilrapport treng: opprett ein i [feilsporaren]({issue_tracker}), så kan dei leggjast til.\n\nDu kan òg oversjå dette — ingenting er øydelagt, akkurat desse verdiane kjem berre ikkje fram."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "Stasjonen {device} har enno ikkje sendt nokon vindretning, så det er ingenting å kalibrere mot. Vent på neste sending og prøv igjen."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Absolutt lufttrykk"
+      },
+      "apiver": {
+        "name": "API-versjon"
+      },
+      "aqbc": {
+        "name": "Svart karbon"
+      },
+      "aqco": {
+        "name": "Karbonmonoksid"
+      },
+      "aqcot": {
+        "name": "Karbonmonoksid i spormengd"
+      },
+      "aqec": {
+        "name": "Elementært karbon"
+      },
+      "aqno": {
+        "name": "Nitrogenmonoksid"
+      },
+      "aqno2": {
+        "name": "NO2 X berekna"
+      },
+      "aqno2t": {
+        "name": "Nitrogendioksid"
+      },
+      "aqno2y": {
+        "name": "NO2 Y berekna"
+      },
+      "aqno3": {
+        "name": "NO3-ion"
+      },
+      "aqnox": {
+        "name": "Nitrogenoksid"
+      },
+      "aqnoy": {
+        "name": "Totalt reaktivt nitrogen"
+      },
+      "aqoc": {
+        "name": "Organisk karbon"
+      },
+      "aqozone": {
+        "name": "Ozon"
+      },
+      "aqpm10": {
+        "name": "PM10-masse"
+      },
+      "aqpm2_5": {
+        "name": "PM2.5-masse"
+      },
+      "aqso2": {
+        "name": "Svoveldioksid"
+      },
+      "aqso2t": {
+        "name": "Svoveldioksid i spormengd"
+      },
+      "aqso4": {
+        "name": "SO4-ion"
+      },
+      "aquv_aeth": {
+        "name": "Aethalometer kanal 2"
+      },
+      "baromin": {
+        "name": "Trykk"
+      },
+      "clouds": {
+        "name": "Skydekke"
+      },
+      "dailyrainin": {
+        "name": "Nedbør per døgn"
+      },
+      "dewptf": {
+        "name": "Doggpunkt"
+      },
+      "humidity": {
+        "name": "Luftfukt ute"
+      },
+      "inbat": {
+        "name": "Batterinivå for konsoll"
+      },
+      "indoorhumidity": {
+        "name": "Luftfukt inne"
+      },
+      "indoortempf": {
+        "name": "Innetemperatur"
+      },
+      "inhum": {
+        "name": "Luftfukt inne"
+      },
+      "intem": {
+        "name": "Innetemperatur"
+      },
+      "last_update": {
+        "name": "Siste mottak"
+      },
+      "leafwetness": {
+        "name": "Bladfukt"
+      },
+      "leafwetness2": {
+        "name": "CH2 bladfukt"
+      },
+      "lowbatt": {
+        "name": "Lågt batteri"
+      },
+      "monthlyrainin": {
+        "name": "Nedbør per månad"
+      },
+      "rainin": {
+        "name": "Nedbør per time"
+      },
+      "rbar": {
+        "name": "Relativt lufttrykk"
+      },
+      "rtfreq": {
+        "name": "Oppdateringsfrekvens"
+      },
+      "soilmoisture": {
+        "name": "Jordfukt"
+      },
+      "soilmoisture2": {
+        "name": "CH2 jordfukt"
+      },
+      "soilmoisture3": {
+        "name": "CH3 jordfukt"
+      },
+      "soilmoisture4": {
+        "name": "CH4 jordfukt"
+      },
+      "soiltemp2f": {
+        "name": "CH2 jordtemperatur"
+      },
+      "soiltemp3f": {
+        "name": "CH3 jordtemperatur"
+      },
+      "soiltemp4f": {
+        "name": "CH4 jordtemperatur"
+      },
+      "soiltempf": {
+        "name": "Jordtemperatur"
+      },
+      "solarradiation": {
+        "name": "Solstråling"
+      },
+      "t10bat": {
+        "name": "Batterinivå for CO2-sensor"
+      },
+      "t10cn": {
+        "name": "Tilkoplingsstatus for CO2-sensor"
+      },
+      "t10co2": {
+        "name": "CO2-konsentrasjon"
+      },
+      "t11bat": {
+        "name": "Batterinivå for CO-sensor"
+      },
+      "t11cn": {
+        "name": "Tilkoplingsstatus for CO-sensor"
+      },
+      "t11co": {
+        "name": "CO-konsentrasjon"
+      },
+      "t1bat": {
+        "name": "Batteristatus for utesensor"
+      },
+      "t1chill": {
+        "name": "Vindavkjølingstemperatur"
+      },
+      "t1cn": {
+        "name": "Tilkoplingsstatus for utesensor"
+      },
+      "t1dew": {
+        "name": "Doggpunktstemperatur"
+      },
+      "t1feels": {
+        "name": "Kjend temperatur"
+      },
+      "t1heat": {
+        "name": "Varmeindeks"
+      },
+      "t1hum": {
+        "name": "Luftfukt ute"
+      },
+      "t1raindy": {
+        "name": "Døgnnedbør"
+      },
+      "t1rainhr": {
+        "name": "Timesnedbør"
+      },
+      "t1rainmth": {
+        "name": "Månadsnedbør"
+      },
+      "t1rainra": {
+        "name": "Nedbørintensitet"
+      },
+      "t1rainwy": {
+        "name": "Vekenedbør"
+      },
+      "t1rainyr": {
+        "name": "Årsnedbør"
+      },
+      "t1solrad": {
+        "name": "Lysstyrke"
+      },
+      "t1tem": {
+        "name": "Utetemperatur"
+      },
+      "t1uvi": {
+        "name": "UV-indeks"
+      },
+      "t1wbgt": {
+        "name": "WBGT-temperatur"
+      },
+      "t1wdir": {
+        "name": "Vindretning"
+      },
+      "t1wgust": {
+        "name": "Vindkast"
+      },
+      "t1ws": {
+        "name": "Vindfart"
+      },
+      "t1ws10mav": {
+        "name": "Vindfart snitt 10 min"
+      },
+      "t234c1bat": {
+        "name": "CH1 batteristatus"
+      },
+      "t234c1cn": {
+        "name": "CH1 tilkoplingsstatus"
+      },
+      "t234c1hum": {
+        "name": "CH1 luftfukt"
+      },
+      "t234c1tem": {
+        "name": "CH1 temperatur"
+      },
+      "t234c1tp": {
+        "name": "CH1 sensortype"
+      },
+      "t234c2bat": {
+        "name": "CH2 batteristatus"
+      },
+      "t234c2cn": {
+        "name": "CH2 tilkoplingsstatus"
+      },
+      "t234c2hum": {
+        "name": "CH2 luftfukt"
+      },
+      "t234c2tem": {
+        "name": "CH2 temperatur"
+      },
+      "t234c2tp": {
+        "name": "CH2 sensortype"
+      },
+      "t234c3bat": {
+        "name": "CH3 batteristatus"
+      },
+      "t234c3cn": {
+        "name": "CH3 tilkoplingsstatus"
+      },
+      "t234c3hum": {
+        "name": "CH3 luftfukt"
+      },
+      "t234c3tem": {
+        "name": "CH3 temperatur"
+      },
+      "t234c3tp": {
+        "name": "CH3 sensortype"
+      },
+      "t234c4bat": {
+        "name": "CH4 batteristatus"
+      },
+      "t234c4cn": {
+        "name": "CH4 tilkoplingsstatus"
+      },
+      "t234c4hum": {
+        "name": "CH4 luftfukt"
+      },
+      "t234c4tem": {
+        "name": "CH4 temperatur"
+      },
+      "t234c4tp": {
+        "name": "CH4 sensortype"
+      },
+      "t234c5bat": {
+        "name": "CH5 batteristatus"
+      },
+      "t234c5cn": {
+        "name": "CH5 tilkoplingsstatus"
+      },
+      "t234c5hum": {
+        "name": "CH5 luftfukt"
+      },
+      "t234c5tem": {
+        "name": "CH5 temperatur"
+      },
+      "t234c5tp": {
+        "name": "CH5 sensortype"
+      },
+      "t234c6bat": {
+        "name": "CH6 batteristatus"
+      },
+      "t234c6cn": {
+        "name": "CH6 tilkoplingsstatus"
+      },
+      "t234c6hum": {
+        "name": "CH6 luftfukt"
+      },
+      "t234c6tem": {
+        "name": "CH6 temperatur"
+      },
+      "t234c6tp": {
+        "name": "CH6 sensortype"
+      },
+      "t234c7bat": {
+        "name": "CH7 batteristatus"
+      },
+      "t234c7cn": {
+        "name": "CH7 tilkoplingsstatus"
+      },
+      "t234c7hum": {
+        "name": "CH7 luftfukt"
+      },
+      "t234c7tem": {
+        "name": "CH7 temperatur"
+      },
+      "t234c7tp": {
+        "name": "CH7 sensortype"
+      },
+      "t5ls1dtc": {
+        "name": "Lynnedslag totalt på 1 døgn"
+      },
+      "t5ls1htc": {
+        "name": "Lynnedslag totalt på 1 time"
+      },
+      "t5ls30mtc": {
+        "name": "Lynnedslag siste 30 minutt"
+      },
+      "t5ls5mtc": {
+        "name": "Lynnedslag siste 5 minutt"
+      },
+      "t5lsbat": {
+        "name": "Batteristatus for lynsensor"
+      },
+      "t5lscn": {
+        "name": "Tilkoplingsstatus for lynsensor"
+      },
+      "t5lsf": {
+        "name": "Lynnedslag siste time"
+      },
+      "t5lskm": {
+        "name": "Lynavstand"
+      },
+      "t5lst": {
+        "name": "Tidspunkt for siste lynnedslag"
+      },
+      "t6c1bat": {
+        "name": "CH1 batteristatus for lekkasjesensor"
+      },
+      "t6c1cn": {
+        "name": "CH1 tilkoplingsstatus for lekkasjesensor"
+      },
+      "t6c1wls": {
+        "name": "CH1 vasslekkasjestatus"
+      },
+      "t6c2bat": {
+        "name": "CH2 batteristatus for lekkasjesensor"
+      },
+      "t6c2cn": {
+        "name": "CH2 tilkoplingsstatus for lekkasjesensor"
+      },
+      "t6c2wls": {
+        "name": "CH2 vasslekkasjestatus"
+      },
+      "t6c3bat": {
+        "name": "CH3 batteristatus for lekkasjesensor"
+      },
+      "t6c3cn": {
+        "name": "CH3 tilkoplingsstatus for lekkasjesensor"
+      },
+      "t6c3wls": {
+        "name": "CH3 vasslekkasjestatus"
+      },
+      "t6c4bat": {
+        "name": "CH4 batteristatus for lekkasjesensor"
+      },
+      "t6c4cn": {
+        "name": "CH4 tilkoplingsstatus for lekkasjesensor"
+      },
+      "t6c4wls": {
+        "name": "CH4 vasslekkasjestatus"
+      },
+      "t6c5bat": {
+        "name": "CH5 batteristatus for lekkasjesensor"
+      },
+      "t6c5cn": {
+        "name": "CH5 tilkoplingsstatus for lekkasjesensor"
+      },
+      "t6c5wls": {
+        "name": "CH5 vasslekkasjestatus"
+      },
+      "t6c6bat": {
+        "name": "CH6 batteristatus for lekkasjesensor"
+      },
+      "t6c6cn": {
+        "name": "CH6 tilkoplingsstatus for lekkasjesensor"
+      },
+      "t6c6wls": {
+        "name": "CH6 vasslekkasjestatus"
+      },
+      "t6c7bat": {
+        "name": "CH7 batteristatus for lekkasjesensor"
+      },
+      "t6c7cn": {
+        "name": "CH7 tilkoplingsstatus for lekkasjesensor"
+      },
+      "t6c7wls": {
+        "name": "CH7 vasslekkasjestatus"
+      },
+      "t8bat": {
+        "name": "Batterinivå for partikkelsensor"
+      },
+      "t8cn": {
+        "name": "Tilkoplingsstatus for partikkelsensor"
+      },
+      "t8pm10": {
+        "name": "PM10-konsentrasjon"
+      },
+      "t8pm10ai": {
+        "name": "PM10 AQI"
+      },
+      "t8pm25": {
+        "name": "PM2.5-konsentrasjon"
+      },
+      "t8pm25ai": {
+        "name": "PM2.5 AQI"
+      },
+      "t9bat": {
+        "name": "Batterinivå for HCHO/VOC-sensor"
+      },
+      "t9cn": {
+        "name": "Tilkoplingsstatus for HCHO/VOC-sensor"
+      },
+      "t9hcho": {
+        "name": "HCHO-konsentrasjon"
+      },
+      "t9voclv": {
+        "name": "VOC-nivå",
+        "state": {
+          "very_low": "Svært låg",
+          "low": "Låg",
+          "moderate": "Moderat",
+          "high": "Høg",
+          "very_high": "Svært høg"
+        }
+      },
+      "tempf": {
+        "name": "Utetemperatur"
+      },
+      "uv": {
+        "name": "UV-indeks"
+      },
+      "visibility": {
+        "name": "Sikt"
+      },
+      "weeklyrainin": {
+        "name": "Nedbør per veke"
+      },
+      "wind_direction_raw": {
+        "name": "Vindretning (rå)"
+      },
+      "windchillf": {
+        "name": "Vindavkjøling"
+      },
+      "winddir": {
+        "name": "Vindretning"
+      },
+      "winddir_avg2m": {
+        "name": "Vindretning snitt 2 min"
+      },
+      "windgustdir": {
+        "name": "Kastretning"
+      },
+      "windgustdir_10m": {
+        "name": "Kastretning snitt 10 min"
+      },
+      "windgustmph": {
+        "name": "Vindkast"
+      },
+      "windgustmph_10m": {
+        "name": "Kastfart snitt 10 min"
+      },
+      "windspdmph_avg2m": {
+        "name": "Vindfart snitt 2 min"
+      },
+      "windspeedmph": {
+        "name": "Vindfart"
+      },
+      "yearlyrainin": {
+        "name": "Nedbør per år"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Batterinivå for konsoll"
+      },
+      "station_online": {
+        "name": "Stasjon tilkopla"
+      },
+      "t10cn": {
+        "name": "Tilkoplingsstatus for CO2-sensor"
+      },
+      "t11cn": {
+        "name": "Tilkoplingsstatus for CO-sensor"
+      },
+      "t1bat": {
+        "name": "Batteristatus for utesensor"
+      },
+      "t1cn": {
+        "name": "Tilkoplingsstatus for utesensor"
+      },
+      "t234c1bat": {
+        "name": "CH1 batteristatus"
+      },
+      "t234c1cn": {
+        "name": "CH1 tilkoplingsstatus"
+      },
+      "t234c2bat": {
+        "name": "CH2 batteristatus"
+      },
+      "t234c2cn": {
+        "name": "CH2 tilkoplingsstatus"
+      },
+      "t234c3bat": {
+        "name": "CH3 batteristatus"
+      },
+      "t234c3cn": {
+        "name": "CH3 tilkoplingsstatus"
+      },
+      "t234c4bat": {
+        "name": "CH4 batteristatus"
+      },
+      "t234c4cn": {
+        "name": "CH4 tilkoplingsstatus"
+      },
+      "t234c5bat": {
+        "name": "CH5 batteristatus"
+      },
+      "t234c5cn": {
+        "name": "CH5 tilkoplingsstatus"
+      },
+      "t234c6bat": {
+        "name": "CH6 batteristatus"
+      },
+      "t234c6cn": {
+        "name": "CH6 tilkoplingsstatus"
+      },
+      "t234c7bat": {
+        "name": "CH7 batteristatus"
+      },
+      "t234c7cn": {
+        "name": "CH7 tilkoplingsstatus"
+      },
+      "t5lsbat": {
+        "name": "Batteristatus for lynsensor"
+      },
+      "t5lscn": {
+        "name": "Tilkoplingsstatus for lynsensor"
+      },
+      "t6c1bat": {
+        "name": "CH1 batteristatus for lekkasjesensor"
+      },
+      "t6c1cn": {
+        "name": "CH1 tilkoplingsstatus for lekkasjesensor"
+      },
+      "t6c1wls": {
+        "name": "CH1 vasslekkasjestatus"
+      },
+      "t6c2bat": {
+        "name": "CH2 batteristatus for lekkasjesensor"
+      },
+      "t6c2cn": {
+        "name": "CH2 tilkoplingsstatus for lekkasjesensor"
+      },
+      "t6c2wls": {
+        "name": "CH2 vasslekkasjestatus"
+      },
+      "t6c3bat": {
+        "name": "CH3 batteristatus for lekkasjesensor"
+      },
+      "t6c3cn": {
+        "name": "CH3 tilkoplingsstatus for lekkasjesensor"
+      },
+      "t6c3wls": {
+        "name": "CH3 vasslekkasjestatus"
+      },
+      "t6c4bat": {
+        "name": "CH4 batteristatus for lekkasjesensor"
+      },
+      "t6c4cn": {
+        "name": "CH4 tilkoplingsstatus for lekkasjesensor"
+      },
+      "t6c4wls": {
+        "name": "CH4 vasslekkasjestatus"
+      },
+      "t6c5bat": {
+        "name": "CH5 batteristatus for lekkasjesensor"
+      },
+      "t6c5cn": {
+        "name": "CH5 tilkoplingsstatus for lekkasjesensor"
+      },
+      "t6c5wls": {
+        "name": "CH5 vasslekkasjestatus"
+      },
+      "t6c6bat": {
+        "name": "CH6 batteristatus for lekkasjesensor"
+      },
+      "t6c6cn": {
+        "name": "CH6 tilkoplingsstatus for lekkasjesensor"
+      },
+      "t6c6wls": {
+        "name": "CH6 vasslekkasjestatus"
+      },
+      "t6c7bat": {
+        "name": "CH7 batteristatus for lekkasjesensor"
+      },
+      "t6c7cn": {
+        "name": "CH7 tilkoplingsstatus for lekkasjesensor"
+      },
+      "t6c7wls": {
+        "name": "CH7 vasslekkasjestatus"
+      },
+      "t8cn": {
+        "name": "Tilkoplingsstatus for partikkelsensor"
+      },
+      "t9cn": {
+        "name": "Tilkoplingsstatus for HCHO/VOC-sensor"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Forskyving av vindretning"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Nullstill forskyvinga"
+      },
+      "set_north": {
+        "name": "Sett nord ut frå gjeldande verdi"
+      }
+    }
+  }
+}
