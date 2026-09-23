@@ -32,6 +32,7 @@ When adding a new sensor:
 - Use the correct unit of measurement.
 - Follow the existing naming conventions.
 - If the sensor represents a battery level, add a `battery_scale` when the raw value is not already expressed as a percentage.
+- If the reading is an on/off status reported as `1` / `0`, add `"binary": "<device class>"` (for example `connectivity` or `moisture`) and it is served by the `binary_sensor` platform instead. Battery levels are an exception and stay percentages.
 
 Example:
 
@@ -45,6 +46,22 @@ Example:
     "battery_scale": 5,
 }
 ```
+
+## Tests
+
+```bash
+pip install -r requirements_test.txt
+pytest tests/ -v
+```
+
+The suite drives a real Home Assistant instance. Two tests matter more than the
+others when changing entities:
+
+- `test_wslink.py::test_official_example_payload` replays the upload example from
+  the vendor's own API document, empty values included.
+- `test_entity_ids.py::test_existing_station_keeps_its_entity_ids` replays the
+  entity IDs of release 1.0.8 so an upgrade never renames an entity someone
+  already put on a dashboard.
 
 ## Code style
 

@@ -11,6 +11,9 @@ permissions:
   
 jobs:
   stale:
+    # A fork carries no issues of its own worth closing, and the daily run only
+    # burns minutes there.
+    if: ${{ !github.event.repository.fork }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/stale@v10
