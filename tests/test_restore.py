@@ -57,6 +57,25 @@ async def test_reload_does_not_duplicate_entities(hass, setup_pws):
     assert state_of(hass, DEVICE_ID, "t1tem").state == "22"
 
 
+async def test_enum_sensor_keeps_its_state_across_a_reload(hass, setup_pws):
+    """
+    The recorder keeps the label ("moderate"), the device dictionary needs
+    the code the station sent (3). Restoring the label as-is left the sensor
+    unknown until the next upload.
+    """
+
+    entry, client = await setup_pws()
+
+    await client.get(f"{WSLINK_ENDPOINT}?wsid={DEVICE_ID}&t9voclv=3")
+    await hass.async_block_till_done()
+    assert state_of(hass, DEVICE_ID, "t9voclv").state == "moderate"
+
+    await hass.config_entries.async_reload(entry.entry_id)
+    await hass.async_block_till_done()
+
+    assert state_of(hass, DEVICE_ID, "t9voclv").state == "moderate"
+
+
 async def test_payload_after_reload_still_works(hass, setup_pws):
     """The endpoint keeps serving across a reload, with the current options."""
 

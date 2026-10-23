@@ -223,6 +223,13 @@ class PwsSensor(PwsEntity, RestoreSensor):
             value = denormalize_battery(value, scale)
         elif self._meta.get("wind_offset"):
             value = apply_wind_offset(value, -self.device.wind_offset)
+        elif (levels := self._meta.get("options")) is not None:
+            # An enum restores its label ("moderate"); the dictionary works
+            # with the code the station sent (3).
+            value = next(
+                (code for code, label in levels.items() if label == value),
+                value,
+            )
 
         self.device.data[self._key] = value
 
