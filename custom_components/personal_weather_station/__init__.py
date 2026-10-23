@@ -736,9 +736,6 @@ class PwsView(HomeAssistantView):
             debug_log("[#%d] New device detected: %s", request_id, device_id)
             ir.async_delete_issue(hass, DOMAIN, ISSUE_NO_STATION_YET)
 
-        device.last_seen = _parse_timestamp(params) or dt_util.utcnow()
-        device.was_available = True
-
         updated_keys = []
         unknown_keys = set()
         errors = 0
@@ -792,6 +789,13 @@ class PwsView(HomeAssistantView):
                 {"status": "error", "detail": "Incorrect data format"},
                 status=405,
             )
+
+        # A rejected payload is not a sighting: every other early return in
+        # this handler leaves last_seen alone, and the 405 must too. Updating
+        # it here rather than at the top keeps a station posting unreadable
+        # payloads from looking alive while it reports nothing.
+        device.last_seen = _parse_timestamp(params) or dt_util.utcnow()
+        device.was_available = True
 
         _async_report_unknown_parameters(hass, device, unknown_keys)
 

@@ -10,7 +10,10 @@ wrong or a condition that fires too eagerly.
 import pytest
 
 import custom_components.personal_weather_station as pws
-from custom_components.personal_weather_station.const import RATE_LIMIT_REQUESTS
+from custom_components.personal_weather_station.const import (
+    DOMAIN,
+    RATE_LIMIT_REQUESTS,
+)
 
 from .conftest import WSLINK_ENDPOINT, state_of
 
@@ -89,6 +92,31 @@ async def test_unreadable_payload_gets_405(hass, setup_pws, monkeypatch):
 
     assert response.status == 405
     assert (await response.json())["detail"] == "Incorrect data format"
+
+
+async def test_a_rejected_payload_is_not_a_sighting(
+    hass, setup_pws, monkeypatch
+):
+    """
+    last_seen means "posted a valid payload" — a 405 is not one.
+
+    Every other rejection (401, 400, 404) returns before touching it; the
+    format error must too, or a station posting unreadable payloads would show
+    a fresh Last update and stay online forever without a single reading.
+    """
+
+    _, client = await setup_pws()
+
+    def explode(_raw):
+        raise ValueError("unreadable")
+
+    monkeypatch.setattr(pws, "parse_value", explode)
+
+    response = await client.get(f"{WSLINK_ENDPOINT}?wsid={DEVICE_ID}&t1tem=20")
+
+    assert response.status == 405
+
+    assert hass.data[DOMAIN].devices[DEVICE_ID].last_seen is None
 
 
 async def test_a_partly_unreadable_payload_still_succeeds(
