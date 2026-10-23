@@ -49,6 +49,22 @@
   no repository topics, issues not enabled — are properties of the fork rather
   than of the code, so it could never pass and only mailed the fork's owner on
   every push. The daily stale run is skipped on forks for the same reason.
+- **A rejected payload no longer counts as a sighting.** `Last update` and
+  `Station online` were refreshed as soon as a request passed the rate limit,
+  before its readings were even looked at, so a station posting nothing but
+  unreadable payloads would have stayed online forever without a single one
+  landing. The 405 answer now leaves both alone, like every other rejection.
+- **Repairs for rejected stations are capped.** Those issues are keyed on the
+  announced station identifier, which stays under the requester's control
+  until the key checks out: one forged ID per request minted one persisted
+  repair each. Past ten of a kind, rejections are filed under the caller's
+  address instead, which cannot be varied as freely.
+- **Enum and binary sensors keep their state across a restart.** The recorder
+  stores what was displayed, like `moderate` or `on`, while the device
+  dictionary works with what the station sent, like `3` or `1`. Restoring the
+  display value as-is left the VOC level and every connection, leak and
+  battery status reading `unknown` until the next upload; both now translate
+  it back.
 
 ### Added
 
