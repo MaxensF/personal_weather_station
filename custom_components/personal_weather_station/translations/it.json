@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Stazione meteo personale",
+        "description": "Imposta qui una chiave di stazione che le tue stazioni meteo dovranno trasmettere affinché i loro dati non vengano rifiutati. Se lasci il campo vuoto, tutte le richieste saranno accettate.",
+        "data": {
+          "password": "Chiave di stazione"
+        }
+      },
+      "station": {
+        "title": "Passo 1 di 5 — la vostra stazione",
+        "description": "{image}\n\nÈ la vostra stazione meteo a creare i propri dispositivi e sensori: qui non c'è nulla da aggiungere. Quel che segue è ciò che va inserito nell'applicazione della stazione.\n\nAprite l'applicazione, verificate che il firmware della stazione sia aggiornato, poi aprite le sue impostazioni."
+      },
+      "settings": {
+        "title": "Passo 2 di 5 — servizio meteo",
+        "description": "{image}\n\nScegliete **Weather server**."
+      },
+      "server": {
+        "title": "Passo 3 di 5 — altro server",
+        "description": "{image}\n\nScegliete **Other Server**."
+      },
+      "form": {
+        "title": "Passo 4 di 5 — impostazioni del server",
+        "description": "{image}\n\nCompilate il modulo, poi premete **Save**.\n\n**URL**\n{urls}\nSenza `http://` né `https://`. Usate un indirizzo che la stazione possa raggiungere sulla vostra rete: non c'è alcun motivo di esporre Home Assistant a Internet per questo. Se la stazione non risolve i nomi, mettete l'indirizzo IP.\n\n**Station ID** — quello che volete. Diventerà il nome del dispositivo in Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minuto è un buon valore.\n\n**API type** — *WSLink API*. Scegliete *WUnderground API* solo se la vostra stazione non offre WSLink: trasporta metà delle letture e soltanto quattro canali.\n\n**Upload** — lasciatelo attivo.\n\n> ⏱️ Alcune stazioni perdono il Wi-Fi se ci si attarda su questa schermata. Tenete l'indirizzo a portata di mano, inseritelo e salvate."
+      },
+      "confirm": {
+        "title": "Passo 5 di 5 — confirm & exit",
+        "description": "{image}\n\nTornate indietro, poi premete **Confirm & Exit**.\n\n> ⚠️ **È Confirm & Exit a scrivere le impostazioni nella stazione.** Salvare da solo non cambia nulla.\n\nPremete Avanti una volta fatto."
+      },
+      "received": {
+        "title": "La vostra stazione parla con Home Assistant",
+        "description": "**{station}** ha appena inviato il primo caricamento.\n\nI suoi sensori compariranno al successivo, e sono creati a partire da ciò che la stazione invia davvero: qui non c'è nulla da scegliere."
+      },
+      "timeout": {
+        "title": "Non è ancora arrivato nulla",
+        "description": "Nessuna stazione ha inviato dati negli ultimi {minutes} minuti.{key_hint_extra}\n\nLe cause abituali sono un indirizzo che la stazione non riesce a raggiungere, **Confirm & Exit** non premuto, oppure un firmware dalla 3.02 in poi, che richiede HTTPS.\n\nGli indirizzi a cui puntarla sono:\n{urls}\nI punti di ingresso in ascolto sono:\n{endpoints}\n\nPremete Avanti per concludere comunque: la configurazione è conservata, i punti di ingresso si mettono davvero in ascolto, e una riparazione vi riporterà qui finché non si presenta una stazione."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Già configurato. Una sola istanza serve tutte le stazioni meteo."
+    },
+    "progress": {
+      "waiting_for_station": "In attesa del primo caricamento della vostra stazione…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Stazione meteo personale",
+        "menu_options": {
+          "options": "Impostazioni",
+          "instructions": "Come puntare una stazione su Home Assistant"
+        }
+      },
+      "options": {
+        "title": "Stazione meteo personale",
+        "description": "Imposta qui una chiave di stazione che le tue stazioni meteo dovranno trasmettere affinché i loro dati non vengano rifiutati. Se lasci il campo vuoto, tutte le richieste saranno accettate.",
+        "data": {
+          "password": "Chiave di stazione",
+          "availability_timeout": "Segna come non disponibile dopo (minuti)",
+          "debug": "Registra ogni richiesta ricevuta"
+        },
+        "data_description": {
+          "availability_timeout": "Per quanto tempo una stazione può restare in silenzio prima che i suoi sensori vengano segnati come non disponibili. 0 per non segnarli mai.",
+          "debug": "Scrive il contenuto completo di ogni richiesta nel registro di Home Assistant. Utile durante la configurazione di una stazione, rumoroso in seguito."
+        }
+      },
+      "station": {
+        "title": "Passo 1 di 5 — la vostra stazione",
+        "description": "{image}\n\nÈ la vostra stazione meteo a creare i propri dispositivi e sensori: qui non c'è nulla da aggiungere. Quel che segue è ciò che va inserito nell'applicazione della stazione.\n\nAprite l'applicazione, verificate che il firmware della stazione sia aggiornato, poi aprite le sue impostazioni."
+      },
+      "settings": {
+        "title": "Passo 2 di 5 — servizio meteo",
+        "description": "{image}\n\nScegliete **Weather server**."
+      },
+      "server": {
+        "title": "Passo 3 di 5 — altro server",
+        "description": "{image}\n\nScegliete **Other Server**."
+      },
+      "form": {
+        "title": "Passo 4 di 5 — impostazioni del server",
+        "description": "{image}\n\nCompilate il modulo, poi premete **Save**.\n\n**URL**\n{urls}\nSenza `http://` né `https://`. Usate un indirizzo che la stazione possa raggiungere sulla vostra rete: non c'è alcun motivo di esporre Home Assistant a Internet per questo. Se la stazione non risolve i nomi, mettete l'indirizzo IP.\n\n**Station ID** — quello che volete. Diventerà il nome del dispositivo in Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minuto è un buon valore.\n\n**API type** — *WSLink API*. Scegliete *WUnderground API* solo se la vostra stazione non offre WSLink: trasporta metà delle letture e soltanto quattro canali.\n\n**Upload** — lasciatelo attivo.\n\n> ⏱️ Alcune stazioni perdono il Wi-Fi se ci si attarda su questa schermata. Tenete l'indirizzo a portata di mano, inseritelo e salvate."
+      },
+      "confirm": {
+        "title": "Passo 5 di 5 — confirm & exit",
+        "description": "{image}\n\nTornate indietro, poi premete **Confirm & Exit**.\n\n> ⚠️ **È Confirm & Exit a scrivere le impostazioni nella stazione.** Salvare da solo non cambia nulla.\n\nPremete Avanti una volta fatto."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Stazione meteo rifiutata: chiave di stazione errata",
+      "description": "Una stazione meteo all'indirizzo {ip} ha tentato di inviare dati come `{station_id}` senza trasmettere la chiave di stazione attesa.\n\nVerifica che la chiave configurata nella stazione o nell'app WSLink corrisponda a quella impostata in questa integrazione. Questo messaggio scomparirà da solo non appena una richiesta proveniente da {ip} verrà accettata."
+    },
+    "missing_device_id": {
+      "title": "Stazione meteo rifiutata: nessun identificativo di stazione",
+      "description": "Una stazione meteo all'indirizzo {ip} ha inviato dati senza identificativo di stazione.\n\nImposta un Sender ID nell'app WSLink, oppure un parametro ID nella configurazione della stazione. Questo messaggio scomparirà da solo non appena una richiesta proveniente da {ip} verrà accettata."
+    },
+    "legacy_entity_ids": {
+      "title": "Gli ID entità ripetono il nome della stazione",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Accorciare gli ID entità",
+            "description": "Fino alla versione 1.0.8 questa integrazione creava ID entità che contengono due volte il nome della stazione, come `{example_old}`. Le nuove stazioni non lo fanno più.\n\nÈ possibile rinominare **{count} entità**, ad esempio in `{example_new}`.\n\nLa cronologia e le statistiche a lungo termine seguono automaticamente la ridenominazione. **Automazioni, script, scene e dashboard no** — dovrai aggiornare tu stesso tutto ciò che fa riferimento ai vecchi ID.\n\nSe preferisci lasciarli come sono, ignora questa riparazione."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Le letture di connessione, perdita e batteria sono ancora numeri",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Convertire in sensori binari",
+            "description": "Le letture di connessione, perdita d'acqua e batteria sono trasmesse come 1 o 0. Fino alla versione 1.0.8 erano esposte come sensori numerici, ad esempio `{example}`, inutilizzabili con le schede standard di perdita, connettività e batteria scarica di Home Assistant. Le stazioni nuove ricevono sensori binari che mostrano **Bagnato / Asciutto**, **Connesso / Disconnesso** e **Acceso / Spento**.\n\n**{count} entità** possono essere convertite. I livelli di batteria 0~5 dei sensori di qualità dell'aria mantengono la percentuale: sei gradini sono più di quanto un on/off possa portare.\n\nCambiare piattaforma non è una rinomina: le vecchie entità vengono rimosse e ricreate come `binary_sensor`. **La loro cronologia registrata va persa** — queste letture non hanno statistiche a lungo termine, quindi è interessata solo la cronologia grezza — e **automazioni, script, scene e dashboard che le puntano vanno aggiornati**. Le nuove entità compaiono al prossimo caricamento della stazione.\n\nSe preferite lasciarle come sono, ignorate questa riparazione."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Nessuna stazione meteo ha ancora inviato dati",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Configura la tua stazione meteo",
+            "description": "È la tua stazione meteo a creare i dispositivi e i sensori — qui non c'è nulla da aggiungere.\n\nNell'app della stazione apri la tua stazione, poi **Settings → Weather server → Other Server**, e compila:\n\n**URL**\n{urls}\nSenza `http://` né `https://`. Usa un indirizzo che la tua stazione possa raggiungere sulla tua rete — non c'è alcun motivo di esporre Home Assistant a internet per questo. Se la stazione non risolve i nomi, metti l'indirizzo IP.\n\n**Station ID** — quello che preferisci. Diventerà il nome del dispositivo in Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minuto è un buon valore.\n\n**API type** — *WSLink API*.\n\n**Upload** — lascialo attivo.\n\nPremi **Save**, torna indietro, poi premi **Confirm & Exit**.\n\n> ⚠️ **È Confirm & Exit a scrivere le impostazioni nella stazione.** Salvare soltanto non cambia nulla. I tuoi sensori compaiono un secondo dopo.\n\nGli endpoint in ascolto sono:\n{endpoints}"
+          },
+          "received": {
+            "title": "La tua stazione è arrivata",
+            "description": "**{station}** ha inviato il suo primo caricamento. I suoi sensori vengono creati adesso, altri compariranno man mano che la stazione li segnala.\n\nQuesto messaggio non tornerà."
+          },
+          "timeout": {
+            "title": "Ancora nulla ricevuto",
+            "description": "Nessun invio è arrivato in {minutes} minuti.\n\nIn ordine di probabilità:\n\n  - **Hai premuto Confirm & Exit?** Salvare la schermata del server non scrive nulla nella stazione.\n  - L'**URL** deve essere {urls_inline}, senza `http://`, e raggiungibile dalla stazione sulla tua rete.\n  - **Upload** deve essere attivo in quella schermata.\n  - Alcuni firmware Bresser dalla **3.02** in poi rifiutano l'HTTP semplice e richiedono un indirizzo che serva HTTPS.\n  - L'intervallo di invio potrebbe semplicemente essere più lungo dell'attesa.\n  - **Chiave di stazione**: {key_hint}.\n\nSe la stazione ha raggiunto Home Assistant ma è stata respinta, viene segnalato separatamente in **Impostazioni → Sistema → Riparazioni**.\n\nPuoi chiudere. Il messaggio resta finché non compare una stazione, e riaprirlo fa ripartire l'attesa."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "In attesa del primo invio della tua stazione…"
+        },
+        "abort": {
+          "not_received": "Non è ancora arrivato nulla, quindi questo punto resta aperto. Rimane in Riparazioni finché non compare una stazione, e puoi riaprirlo per attendere di nuovo."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "La stazione {station} invia letture che vengono scartate",
+      "description": "**{count} parametri** di **{station}** non sono riconosciuti, quindi i loro valori vengono scartati a ogni invio:\n\n{parameters}\n\nLa causa abituale è una stazione che riporta più di quanto il suo protocollo possa trasportare. Weather Underground ha solo **4 posti** per i sensori aggiuntivi; se la tua stazione offre **WSLink** come *API type*, passarci espone sette canali e circa il doppio delle letture.\n\nSe non è questo, questi nomi di parametri sono esattamente ciò che serve a una segnalazione: aprine una sull'[issue tracker]({issue_tracker}) e potranno essere aggiunti.\n\nPuoi anche ignorare questo messaggio — non è rotto nulla, semplicemente quei valori non arrivano."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "La stazione {device} non ha ancora trasmesso una direzione del vento, quindi non c'è nulla su cui calibrare. Attendi il prossimo invio e riprova."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Pressione atmosferica assoluta"
+      },
+      "apiver": {
+        "name": "Versione API"
+      },
+      "aqbc": {
+        "name": "Carbonio nero"
+      },
+      "aqco": {
+        "name": "Monossido di carbonio"
+      },
+      "aqcot": {
+        "name": "Monossido di carbonio in tracce"
+      },
+      "aqec": {
+        "name": "Carbonio elementare"
+      },
+      "aqno": {
+        "name": "Monossido di azoto"
+      },
+      "aqno2": {
+        "name": "NO2 X calcolato"
+      },
+      "aqno2t": {
+        "name": "Biossido di azoto"
+      },
+      "aqno2y": {
+        "name": "NO2 Y calcolato"
+      },
+      "aqno3": {
+        "name": "Ione NO3"
+      },
+      "aqnox": {
+        "name": "Ossidi di azoto"
+      },
+      "aqnoy": {
+        "name": "Azoto reattivo totale"
+      },
+      "aqoc": {
+        "name": "Carbonio organico"
+      },
+      "aqozone": {
+        "name": "Ozono"
+      },
+      "aqpm10": {
+        "name": "Massa di PM10"
+      },
+      "aqpm2_5": {
+        "name": "Massa di PM2.5"
+      },
+      "aqso2": {
+        "name": "Biossido di zolfo"
+      },
+      "aqso2t": {
+        "name": "Biossido di zolfo in tracce"
+      },
+      "aqso4": {
+        "name": "Ione SO4"
+      },
+      "aquv_aeth": {
+        "name": "Etalometro canale 2"
+      },
+      "baromin": {
+        "name": "Pressione"
+      },
+      "clouds": {
+        "name": "Copertura nuvolosa"
+      },
+      "dailyrainin": {
+        "name": "Pioggia giornaliera"
+      },
+      "dewptf": {
+        "name": "Punto di rugiada"
+      },
+      "humidity": {
+        "name": "Umidità esterna"
+      },
+      "inbat": {
+        "name": "Livello batteria della console"
+      },
+      "indoorhumidity": {
+        "name": "Umidità interna"
+      },
+      "indoortempf": {
+        "name": "Temperatura interna"
+      },
+      "inhum": {
+        "name": "Umidità interna"
+      },
+      "intem": {
+        "name": "Temperatura interna"
+      },
+      "last_update": {
+        "name": "Ultima ricezione"
+      },
+      "leafwetness": {
+        "name": "Bagnatura fogliare"
+      },
+      "leafwetness2": {
+        "name": "CH2 bagnatura fogliare"
+      },
+      "lowbatt": {
+        "name": "Batteria scarica"
+      },
+      "monthlyrainin": {
+        "name": "Pioggia mensile"
+      },
+      "rainin": {
+        "name": "Pioggia oraria"
+      },
+      "rbar": {
+        "name": "Pressione atmosferica relativa"
+      },
+      "rtfreq": {
+        "name": "Frequenza di aggiornamento"
+      },
+      "soilmoisture": {
+        "name": "Umidità del suolo"
+      },
+      "soilmoisture2": {
+        "name": "CH2 umidità del suolo"
+      },
+      "soilmoisture3": {
+        "name": "CH3 umidità del suolo"
+      },
+      "soilmoisture4": {
+        "name": "CH4 umidità del suolo"
+      },
+      "soiltemp2f": {
+        "name": "CH2 temperatura del suolo"
+      },
+      "soiltemp3f": {
+        "name": "CH3 temperatura del suolo"
+      },
+      "soiltemp4f": {
+        "name": "CH4 temperatura del suolo"
+      },
+      "soiltempf": {
+        "name": "Temperatura del suolo"
+      },
+      "solarradiation": {
+        "name": "Radiazione solare"
+      },
+      "t10bat": {
+        "name": "Livello batteria del sensore CO2"
+      },
+      "t10cn": {
+        "name": "Stato di connessione del sensore CO2"
+      },
+      "t10co2": {
+        "name": "Concentrazione di CO2"
+      },
+      "t11bat": {
+        "name": "Livello batteria del sensore CO"
+      },
+      "t11cn": {
+        "name": "Stato di connessione del sensore CO"
+      },
+      "t11co": {
+        "name": "Concentrazione di CO"
+      },
+      "t1bat": {
+        "name": "Stato della batteria del sensore esterno"
+      },
+      "t1chill": {
+        "name": "Temperatura di raffreddamento da vento"
+      },
+      "t1cn": {
+        "name": "Stato di connessione del sensore esterno"
+      },
+      "t1dew": {
+        "name": "Temperatura del punto di rugiada"
+      },
+      "t1feels": {
+        "name": "Temperatura percepita"
+      },
+      "t1heat": {
+        "name": "Indice di calore"
+      },
+      "t1hum": {
+        "name": "Umidità esterna"
+      },
+      "t1raindy": {
+        "name": "Precipitazioni giornaliere"
+      },
+      "t1rainhr": {
+        "name": "Precipitazioni orarie"
+      },
+      "t1rainmth": {
+        "name": "Precipitazioni mensili"
+      },
+      "t1rainra": {
+        "name": "Intensità di pioggia"
+      },
+      "t1rainwy": {
+        "name": "Precipitazioni settimanali"
+      },
+      "t1rainyr": {
+        "name": "Precipitazioni annuali"
+      },
+      "t1solrad": {
+        "name": "Intensità luminosa"
+      },
+      "t1tem": {
+        "name": "Temperatura esterna"
+      },
+      "t1uvi": {
+        "name": "Indice UV"
+      },
+      "t1wbgt": {
+        "name": "Temperatura WBGT"
+      },
+      "t1wdir": {
+        "name": "Direzione del vento"
+      },
+      "t1wgust": {
+        "name": "Raffica di vento"
+      },
+      "t1ws": {
+        "name": "Velocità del vento"
+      },
+      "t1ws10mav": {
+        "name": "Velocità del vento media 10 min"
+      },
+      "t234c1bat": {
+        "name": "CH1 stato della batteria"
+      },
+      "t234c1cn": {
+        "name": "CH1 stato di connessione"
+      },
+      "t234c1hum": {
+        "name": "CH1 umidità"
+      },
+      "t234c1tem": {
+        "name": "CH1 temperatura"
+      },
+      "t234c1tp": {
+        "name": "CH1 tipo di sensore"
+      },
+      "t234c2bat": {
+        "name": "CH2 stato della batteria"
+      },
+      "t234c2cn": {
+        "name": "CH2 stato di connessione"
+      },
+      "t234c2hum": {
+        "name": "CH2 umidità"
+      },
+      "t234c2tem": {
+        "name": "CH2 temperatura"
+      },
+      "t234c2tp": {
+        "name": "CH2 tipo di sensore"
+      },
+      "t234c3bat": {
+        "name": "CH3 stato della batteria"
+      },
+      "t234c3cn": {
+        "name": "CH3 stato di connessione"
+      },
+      "t234c3hum": {
+        "name": "CH3 umidità"
+      },
+      "t234c3tem": {
+        "name": "CH3 temperatura"
+      },
+      "t234c3tp": {
+        "name": "CH3 tipo di sensore"
+      },
+      "t234c4bat": {
+        "name": "CH4 stato della batteria"
+      },
+      "t234c4cn": {
+        "name": "CH4 stato di connessione"
+      },
+      "t234c4hum": {
+        "name": "CH4 umidità"
+      },
+      "t234c4tem": {
+        "name": "CH4 temperatura"
+      },
+      "t234c4tp": {
+        "name": "CH4 tipo di sensore"
+      },
+      "t234c5bat": {
+        "name": "CH5 stato della batteria"
+      },
+      "t234c5cn": {
+        "name": "CH5 stato di connessione"
+      },
+      "t234c5hum": {
+        "name": "CH5 umidità"
+      },
+      "t234c5tem": {
+        "name": "CH5 temperatura"
+      },
+      "t234c5tp": {
+        "name": "CH5 tipo di sensore"
+      },
+      "t234c6bat": {
+        "name": "CH6 stato della batteria"
+      },
+      "t234c6cn": {
+        "name": "CH6 stato di connessione"
+      },
+      "t234c6hum": {
+        "name": "CH6 umidità"
+      },
+      "t234c6tem": {
+        "name": "CH6 temperatura"
+      },
+      "t234c6tp": {
+        "name": "CH6 tipo di sensore"
+      },
+      "t234c7bat": {
+        "name": "CH7 stato della batteria"
+      },
+      "t234c7cn": {
+        "name": "CH7 stato di connessione"
+      },
+      "t234c7hum": {
+        "name": "CH7 umidità"
+      },
+      "t234c7tem": {
+        "name": "CH7 temperatura"
+      },
+      "t234c7tp": {
+        "name": "CH7 tipo di sensore"
+      },
+      "t5ls1dtc": {
+        "name": "Fulmini totali in 1 giorno"
+      },
+      "t5ls1htc": {
+        "name": "Fulmini totali in 1 ora"
+      },
+      "t5ls30mtc": {
+        "name": "Fulmini negli ultimi 30 minuti"
+      },
+      "t5ls5mtc": {
+        "name": "Fulmini negli ultimi 5 minuti"
+      },
+      "t5lsbat": {
+        "name": "Stato della batteria del sensore fulmini"
+      },
+      "t5lscn": {
+        "name": "Stato di connessione del sensore fulmini"
+      },
+      "t5lsf": {
+        "name": "Fulmini nell'ultima ora"
+      },
+      "t5lskm": {
+        "name": "Distanza del fulmine"
+      },
+      "t5lst": {
+        "name": "Ora dell'ultimo fulmine"
+      },
+      "t6c1bat": {
+        "name": "CH1 stato della batteria del rilevatore di perdite"
+      },
+      "t6c1cn": {
+        "name": "CH1 stato di connessione del rilevatore di perdite"
+      },
+      "t6c1wls": {
+        "name": "CH1 stato perdita d'acqua"
+      },
+      "t6c2bat": {
+        "name": "CH2 stato della batteria del rilevatore di perdite"
+      },
+      "t6c2cn": {
+        "name": "CH2 stato di connessione del rilevatore di perdite"
+      },
+      "t6c2wls": {
+        "name": "CH2 stato perdita d'acqua"
+      },
+      "t6c3bat": {
+        "name": "CH3 stato della batteria del rilevatore di perdite"
+      },
+      "t6c3cn": {
+        "name": "CH3 stato di connessione del rilevatore di perdite"
+      },
+      "t6c3wls": {
+        "name": "CH3 stato perdita d'acqua"
+      },
+      "t6c4bat": {
+        "name": "CH4 stato della batteria del rilevatore di perdite"
+      },
+      "t6c4cn": {
+        "name": "CH4 stato di connessione del rilevatore di perdite"
+      },
+      "t6c4wls": {
+        "name": "CH4 stato perdita d'acqua"
+      },
+      "t6c5bat": {
+        "name": "CH5 stato della batteria del rilevatore di perdite"
+      },
+      "t6c5cn": {
+        "name": "CH5 stato di connessione del rilevatore di perdite"
+      },
+      "t6c5wls": {
+        "name": "CH5 stato perdita d'acqua"
+      },
+      "t6c6bat": {
+        "name": "CH6 stato della batteria del rilevatore di perdite"
+      },
+      "t6c6cn": {
+        "name": "CH6 stato di connessione del rilevatore di perdite"
+      },
+      "t6c6wls": {
+        "name": "CH6 stato perdita d'acqua"
+      },
+      "t6c7bat": {
+        "name": "CH7 stato della batteria del rilevatore di perdite"
+      },
+      "t6c7cn": {
+        "name": "CH7 stato di connessione del rilevatore di perdite"
+      },
+      "t6c7wls": {
+        "name": "CH7 stato perdita d'acqua"
+      },
+      "t8bat": {
+        "name": "Livello batteria del sensore di particolato"
+      },
+      "t8cn": {
+        "name": "Stato di connessione del sensore di particolato"
+      },
+      "t8pm10": {
+        "name": "Concentrazione di PM10"
+      },
+      "t8pm10ai": {
+        "name": "AQI PM10"
+      },
+      "t8pm25": {
+        "name": "Concentrazione di PM2.5"
+      },
+      "t8pm25ai": {
+        "name": "AQI PM2.5"
+      },
+      "t9bat": {
+        "name": "Livello batteria del sensore HCHO/COV"
+      },
+      "t9cn": {
+        "name": "Stato di connessione del sensore HCHO/COV"
+      },
+      "t9hcho": {
+        "name": "Concentrazione di HCHO"
+      },
+      "t9voclv": {
+        "name": "Livello di COV",
+        "state": {
+          "very_low": "Molto basso",
+          "low": "Basso",
+          "moderate": "Moderato",
+          "high": "Alto",
+          "very_high": "Molto alto"
+        }
+      },
+      "tempf": {
+        "name": "Temperatura esterna"
+      },
+      "uv": {
+        "name": "Indice UV"
+      },
+      "visibility": {
+        "name": "Visibilità"
+      },
+      "weeklyrainin": {
+        "name": "Pioggia settimanale"
+      },
+      "wind_direction_raw": {
+        "name": "Direzione del vento (grezza)"
+      },
+      "windchillf": {
+        "name": "Temperatura percepita da vento"
+      },
+      "winddir": {
+        "name": "Direzione del vento"
+      },
+      "winddir_avg2m": {
+        "name": "Direzione del vento media 2 min"
+      },
+      "windgustdir": {
+        "name": "Direzione della raffica"
+      },
+      "windgustdir_10m": {
+        "name": "Direzione raffica media 10 min"
+      },
+      "windgustmph": {
+        "name": "Raffica di vento"
+      },
+      "windgustmph_10m": {
+        "name": "Velocità raffica media 10 min"
+      },
+      "windspdmph_avg2m": {
+        "name": "Velocità del vento media 2 min"
+      },
+      "windspeedmph": {
+        "name": "Velocità del vento"
+      },
+      "yearlyrainin": {
+        "name": "Pioggia annuale"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Livello batteria della console"
+      },
+      "station_online": {
+        "name": "Stazione in linea"
+      },
+      "t10cn": {
+        "name": "Stato di connessione del sensore CO2"
+      },
+      "t11cn": {
+        "name": "Stato di connessione del sensore CO"
+      },
+      "t1bat": {
+        "name": "Stato della batteria del sensore esterno"
+      },
+      "t1cn": {
+        "name": "Stato di connessione del sensore esterno"
+      },
+      "t234c1bat": {
+        "name": "CH1 stato della batteria"
+      },
+      "t234c1cn": {
+        "name": "CH1 stato di connessione"
+      },
+      "t234c2bat": {
+        "name": "CH2 stato della batteria"
+      },
+      "t234c2cn": {
+        "name": "CH2 stato di connessione"
+      },
+      "t234c3bat": {
+        "name": "CH3 stato della batteria"
+      },
+      "t234c3cn": {
+        "name": "CH3 stato di connessione"
+      },
+      "t234c4bat": {
+        "name": "CH4 stato della batteria"
+      },
+      "t234c4cn": {
+        "name": "CH4 stato di connessione"
+      },
+      "t234c5bat": {
+        "name": "CH5 stato della batteria"
+      },
+      "t234c5cn": {
+        "name": "CH5 stato di connessione"
+      },
+      "t234c6bat": {
+        "name": "CH6 stato della batteria"
+      },
+      "t234c6cn": {
+        "name": "CH6 stato di connessione"
+      },
+      "t234c7bat": {
+        "name": "CH7 stato della batteria"
+      },
+      "t234c7cn": {
+        "name": "CH7 stato di connessione"
+      },
+      "t5lsbat": {
+        "name": "Stato della batteria del sensore fulmini"
+      },
+      "t5lscn": {
+        "name": "Stato di connessione del sensore fulmini"
+      },
+      "t6c1bat": {
+        "name": "CH1 stato della batteria del rilevatore di perdite"
+      },
+      "t6c1cn": {
+        "name": "CH1 stato di connessione del rilevatore di perdite"
+      },
+      "t6c1wls": {
+        "name": "CH1 stato perdita d'acqua"
+      },
+      "t6c2bat": {
+        "name": "CH2 stato della batteria del rilevatore di perdite"
+      },
+      "t6c2cn": {
+        "name": "CH2 stato di connessione del rilevatore di perdite"
+      },
+      "t6c2wls": {
+        "name": "CH2 stato perdita d'acqua"
+      },
+      "t6c3bat": {
+        "name": "CH3 stato della batteria del rilevatore di perdite"
+      },
+      "t6c3cn": {
+        "name": "CH3 stato di connessione del rilevatore di perdite"
+      },
+      "t6c3wls": {
+        "name": "CH3 stato perdita d'acqua"
+      },
+      "t6c4bat": {
+        "name": "CH4 stato della batteria del rilevatore di perdite"
+      },
+      "t6c4cn": {
+        "name": "CH4 stato di connessione del rilevatore di perdite"
+      },
+      "t6c4wls": {
+        "name": "CH4 stato perdita d'acqua"
+      },
+      "t6c5bat": {
+        "name": "CH5 stato della batteria del rilevatore di perdite"
+      },
+      "t6c5cn": {
+        "name": "CH5 stato di connessione del rilevatore di perdite"
+      },
+      "t6c5wls": {
+        "name": "CH5 stato perdita d'acqua"
+      },
+      "t6c6bat": {
+        "name": "CH6 stato della batteria del rilevatore di perdite"
+      },
+      "t6c6cn": {
+        "name": "CH6 stato di connessione del rilevatore di perdite"
+      },
+      "t6c6wls": {
+        "name": "CH6 stato perdita d'acqua"
+      },
+      "t6c7bat": {
+        "name": "CH7 stato della batteria del rilevatore di perdite"
+      },
+      "t6c7cn": {
+        "name": "CH7 stato di connessione del rilevatore di perdite"
+      },
+      "t6c7wls": {
+        "name": "CH7 stato perdita d'acqua"
+      },
+      "t8cn": {
+        "name": "Stato di connessione del sensore di particolato"
+      },
+      "t9cn": {
+        "name": "Stato di connessione del sensore HCHO/COV"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Scostamento direzione del vento"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Azzera lo scostamento"
+      },
+      "set_north": {
+        "name": "Imposta il nord sul valore attuale"
+      }
+    }
+  }
+}

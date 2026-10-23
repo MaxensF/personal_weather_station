@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Stasiun cuaca pribadi",
+        "description": "Tetapkan kunci stasiun di sini yang harus dikirim oleh stasiun cuaca Anda agar datanya tidak ditolak. Jika Anda mengosongkan kolom ini, semua permintaan akan diterima.",
+        "data": {
+          "password": "Kunci stasiun"
+        }
+      },
+      "station": {
+        "title": "Langkah 1 dari 5 — stasiun Anda",
+        "description": "{image}\n\nStasiun cuaca Anda membuat sendiri perangkat dan sensornya, jadi tidak ada yang perlu ditambahkan di sini. Berikut ini adalah yang harus diisikan di aplikasi stasiun.\n\nBuka aplikasinya, pastikan firmware stasiun sudah mutakhir, lalu buka pengaturannya."
+      },
+      "settings": {
+        "title": "Langkah 2 dari 5 — layanan cuaca",
+        "description": "{image}\n\nPilih **Weather server**."
+      },
+      "server": {
+        "title": "Langkah 3 dari 5 — server lain",
+        "description": "{image}\n\nPilih **Other Server**."
+      },
+      "form": {
+        "title": "Langkah 4 dari 5 — pengaturan server",
+        "description": "{image}\n\nIsi formulirnya, lalu tekan **Save**.\n\n**URL**\n{urls}\nTanpa `http://` maupun `https://`. Gunakan alamat yang dapat dijangkau stasiun Anda di jaringan Anda sendiri — tidak ada alasan untuk memaparkan Home Assistant ke internet demi hal ini. Jika stasiun Anda tidak dapat mengurai nama, isikan alamat IP.\n\n**Station ID** — terserah Anda. Ini menjadi nama perangkat di Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 menit adalah nilai yang baik.\n\n**API type** — *WSLink API*. Pilih *WUnderground API* hanya jika stasiun Anda tidak menawarkan WSLink: ia membawa separuh jumlah pembacaan dan hanya empat kanal.\n\n**Upload** — biarkan aktif.\n\n> ⏱️ Sebagian stasiun kehilangan Wi-Fi jika Anda berlama-lama di layar ini. Siapkan alamatnya, isikan, lalu simpan."
+      },
+      "confirm": {
+        "title": "Langkah 5 dari 5 — confirm & exit",
+        "description": "{image}\n\nKembali, lalu tekan **Confirm & Exit**.\n\n> ⚠️ **Confirm & Exit-lah yang menuliskan pengaturan ke stasiun.** Menyimpan saja tidak mengubah apa pun.\n\nTekan Berikutnya setelah Anda melakukannya."
+      },
+      "received": {
+        "title": "Stasiun Anda berbicara dengan Home Assistant",
+        "description": "**{station}** baru saja mengirim unggahan pertamanya.\n\nSensornya muncul pada unggahan berikutnya, dan dibuat dari apa yang benar-benar dikirim stasiun — tidak ada yang perlu dipilih di sini."
+      },
+      "timeout": {
+        "title": "Belum ada yang tiba",
+        "description": "Tidak ada stasiun yang mengirim apa pun dalam {minutes} menit terakhir.{key_hint_extra}\n\nPenyebab yang biasa adalah alamat yang tidak dapat dijangkau stasiun, **Confirm & Exit** yang belum ditekan, atau firmware 3.02 ke atas, yang mensyaratkan HTTPS.\n\nAlamat yang harus dituju:\n{urls}\nTitik akhir yang menunggu unggahan:\n{endpoints}\n\nTekan Berikutnya untuk tetap menyelesaikan — konfigurasinya disimpan, titik akhir benar-benar mulai mendengarkan, dan sebuah perbaikan akan membawa Anda kembali ke sini sampai ada stasiun yang muncul."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Sudah dikonfigurasi. Satu instans melayani semua stasiun cuaca."
+    },
+    "progress": {
+      "waiting_for_station": "Menunggu unggahan pertama dari stasiun Anda…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Stasiun cuaca pribadi",
+        "menu_options": {
+          "options": "Pengaturan",
+          "instructions": "Cara mengarahkan stasiun ke Home Assistant"
+        }
+      },
+      "options": {
+        "title": "Stasiun cuaca pribadi",
+        "description": "Tetapkan kunci stasiun di sini yang harus dikirim oleh stasiun cuaca Anda agar datanya tidak ditolak. Jika Anda mengosongkan kolom ini, semua permintaan akan diterima.",
+        "data": {
+          "password": "Kunci stasiun",
+          "availability_timeout": "Tandai sebagai tidak tersedia setelah (menit)",
+          "debug": "Catat setiap permintaan masuk"
+        },
+        "data_description": {
+          "availability_timeout": "Berapa lama sebuah stasiun boleh diam sebelum sensornya ditandai tidak tersedia. 0 berarti tidak pernah ditandai.",
+          "debug": "Menulis seluruh isi setiap permintaan ke log Home Assistant. Berguna saat menyiapkan stasiun, mengganggu setelahnya."
+        }
+      },
+      "station": {
+        "title": "Langkah 1 dari 5 — stasiun Anda",
+        "description": "{image}\n\nStasiun cuaca Anda membuat sendiri perangkat dan sensornya, jadi tidak ada yang perlu ditambahkan di sini. Berikut ini adalah yang harus diisikan di aplikasi stasiun.\n\nBuka aplikasinya, pastikan firmware stasiun sudah mutakhir, lalu buka pengaturannya."
+      },
+      "settings": {
+        "title": "Langkah 2 dari 5 — layanan cuaca",
+        "description": "{image}\n\nPilih **Weather server**."
+      },
+      "server": {
+        "title": "Langkah 3 dari 5 — server lain",
+        "description": "{image}\n\nPilih **Other Server**."
+      },
+      "form": {
+        "title": "Langkah 4 dari 5 — pengaturan server",
+        "description": "{image}\n\nIsi formulirnya, lalu tekan **Save**.\n\n**URL**\n{urls}\nTanpa `http://` maupun `https://`. Gunakan alamat yang dapat dijangkau stasiun Anda di jaringan Anda sendiri — tidak ada alasan untuk memaparkan Home Assistant ke internet demi hal ini. Jika stasiun Anda tidak dapat mengurai nama, isikan alamat IP.\n\n**Station ID** — terserah Anda. Ini menjadi nama perangkat di Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 menit adalah nilai yang baik.\n\n**API type** — *WSLink API*. Pilih *WUnderground API* hanya jika stasiun Anda tidak menawarkan WSLink: ia membawa separuh jumlah pembacaan dan hanya empat kanal.\n\n**Upload** — biarkan aktif.\n\n> ⏱️ Sebagian stasiun kehilangan Wi-Fi jika Anda berlama-lama di layar ini. Siapkan alamatnya, isikan, lalu simpan."
+      },
+      "confirm": {
+        "title": "Langkah 5 dari 5 — confirm & exit",
+        "description": "{image}\n\nKembali, lalu tekan **Confirm & Exit**.\n\n> ⚠️ **Confirm & Exit-lah yang menuliskan pengaturan ke stasiun.** Menyimpan saja tidak mengubah apa pun.\n\nTekan Berikutnya setelah Anda melakukannya."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Stasiun cuaca ditolak: kunci stasiun salah",
+      "description": "Sebuah stasiun cuaca di {ip} mencoba mengirim data sebagai `{station_id}` tanpa mengirimkan kunci stasiun yang diharapkan.\n\nPeriksa apakah kunci yang dikonfigurasi di stasiun atau di aplikasi WSLink cocok dengan yang ditetapkan pada integrasi ini. Pesan ini hilang dengan sendirinya begitu permintaan dari {ip} diterima."
+    },
+    "missing_device_id": {
+      "title": "Stasiun cuaca ditolak: tanpa pengenal stasiun",
+      "description": "Sebuah stasiun cuaca di {ip} mengirim data tanpa pengenal stasiun.\n\nTetapkan Sender ID di aplikasi WSLink, atau parameter ID pada konfigurasi stasiun. Pesan ini hilang dengan sendirinya begitu permintaan dari {ip} diterima."
+    },
+    "legacy_entity_ids": {
+      "title": "ID entitas mengulang nama stasiun",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Persingkat ID entitas",
+            "description": "Hingga versi 1.0.8 integrasi ini membuat ID entitas yang memuat nama stasiun dua kali, seperti `{example_old}`. Stasiun baru tidak lagi begitu.\n\n**{count} entitas** dapat diganti namanya, misalnya menjadi `{example_new}`.\n\nRiwayat dan statistik jangka panjang mengikuti penggantian nama secara otomatis. **Otomatisasi, skrip, adegan, dan dasbor tidak** — Anda harus memperbarui sendiri semua yang merujuk ke ID lama.\n\nJika Anda lebih suka membiarkannya apa adanya, abaikan perbaikan ini."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Pembacaan koneksi, kebocoran, dan baterai masih berupa angka",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Ubah menjadi sensor biner",
+            "description": "Pembacaan koneksi, kebocoran air, dan baterai dikirim sebagai 1 atau 0. Sampai versi 1.0.8 semuanya ditampilkan sebagai sensor numerik, misalnya `{example}`, yang tidak bisa dipakai dengan kartu bawaan Home Assistant untuk kebocoran, konektivitas, dan baterai lemah. Stasiun baru mendapat sensor biner yang menampilkan **Basah / Kering**, **Terhubung / Terputus**, dan **Hidup / Mati**.\n\nSebanyak **{count} entitas** dapat dikonversi. Tingkat baterai 0~5 pada sensor kualitas udara tetap berupa persentase: enam tingkat lebih dari yang bisa dibawa sebuah hidup/mati.\n\nBerpindah platform bukan penggantian nama: entitas lama dihapus dan dibuat ulang sebagai `binary_sensor`. **Riwayat tercatatnya hilang** — pembacaan ini tidak punya statistik jangka panjang, jadi hanya riwayat mentah yang terpengaruh — dan **otomasi, skrip, adegan, dan dasbor yang menunjuk ke sana harus diperbarui**. Entitas baru muncul pada unggahan berikutnya dari stasiun.\n\nJika Anda lebih suka membiarkannya apa adanya, abaikan perbaikan ini."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Belum ada stasiun cuaca yang mengirim apa pun",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Siapkan stasiun cuaca Anda",
+            "description": "Stasiun cuaca Anda yang membuat perangkat dan sensornya — tidak ada yang perlu ditambahkan di sini.\n\nDi aplikasi stasiun, buka stasiun Anda, lalu **Settings → Weather server → Other Server**, dan isi:\n\n**URL**\n{urls}\nTanpa `http://` atau `https://`. Gunakan alamat yang dapat dijangkau stasiun Anda di jaringan Anda sendiri — tidak ada alasan untuk membuka Home Assistant ke internet demi ini. Jika stasiun Anda tidak dapat menerjemahkan nama, gunakan alamat IP.\n\n**Station ID** — apa saja yang Anda mau. Ini menjadi nama perangkat di Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 menit adalah nilai yang baik.\n\n**API type** — *WSLink API*.\n\n**Upload** — biarkan aktif.\n\nTekan **Save**, kembali, lalu tekan **Confirm & Exit**.\n\n> ⚠️ **Confirm & Exit-lah yang menulis pengaturan ke stasiun.** Menyimpan saja tidak mengubah apa pun. Sensor Anda muncul sedetik setelahnya.\n\nTitik akhir yang mendengarkan adalah:\n{endpoints}"
+          },
+          "received": {
+            "title": "Stasiun Anda sudah masuk",
+            "description": "**{station}** telah mengirim unggahan pertamanya. Sensornya sedang dibuat sekarang, dan akan bertambah seiring stasiun melaporkannya.\n\nPesan ini tidak akan muncul lagi."
+          },
+          "timeout": {
+            "title": "Belum ada yang diterima",
+            "description": "Tidak ada unggahan yang tiba dalam {minutes} menit.\n\nBerdasarkan urutan kemungkinan:\n\n  - **Apakah Anda menekan Confirm & Exit?** Menyimpan layar server saja tidak menulis apa pun ke stasiun.\n  - **URL** harus {urls_inline}, tanpa `http://`, dan dapat dijangkau stasiun di jaringan Anda.\n  - **Upload** harus aktif di layar tersebut.\n  - Beberapa firmware Bresser sejak **3.02** menolak HTTP biasa dan memerlukan alamat yang menyediakan HTTPS.\n  - Interval unggah mungkin memang lebih panjang daripada waktu tunggu.\n  - **Kunci stasiun**: {key_hint}.\n\nJika stasiun mencapai Home Assistant tetapi ditolak, hal itu dilaporkan terpisah di **Pengaturan → Sistem → Perbaikan**.\n\nAnda dapat menutup ini. Ini tetap di sini sampai ada stasiun yang muncul, dan membukanya kembali memulai penantian dari awal."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Menunggu unggahan pertama stasiun Anda…"
+        },
+        "abort": {
+          "not_received": "Belum ada yang tiba, jadi ini dibiarkan terbuka. Ini tetap di Perbaikan sampai ada stasiun yang muncul, dan Anda dapat membukanya lagi untuk menunggu kembali."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "Stasiun {station} mengirim pembacaan yang dibuang",
+      "description": "**{count} parameter** dari **{station}** tidak dikenali, sehingga nilainya dibuang pada setiap pengiriman:\n\n{parameters}\n\nPenyebab yang biasa adalah stasiun yang melaporkan lebih banyak daripada yang dapat dibawa protokolnya. Weather Underground hanya memiliki **4 slot** untuk sensor tambahan; jika stasiun Anda menawarkan **WSLink** sebagai *API type*, beralih ke sana membuka tujuh kanal dan kira-kira dua kali lipat jumlah pembacaan.\n\nJika bukan itu penyebabnya, nama-nama parameter inilah yang persis dibutuhkan sebuah laporan bug: buka satu di [pelacak isu]({issue_tracker}) agar semuanya dapat ditambahkan.\n\nAnda juga boleh mengabaikannya — tidak ada yang rusak, hanya saja nilai-nilai tertentu ini tidak sampai."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "Stasiun {device} belum mengirimkan arah angin, jadi tidak ada acuan untuk kalibrasi. Tunggu unggahan berikutnya lalu coba lagi."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Tekanan udara absolut"
+      },
+      "apiver": {
+        "name": "Versi API"
+      },
+      "aqbc": {
+        "name": "Karbon hitam"
+      },
+      "aqco": {
+        "name": "Karbon monoksida"
+      },
+      "aqcot": {
+        "name": "Karbon monoksida kadar renik"
+      },
+      "aqec": {
+        "name": "Karbon elemental"
+      },
+      "aqno": {
+        "name": "Nitrogen monoksida"
+      },
+      "aqno2": {
+        "name": "NO2 X terhitung"
+      },
+      "aqno2t": {
+        "name": "Nitrogen dioksida"
+      },
+      "aqno2y": {
+        "name": "NO2 Y terhitung"
+      },
+      "aqno3": {
+        "name": "Ion NO3"
+      },
+      "aqnox": {
+        "name": "Oksida nitrogen"
+      },
+      "aqnoy": {
+        "name": "Total nitrogen reaktif"
+      },
+      "aqoc": {
+        "name": "Karbon organik"
+      },
+      "aqozone": {
+        "name": "Ozon"
+      },
+      "aqpm10": {
+        "name": "Massa PM10"
+      },
+      "aqpm2_5": {
+        "name": "Massa PM2.5"
+      },
+      "aqso2": {
+        "name": "Sulfur dioksida"
+      },
+      "aqso2t": {
+        "name": "Sulfur dioksida kadar renik"
+      },
+      "aqso4": {
+        "name": "Ion SO4"
+      },
+      "aquv_aeth": {
+        "name": "Etalometer kanal 2"
+      },
+      "baromin": {
+        "name": "Tekanan"
+      },
+      "clouds": {
+        "name": "Tutupan awan"
+      },
+      "dailyrainin": {
+        "name": "Hujan harian"
+      },
+      "dewptf": {
+        "name": "Titik embun"
+      },
+      "humidity": {
+        "name": "Kelembapan luar"
+      },
+      "inbat": {
+        "name": "Level baterai konsol"
+      },
+      "indoorhumidity": {
+        "name": "Kelembapan dalam"
+      },
+      "indoortempf": {
+        "name": "Suhu dalam"
+      },
+      "inhum": {
+        "name": "Kelembapan dalam"
+      },
+      "intem": {
+        "name": "Suhu dalam"
+      },
+      "last_update": {
+        "name": "Penerimaan terakhir"
+      },
+      "leafwetness": {
+        "name": "Kebasahan daun"
+      },
+      "leafwetness2": {
+        "name": "CH2 kebasahan daun"
+      },
+      "lowbatt": {
+        "name": "Baterai lemah"
+      },
+      "monthlyrainin": {
+        "name": "Hujan bulanan"
+      },
+      "rainin": {
+        "name": "Hujan per jam"
+      },
+      "rbar": {
+        "name": "Tekanan udara relatif"
+      },
+      "rtfreq": {
+        "name": "Frekuensi pembaruan"
+      },
+      "soilmoisture": {
+        "name": "Kelembapan tanah"
+      },
+      "soilmoisture2": {
+        "name": "CH2 kelembapan tanah"
+      },
+      "soilmoisture3": {
+        "name": "CH3 kelembapan tanah"
+      },
+      "soilmoisture4": {
+        "name": "CH4 kelembapan tanah"
+      },
+      "soiltemp2f": {
+        "name": "CH2 suhu tanah"
+      },
+      "soiltemp3f": {
+        "name": "CH3 suhu tanah"
+      },
+      "soiltemp4f": {
+        "name": "CH4 suhu tanah"
+      },
+      "soiltempf": {
+        "name": "Suhu tanah"
+      },
+      "solarradiation": {
+        "name": "Radiasi matahari"
+      },
+      "t10bat": {
+        "name": "Level baterai sensor CO2"
+      },
+      "t10cn": {
+        "name": "Status koneksi sensor CO2"
+      },
+      "t10co2": {
+        "name": "Konsentrasi CO2"
+      },
+      "t11bat": {
+        "name": "Level baterai sensor CO"
+      },
+      "t11cn": {
+        "name": "Status koneksi sensor CO"
+      },
+      "t11co": {
+        "name": "Konsentrasi CO"
+      },
+      "t1bat": {
+        "name": "Status baterai sensor luar"
+      },
+      "t1chill": {
+        "name": "Suhu pendinginan angin"
+      },
+      "t1cn": {
+        "name": "Status koneksi sensor luar"
+      },
+      "t1dew": {
+        "name": "Suhu titik embun"
+      },
+      "t1feels": {
+        "name": "Suhu terasa"
+      },
+      "t1heat": {
+        "name": "Indeks panas"
+      },
+      "t1hum": {
+        "name": "Kelembapan luar"
+      },
+      "t1raindy": {
+        "name": "Curah hujan harian"
+      },
+      "t1rainhr": {
+        "name": "Curah hujan per jam"
+      },
+      "t1rainmth": {
+        "name": "Curah hujan bulanan"
+      },
+      "t1rainra": {
+        "name": "Intensitas hujan"
+      },
+      "t1rainwy": {
+        "name": "Curah hujan mingguan"
+      },
+      "t1rainyr": {
+        "name": "Curah hujan tahunan"
+      },
+      "t1solrad": {
+        "name": "Intensitas cahaya"
+      },
+      "t1tem": {
+        "name": "Suhu luar"
+      },
+      "t1uvi": {
+        "name": "Indeks UV"
+      },
+      "t1wbgt": {
+        "name": "Suhu WBGT"
+      },
+      "t1wdir": {
+        "name": "Arah angin"
+      },
+      "t1wgust": {
+        "name": "Embusan angin"
+      },
+      "t1ws": {
+        "name": "Kecepatan angin"
+      },
+      "t1ws10mav": {
+        "name": "Kecepatan angin rata-rata 10 mnt"
+      },
+      "t234c1bat": {
+        "name": "CH1 status baterai"
+      },
+      "t234c1cn": {
+        "name": "CH1 status koneksi"
+      },
+      "t234c1hum": {
+        "name": "CH1 kelembapan"
+      },
+      "t234c1tem": {
+        "name": "CH1 suhu"
+      },
+      "t234c1tp": {
+        "name": "CH1 jenis sensor"
+      },
+      "t234c2bat": {
+        "name": "CH2 status baterai"
+      },
+      "t234c2cn": {
+        "name": "CH2 status koneksi"
+      },
+      "t234c2hum": {
+        "name": "CH2 kelembapan"
+      },
+      "t234c2tem": {
+        "name": "CH2 suhu"
+      },
+      "t234c2tp": {
+        "name": "CH2 jenis sensor"
+      },
+      "t234c3bat": {
+        "name": "CH3 status baterai"
+      },
+      "t234c3cn": {
+        "name": "CH3 status koneksi"
+      },
+      "t234c3hum": {
+        "name": "CH3 kelembapan"
+      },
+      "t234c3tem": {
+        "name": "CH3 suhu"
+      },
+      "t234c3tp": {
+        "name": "CH3 jenis sensor"
+      },
+      "t234c4bat": {
+        "name": "CH4 status baterai"
+      },
+      "t234c4cn": {
+        "name": "CH4 status koneksi"
+      },
+      "t234c4hum": {
+        "name": "CH4 kelembapan"
+      },
+      "t234c4tem": {
+        "name": "CH4 suhu"
+      },
+      "t234c4tp": {
+        "name": "CH4 jenis sensor"
+      },
+      "t234c5bat": {
+        "name": "CH5 status baterai"
+      },
+      "t234c5cn": {
+        "name": "CH5 status koneksi"
+      },
+      "t234c5hum": {
+        "name": "CH5 kelembapan"
+      },
+      "t234c5tem": {
+        "name": "CH5 suhu"
+      },
+      "t234c5tp": {
+        "name": "CH5 jenis sensor"
+      },
+      "t234c6bat": {
+        "name": "CH6 status baterai"
+      },
+      "t234c6cn": {
+        "name": "CH6 status koneksi"
+      },
+      "t234c6hum": {
+        "name": "CH6 kelembapan"
+      },
+      "t234c6tem": {
+        "name": "CH6 suhu"
+      },
+      "t234c6tp": {
+        "name": "CH6 jenis sensor"
+      },
+      "t234c7bat": {
+        "name": "CH7 status baterai"
+      },
+      "t234c7cn": {
+        "name": "CH7 status koneksi"
+      },
+      "t234c7hum": {
+        "name": "CH7 kelembapan"
+      },
+      "t234c7tem": {
+        "name": "CH7 suhu"
+      },
+      "t234c7tp": {
+        "name": "CH7 jenis sensor"
+      },
+      "t5ls1dtc": {
+        "name": "Total petir dalam 1 hari"
+      },
+      "t5ls1htc": {
+        "name": "Total petir dalam 1 jam"
+      },
+      "t5ls30mtc": {
+        "name": "Petir dalam 30 menit terakhir"
+      },
+      "t5ls5mtc": {
+        "name": "Petir dalam 5 menit terakhir"
+      },
+      "t5lsbat": {
+        "name": "Status baterai sensor petir"
+      },
+      "t5lscn": {
+        "name": "Status koneksi sensor petir"
+      },
+      "t5lsf": {
+        "name": "Petir dalam satu jam terakhir"
+      },
+      "t5lskm": {
+        "name": "Jarak petir"
+      },
+      "t5lst": {
+        "name": "Waktu petir terakhir"
+      },
+      "t6c1bat": {
+        "name": "CH1 status baterai sensor kebocoran"
+      },
+      "t6c1cn": {
+        "name": "CH1 status koneksi sensor kebocoran"
+      },
+      "t6c1wls": {
+        "name": "CH1 status kebocoran air"
+      },
+      "t6c2bat": {
+        "name": "CH2 status baterai sensor kebocoran"
+      },
+      "t6c2cn": {
+        "name": "CH2 status koneksi sensor kebocoran"
+      },
+      "t6c2wls": {
+        "name": "CH2 status kebocoran air"
+      },
+      "t6c3bat": {
+        "name": "CH3 status baterai sensor kebocoran"
+      },
+      "t6c3cn": {
+        "name": "CH3 status koneksi sensor kebocoran"
+      },
+      "t6c3wls": {
+        "name": "CH3 status kebocoran air"
+      },
+      "t6c4bat": {
+        "name": "CH4 status baterai sensor kebocoran"
+      },
+      "t6c4cn": {
+        "name": "CH4 status koneksi sensor kebocoran"
+      },
+      "t6c4wls": {
+        "name": "CH4 status kebocoran air"
+      },
+      "t6c5bat": {
+        "name": "CH5 status baterai sensor kebocoran"
+      },
+      "t6c5cn": {
+        "name": "CH5 status koneksi sensor kebocoran"
+      },
+      "t6c5wls": {
+        "name": "CH5 status kebocoran air"
+      },
+      "t6c6bat": {
+        "name": "CH6 status baterai sensor kebocoran"
+      },
+      "t6c6cn": {
+        "name": "CH6 status koneksi sensor kebocoran"
+      },
+      "t6c6wls": {
+        "name": "CH6 status kebocoran air"
+      },
+      "t6c7bat": {
+        "name": "CH7 status baterai sensor kebocoran"
+      },
+      "t6c7cn": {
+        "name": "CH7 status koneksi sensor kebocoran"
+      },
+      "t6c7wls": {
+        "name": "CH7 status kebocoran air"
+      },
+      "t8bat": {
+        "name": "Level baterai sensor partikel"
+      },
+      "t8cn": {
+        "name": "Status koneksi sensor partikel"
+      },
+      "t8pm10": {
+        "name": "Konsentrasi PM10"
+      },
+      "t8pm10ai": {
+        "name": "AQI PM10"
+      },
+      "t8pm25": {
+        "name": "Konsentrasi PM2.5"
+      },
+      "t8pm25ai": {
+        "name": "AQI PM2.5"
+      },
+      "t9bat": {
+        "name": "Level baterai sensor HCHO/VOC"
+      },
+      "t9cn": {
+        "name": "Status koneksi sensor HCHO/VOC"
+      },
+      "t9hcho": {
+        "name": "Konsentrasi HCHO"
+      },
+      "t9voclv": {
+        "name": "Level VOC",
+        "state": {
+          "very_low": "Sangat rendah",
+          "low": "Rendah",
+          "moderate": "Sedang",
+          "high": "Tinggi",
+          "very_high": "Sangat tinggi"
+        }
+      },
+      "tempf": {
+        "name": "Suhu luar"
+      },
+      "uv": {
+        "name": "Indeks UV"
+      },
+      "visibility": {
+        "name": "Jarak pandang"
+      },
+      "weeklyrainin": {
+        "name": "Hujan mingguan"
+      },
+      "wind_direction_raw": {
+        "name": "Arah angin (mentah)"
+      },
+      "windchillf": {
+        "name": "Pendinginan angin"
+      },
+      "winddir": {
+        "name": "Arah angin"
+      },
+      "winddir_avg2m": {
+        "name": "Arah angin rata-rata 2 mnt"
+      },
+      "windgustdir": {
+        "name": "Arah embusan"
+      },
+      "windgustdir_10m": {
+        "name": "Arah embusan rata-rata 10 mnt"
+      },
+      "windgustmph": {
+        "name": "Embusan angin"
+      },
+      "windgustmph_10m": {
+        "name": "Kecepatan embusan rata-rata 10 mnt"
+      },
+      "windspdmph_avg2m": {
+        "name": "Kecepatan angin rata-rata 2 mnt"
+      },
+      "windspeedmph": {
+        "name": "Kecepatan angin"
+      },
+      "yearlyrainin": {
+        "name": "Hujan tahunan"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Level baterai konsol"
+      },
+      "station_online": {
+        "name": "Stasiun daring"
+      },
+      "t10cn": {
+        "name": "Status koneksi sensor CO2"
+      },
+      "t11cn": {
+        "name": "Status koneksi sensor CO"
+      },
+      "t1bat": {
+        "name": "Status baterai sensor luar"
+      },
+      "t1cn": {
+        "name": "Status koneksi sensor luar"
+      },
+      "t234c1bat": {
+        "name": "CH1 status baterai"
+      },
+      "t234c1cn": {
+        "name": "CH1 status koneksi"
+      },
+      "t234c2bat": {
+        "name": "CH2 status baterai"
+      },
+      "t234c2cn": {
+        "name": "CH2 status koneksi"
+      },
+      "t234c3bat": {
+        "name": "CH3 status baterai"
+      },
+      "t234c3cn": {
+        "name": "CH3 status koneksi"
+      },
+      "t234c4bat": {
+        "name": "CH4 status baterai"
+      },
+      "t234c4cn": {
+        "name": "CH4 status koneksi"
+      },
+      "t234c5bat": {
+        "name": "CH5 status baterai"
+      },
+      "t234c5cn": {
+        "name": "CH5 status koneksi"
+      },
+      "t234c6bat": {
+        "name": "CH6 status baterai"
+      },
+      "t234c6cn": {
+        "name": "CH6 status koneksi"
+      },
+      "t234c7bat": {
+        "name": "CH7 status baterai"
+      },
+      "t234c7cn": {
+        "name": "CH7 status koneksi"
+      },
+      "t5lsbat": {
+        "name": "Status baterai sensor petir"
+      },
+      "t5lscn": {
+        "name": "Status koneksi sensor petir"
+      },
+      "t6c1bat": {
+        "name": "CH1 status baterai sensor kebocoran"
+      },
+      "t6c1cn": {
+        "name": "CH1 status koneksi sensor kebocoran"
+      },
+      "t6c1wls": {
+        "name": "CH1 status kebocoran air"
+      },
+      "t6c2bat": {
+        "name": "CH2 status baterai sensor kebocoran"
+      },
+      "t6c2cn": {
+        "name": "CH2 status koneksi sensor kebocoran"
+      },
+      "t6c2wls": {
+        "name": "CH2 status kebocoran air"
+      },
+      "t6c3bat": {
+        "name": "CH3 status baterai sensor kebocoran"
+      },
+      "t6c3cn": {
+        "name": "CH3 status koneksi sensor kebocoran"
+      },
+      "t6c3wls": {
+        "name": "CH3 status kebocoran air"
+      },
+      "t6c4bat": {
+        "name": "CH4 status baterai sensor kebocoran"
+      },
+      "t6c4cn": {
+        "name": "CH4 status koneksi sensor kebocoran"
+      },
+      "t6c4wls": {
+        "name": "CH4 status kebocoran air"
+      },
+      "t6c5bat": {
+        "name": "CH5 status baterai sensor kebocoran"
+      },
+      "t6c5cn": {
+        "name": "CH5 status koneksi sensor kebocoran"
+      },
+      "t6c5wls": {
+        "name": "CH5 status kebocoran air"
+      },
+      "t6c6bat": {
+        "name": "CH6 status baterai sensor kebocoran"
+      },
+      "t6c6cn": {
+        "name": "CH6 status koneksi sensor kebocoran"
+      },
+      "t6c6wls": {
+        "name": "CH6 status kebocoran air"
+      },
+      "t6c7bat": {
+        "name": "CH7 status baterai sensor kebocoran"
+      },
+      "t6c7cn": {
+        "name": "CH7 status koneksi sensor kebocoran"
+      },
+      "t6c7wls": {
+        "name": "CH7 status kebocoran air"
+      },
+      "t8cn": {
+        "name": "Status koneksi sensor partikel"
+      },
+      "t9cn": {
+        "name": "Status koneksi sensor HCHO/VOC"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Pergeseran arah angin"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Atur ulang pergeseran"
+      },
+      "set_north": {
+        "name": "Tetapkan utara dari nilai saat ini"
+      }
+    }
+  }
+}

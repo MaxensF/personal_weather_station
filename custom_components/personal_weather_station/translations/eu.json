@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Norberaren eguraldi-estazioa",
+        "description": "Ezarri hemen zure eguraldi-estazioek bidali behar duten estazio-gakoa, haien datuak baztertuak izan ez daitezen. Eremua hutsik uzten baduzu, eskaera guztiak onartuko dira.",
+        "data": {
+          "password": "Estazio-gakoa"
+        }
+      },
+      "station": {
+        "title": "1. urratsa 5etik — zure estazioa",
+        "description": "{image}\n\nZure eguraldi-estazioak berak sortzen ditu bere gailuak eta sentsoreak, beraz hemen ez dago ezer gehitzeko. Jarraian datorrena estazioaren aplikazioan idatzi beharrekoa da.\n\nIreki aplikazioa, egiaztatu estazioaren firmwarea eguneratuta dagoela, eta ireki haren ezarpenak."
+      },
+      "settings": {
+        "title": "2. urratsa 5etik — eguraldi-zerbitzua",
+        "description": "{image}\n\nAukeratu **Weather server**."
+      },
+      "server": {
+        "title": "3. urratsa 5etik — beste zerbitzari bat",
+        "description": "{image}\n\nAukeratu **Other Server**."
+      },
+      "form": {
+        "title": "4. urratsa 5etik — zerbitzariaren ezarpenak",
+        "description": "{image}\n\nBete inprimakia eta sakatu **Save**.\n\n**URL**\n{urls}\n`http://` edo `https://` gabe. Erabili zure estazioak zure sarean irits dezakeen helbide bat: ez dago arrazoirik horretarako Home Assistant Internetera zabaltzeko. Zure estazioak izenak ebazten ez baditu, jarri IP helbidea.\n\n**Station ID** — nahi duzuna. Home Assistant-en gailuaren izena izango da.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — minutu 1 balio ona da.\n\n**API type** — *WSLink API*. Aukeratu *WUnderground API* zure estazioak WSLink eskaintzen ez badu soilik: irakurketen erdia eta lau kanal baino ez ditu garraiatzen.\n\n**Upload** — utzi aktibatuta.\n\n> ⏱️ Estazio batzuek Wi-Fia galtzen dute pantaila honetan luzatzen bazara. Eduki helbidea eskura, idatzi eta gorde."
+      },
+      "confirm": {
+        "title": "5. urratsa 5etik — confirm & exit",
+        "description": "{image}\n\nItzuli atzera eta sakatu **Confirm & Exit**.\n\n> ⚠️ **Confirm & Exit da ezarpenak estazioan idazten dituena.** Gordetzeak berak ez du ezer aldatzen.\n\nEgin ondoren, sakatu Hurrengoa."
+      },
+      "received": {
+        "title": "Zure estazioa Home Assistant-ekin hizketan ari da",
+        "description": "**{station}**-k bere lehen bidalketa egin berri du.\n\nHaren sentsoreak hurrengoan agertuko dira, eta estazioak benetan bidaltzen duenetik sortzen dira: hemen ez dago ezer aukeratzeko."
+      },
+      "timeout": {
+        "title": "Oraindik ez da ezer iritsi",
+        "description": "Azken {minutes} minutuetan ez du estaziorik ezer bidali.{key_hint_extra}\n\nOhiko arrazoiak dira estazioak iritsi ezin duen helbide bat, **Confirm & Exit** sakatu gabe egotea, edo 3.02tik aurrerako firmwarea, HTTPS eskatzen duena.\n\nHara bideratzeko helbideak hauek dira:\n{urls}\nBidalketak entzuten dituzten amaiera-puntuak:\n{endpoints}\n\nSakatu Hurrengoa hala ere amaitzeko: konfigurazioa gordetzen da, amaiera-puntuak benetan entzuten hasten dira, eta konponketa batek hona ekarriko zaitu estazioren bat agertu arte."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Dagoeneko konfiguratuta. Instantzia bakar batek eguraldi-estazio guztiak zerbitzatzen ditu."
+    },
+    "progress": {
+      "waiting_for_station": "Zure estazioaren lehen bidalketaren zain…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Norberaren eguraldi-estazioa",
+        "menu_options": {
+          "options": "Ezarpenak",
+          "instructions": "Nola bideratu estazio bat Home Assistant-era"
+        }
+      },
+      "options": {
+        "title": "Norberaren eguraldi-estazioa",
+        "description": "Ezarri hemen zure eguraldi-estazioek bidali behar duten estazio-gakoa, haien datuak baztertuak izan ez daitezen. Eremua hutsik uzten baduzu, eskaera guztiak onartuko dira.",
+        "data": {
+          "password": "Estazio-gakoa",
+          "availability_timeout": "Markatu erabilgaitz gisa honen ondoren (minutuak)",
+          "debug": "Erregistratu jasotako eskaera bakoitza"
+        },
+        "data_description": {
+          "availability_timeout": "Zenbat denbora egon daitekeen estazio bat isilik bere sentsoreak erabilgaitz gisa markatu aurretik. 0 inoiz ez markatzeko.",
+          "debug": "Eskaera bakoitzaren eduki osoa Home Assistant-en erregistroan idazten du. Erabilgarria estazio bat konfiguratzean, zaratatsua ondoren."
+        }
+      },
+      "station": {
+        "title": "1. urratsa 5etik — zure estazioa",
+        "description": "{image}\n\nZure eguraldi-estazioak berak sortzen ditu bere gailuak eta sentsoreak, beraz hemen ez dago ezer gehitzeko. Jarraian datorrena estazioaren aplikazioan idatzi beharrekoa da.\n\nIreki aplikazioa, egiaztatu estazioaren firmwarea eguneratuta dagoela, eta ireki haren ezarpenak."
+      },
+      "settings": {
+        "title": "2. urratsa 5etik — eguraldi-zerbitzua",
+        "description": "{image}\n\nAukeratu **Weather server**."
+      },
+      "server": {
+        "title": "3. urratsa 5etik — beste zerbitzari bat",
+        "description": "{image}\n\nAukeratu **Other Server**."
+      },
+      "form": {
+        "title": "4. urratsa 5etik — zerbitzariaren ezarpenak",
+        "description": "{image}\n\nBete inprimakia eta sakatu **Save**.\n\n**URL**\n{urls}\n`http://` edo `https://` gabe. Erabili zure estazioak zure sarean irits dezakeen helbide bat: ez dago arrazoirik horretarako Home Assistant Internetera zabaltzeko. Zure estazioak izenak ebazten ez baditu, jarri IP helbidea.\n\n**Station ID** — nahi duzuna. Home Assistant-en gailuaren izena izango da.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — minutu 1 balio ona da.\n\n**API type** — *WSLink API*. Aukeratu *WUnderground API* zure estazioak WSLink eskaintzen ez badu soilik: irakurketen erdia eta lau kanal baino ez ditu garraiatzen.\n\n**Upload** — utzi aktibatuta.\n\n> ⏱️ Estazio batzuek Wi-Fia galtzen dute pantaila honetan luzatzen bazara. Eduki helbidea eskura, idatzi eta gorde."
+      },
+      "confirm": {
+        "title": "5. urratsa 5etik — confirm & exit",
+        "description": "{image}\n\nItzuli atzera eta sakatu **Confirm & Exit**.\n\n> ⚠️ **Confirm & Exit da ezarpenak estazioan idazten dituena.** Gordetzeak berak ez du ezer aldatzen.\n\nEgin ondoren, sakatu Hurrengoa."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Eguraldi-estazioa baztertuta: estazio-gako okerra",
+      "description": "{ip} helbideko eguraldi-estazio batek `{station_id}` gisa datuak bidaltzen saiatu da, espero zen estazio-gakoa bidali gabe.\n\nEgiaztatu estazioan edo WSLink aplikazioan konfiguratutako gakoa integrazio honetan ezarritakoarekin bat datorrela. Mezu hau bere kabuz desagertuko da {ip} helbidetik datorren eskaera bat onartu bezain laster."
+    },
+    "missing_device_id": {
+      "title": "Eguraldi-estazioa baztertuta: estazio-identifikatzailerik ez",
+      "description": "{ip} helbideko eguraldi-estazio batek datuak bidali ditu estazio-identifikatzailerik gabe.\n\nEzarri Sender ID bat WSLink aplikazioan, edo ID parametro bat estazioaren konfigurazioan. Mezu hau bere kabuz desagertuko da {ip} helbidetik datorren eskaera bat onartu bezain laster."
+    },
+    "legacy_entity_ids": {
+      "title": "Entitateen IDek estazioaren izena errepikatzen dute",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Laburtu entitateen IDak",
+            "description": "1.0.8 bertsiora arte integrazio honek estazioaren izena bi aldiz zeramaten entitate-IDak sortzen zituen, esaterako `{example_old}`. Estazio berriek dagoeneko ez dute hori egiten.\n\n**{count} entitate** berrizenda daitezke, adibidez `{example_new}` izenera.\n\nHistoriak eta epe luzeko estatistikek automatikoki jarraitzen diote berrizendatzeari. **Automatizazioek, script-ek, eszenek eta panelek ez** — ID zaharrei erreferentzia egiten dien guztia zuk zeuk eguneratu beharko duzu.\n\nNahiago baduzu dauden bezala uztea, ez ikusiarena egin konponketa honi."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Konexio-, ihes- eta bateria-irakurketak zenbakiak dira oraindik",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Bihurtu sentsore bitarretan",
+            "description": "Konexio-, ur-ihes- eta bateria-irakurketak 1 edo 0 gisa bidaltzen dira. 1.0.8 bertsiora arte sentsore numeriko gisa erakusten ziren, adibidez `{example}`, eta ez dute balio Home Assistant-en ihes-, konektibitate- eta bateria baxuko txartel estandarrekin. Estazio berriek sentsore bitarrak jasotzen dituzte, **Bustia / Lehorra**, **Konektatuta / Deskonektatuta** eta **Piztuta / Itzalita** erakusten dutenak.\n\n**{count} entitate** bihur daitezke. Aire-kalitatearen sentsoreen 0~5 bateria-mailek beren ehunekoa gordetzen dute: sei maila piztu/itzali batek eraman dezakeena baino gehiago dira.\n\nPlataforma aldatzea ez da izena aldatzea: entitate zaharrak kendu eta `binary_sensor` gisa birsortzen dira. **Haien erregistratutako historia galdu egiten da** — irakurketa hauek ez dute epe luzeko estatistikarik, beraz historia gordina baino ez da ukitzen — eta **haiei begira dauden automatizazioak, script-ak, eszenak eta arbelak eguneratu behar dira**. Entitate berriak estazioaren hurrengo bidalketan agertuko dira.\n\nNahiago baduzu dauden bezala uztea, ez ikusi egin konponketa honi."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Oraindik ez du eguraldi-estaziorik ezer bidali",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Konfiguratu zure eguraldi-estazioa",
+            "description": "Zure eguraldi-estazioak sortzen ditu gailuak eta sentsoreak — hemen ez dago ezer gehitzeko.\n\nEstazioaren aplikazioan ireki zure estazioa, gero **Settings → Weather server → Other Server**, eta bete:\n\n**URL**\n{urls}\n`http://` edo `https://` gabe. Erabili zure estazioak zure sarean irits dezakeen helbide bat — ez dago inolako arrazoirik horretarako Home Assistant Internetera zabaltzeko. Zure estazioak izenak ebazten ez baditu, erabili IP helbidea.\n\n**Station ID** — nahi duzuna. Home Assistant-en gailuaren izena izango da.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — minutu 1 balio ona da.\n\n**API type** — *WSLink API*.\n\n**Upload** — utzi aktibatuta.\n\nSakatu **Save**, itzuli atzera eta sakatu **Confirm & Exit**.\n\n> ⚠️ **Confirm & Exit da ezarpenak estazioan idazten dituena.** Gordetzeak bakarrik ez du ezer aldatzen. Zure sentsoreak segundo bat geroago agertuko dira.\n\nEntzuten ari diren amaiera-puntuak:\n{endpoints}"
+          },
+          "received": {
+            "title": "Zure estazioa iritsi da",
+            "description": "**{station}** estazioak bere lehen bidalketa egin du. Bere sentsoreak sortzen ari dira, eta gehiago agertuko dira estazioak jakinarazi ahala.\n\nMezu hau ez da berriro agertuko."
+          },
+          "timeout": {
+            "title": "Oraindik ez da ezer jaso",
+            "description": "Ez da bidalketarik iritsi {minutes} minututan.\n\nProbabilitate-ordenan:\n\n  - **Sakatu duzu Confirm & Exit?** Zerbitzariaren pantaila gordetzeak bakarrik ez du ezer idazten estazioan.\n  - **URL** {urls_inline} izan behar da, `http://` gabe, eta estazioak zure sarean irits dezakeena.\n  - **Upload** aktibatuta egon behar da pantaila horretan.\n  - Bresser-en **3.02** bertsiotik aurrerako firmware batzuek HTTP soila baztertzen dute eta HTTPS zerbitzatzen duen helbidea eskatzen dute.\n  - Bidalketa-tartea itxaronaldia baino luzeagoa izan liteke besterik gabe.\n  - **Estazio-gakoa**: {key_hint}.\n\nEstazioa Home Assistant-era iritsi bada baina baztertua izan bada, hori bereiz jakinarazten da **Ezarpenak → Sistema → Konponketak** atalean.\n\nItxi dezakezu. Hemen geratzen da estazio bat agertu arte, eta berriro irekitzeak itxaronaldia berrabiarazten du."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Zure estazioaren lehen bidalketaren zain…"
+        },
+        "abort": {
+          "not_received": "Oraindik ez da ezer iritsi, beraz hau irekita geratzen da. Konponketetan geratzen da estazio bat agertu arte, eta berriro ireki dezakezu berriro itxaroteko."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "{station} estazioak baztertzen ari diren irakurketak bidaltzen ditu",
+      "description": "**{station}** estazioaren **{count} parametro** ez dira ezagutzen, beraz haien balioak baztertu egiten dira igoera bakoitzean:\n\n{parameters}\n\nOhiko arrazoia da estazioak bere protokoloak eraman dezakeena baino gehiago jakinaraztea. Weather Underground-ek **4 leku** baino ez ditu sentsore gehigarrietarako; zure estazioak **WSLink** eskaintzen badu *API type* gisa, hara aldatzeak zazpi kanal eta ia bikoitza diren irakurketak agerian uzten ditu.\n\nHori ez bada, parametro-izen horiek dira, hain zuzen, akats-txosten batek behar duena: ireki bat [arazoen jarraipenean]({issue_tracker}) eta gehitu ahal izango dira.\n\nHau alde batera ere utz dezakezu — ez dago ezer hautsita, balio zehatz horiek ez dira iristen, besterik ez."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "{device} estazioak ez du oraindik haizearen norabiderik bidali, beraz ez dago ezer kalibratzeko. Itxaron hurrengo bidalketari eta saiatu berriro."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Presio atmosferiko absolutua"
+      },
+      "apiver": {
+        "name": "API bertsioa"
+      },
+      "aqbc": {
+        "name": "Karbono beltza"
+      },
+      "aqco": {
+        "name": "Karbono monoxidoa"
+      },
+      "aqcot": {
+        "name": "Karbono monoxidoa arrastoetan"
+      },
+      "aqec": {
+        "name": "Karbono elementala"
+      },
+      "aqno": {
+        "name": "Nitrogeno monoxidoa"
+      },
+      "aqno2": {
+        "name": "NO2 X kalkulatua"
+      },
+      "aqno2t": {
+        "name": "Nitrogeno dioxidoa"
+      },
+      "aqno2y": {
+        "name": "NO2 Y kalkulatua"
+      },
+      "aqno3": {
+        "name": "NO3 ioia"
+      },
+      "aqnox": {
+        "name": "Nitrogeno oxidoak"
+      },
+      "aqnoy": {
+        "name": "Nitrogeno erreaktibo osoa"
+      },
+      "aqoc": {
+        "name": "Karbono organikoa"
+      },
+      "aqozone": {
+        "name": "Ozonoa"
+      },
+      "aqpm10": {
+        "name": "PM10 masa"
+      },
+      "aqpm2_5": {
+        "name": "PM2.5 masa"
+      },
+      "aqso2": {
+        "name": "Sufre dioxidoa"
+      },
+      "aqso2t": {
+        "name": "Sufre dioxidoa arrastoetan"
+      },
+      "aqso4": {
+        "name": "SO4 ioia"
+      },
+      "aquv_aeth": {
+        "name": "Etalometroa 2. kanala"
+      },
+      "baromin": {
+        "name": "Presioa"
+      },
+      "clouds": {
+        "name": "Hodei-estaldura"
+      },
+      "dailyrainin": {
+        "name": "Eguneko euria"
+      },
+      "dewptf": {
+        "name": "Ihintz-puntua"
+      },
+      "humidity": {
+        "name": "Kanpoko hezetasuna"
+      },
+      "inbat": {
+        "name": "Kontsolaren bateria-maila"
+      },
+      "indoorhumidity": {
+        "name": "Barruko hezetasuna"
+      },
+      "indoortempf": {
+        "name": "Barruko tenperatura"
+      },
+      "inhum": {
+        "name": "Barruko hezetasuna"
+      },
+      "intem": {
+        "name": "Barruko tenperatura"
+      },
+      "last_update": {
+        "name": "Azken harrera"
+      },
+      "leafwetness": {
+        "name": "Hostoen hezetasuna"
+      },
+      "leafwetness2": {
+        "name": "CH2 hostoen hezetasuna"
+      },
+      "lowbatt": {
+        "name": "Bateria baxua"
+      },
+      "monthlyrainin": {
+        "name": "Hileko euria"
+      },
+      "rainin": {
+        "name": "Orduko euria"
+      },
+      "rbar": {
+        "name": "Presio atmosferiko erlatiboa"
+      },
+      "rtfreq": {
+        "name": "Eguneratze-maiztasuna"
+      },
+      "soilmoisture": {
+        "name": "Lurzoruaren hezetasuna"
+      },
+      "soilmoisture2": {
+        "name": "CH2 lurzoruaren hezetasuna"
+      },
+      "soilmoisture3": {
+        "name": "CH3 lurzoruaren hezetasuna"
+      },
+      "soilmoisture4": {
+        "name": "CH4 lurzoruaren hezetasuna"
+      },
+      "soiltemp2f": {
+        "name": "CH2 lurzoruaren tenperatura"
+      },
+      "soiltemp3f": {
+        "name": "CH3 lurzoruaren tenperatura"
+      },
+      "soiltemp4f": {
+        "name": "CH4 lurzoruaren tenperatura"
+      },
+      "soiltempf": {
+        "name": "Lurzoruaren tenperatura"
+      },
+      "solarradiation": {
+        "name": "Eguzki-erradiazioa"
+      },
+      "t10bat": {
+        "name": "CO2 sentsorearen bateria-maila"
+      },
+      "t10cn": {
+        "name": "CO2 sentsorearen konexio-egoera"
+      },
+      "t10co2": {
+        "name": "CO2 kontzentrazioa"
+      },
+      "t11bat": {
+        "name": "CO sentsorearen bateria-maila"
+      },
+      "t11cn": {
+        "name": "CO sentsorearen konexio-egoera"
+      },
+      "t11co": {
+        "name": "CO kontzentrazioa"
+      },
+      "t1bat": {
+        "name": "Kanpoko sentsorearen bateria-egoera"
+      },
+      "t1chill": {
+        "name": "Haize-hoztearen tenperatura"
+      },
+      "t1cn": {
+        "name": "Kanpoko sentsorearen konexio-egoera"
+      },
+      "t1dew": {
+        "name": "Ihintz-puntuaren tenperatura"
+      },
+      "t1feels": {
+        "name": "Sentsazio termikoa"
+      },
+      "t1heat": {
+        "name": "Bero-indizea"
+      },
+      "t1hum": {
+        "name": "Kanpoko hezetasuna"
+      },
+      "t1raindy": {
+        "name": "Eguneko prezipitazioa"
+      },
+      "t1rainhr": {
+        "name": "Orduko prezipitazioa"
+      },
+      "t1rainmth": {
+        "name": "Hileko prezipitazioa"
+      },
+      "t1rainra": {
+        "name": "Euri-intentsitatea"
+      },
+      "t1rainwy": {
+        "name": "Asteko prezipitazioa"
+      },
+      "t1rainyr": {
+        "name": "Urteko prezipitazioa"
+      },
+      "t1solrad": {
+        "name": "Argi-intentsitatea"
+      },
+      "t1tem": {
+        "name": "Kanpoko tenperatura"
+      },
+      "t1uvi": {
+        "name": "UV indizea"
+      },
+      "t1wbgt": {
+        "name": "WBGT tenperatura"
+      },
+      "t1wdir": {
+        "name": "Haizearen norabidea"
+      },
+      "t1wgust": {
+        "name": "Haize-bolada"
+      },
+      "t1ws": {
+        "name": "Haizearen abiadura"
+      },
+      "t1ws10mav": {
+        "name": "Haizearen abiadura 10 min batez beste"
+      },
+      "t234c1bat": {
+        "name": "CH1 bateria-egoera"
+      },
+      "t234c1cn": {
+        "name": "CH1 konexio-egoera"
+      },
+      "t234c1hum": {
+        "name": "CH1 hezetasuna"
+      },
+      "t234c1tem": {
+        "name": "CH1 tenperatura"
+      },
+      "t234c1tp": {
+        "name": "CH1 sentsore mota"
+      },
+      "t234c2bat": {
+        "name": "CH2 bateria-egoera"
+      },
+      "t234c2cn": {
+        "name": "CH2 konexio-egoera"
+      },
+      "t234c2hum": {
+        "name": "CH2 hezetasuna"
+      },
+      "t234c2tem": {
+        "name": "CH2 tenperatura"
+      },
+      "t234c2tp": {
+        "name": "CH2 sentsore mota"
+      },
+      "t234c3bat": {
+        "name": "CH3 bateria-egoera"
+      },
+      "t234c3cn": {
+        "name": "CH3 konexio-egoera"
+      },
+      "t234c3hum": {
+        "name": "CH3 hezetasuna"
+      },
+      "t234c3tem": {
+        "name": "CH3 tenperatura"
+      },
+      "t234c3tp": {
+        "name": "CH3 sentsore mota"
+      },
+      "t234c4bat": {
+        "name": "CH4 bateria-egoera"
+      },
+      "t234c4cn": {
+        "name": "CH4 konexio-egoera"
+      },
+      "t234c4hum": {
+        "name": "CH4 hezetasuna"
+      },
+      "t234c4tem": {
+        "name": "CH4 tenperatura"
+      },
+      "t234c4tp": {
+        "name": "CH4 sentsore mota"
+      },
+      "t234c5bat": {
+        "name": "CH5 bateria-egoera"
+      },
+      "t234c5cn": {
+        "name": "CH5 konexio-egoera"
+      },
+      "t234c5hum": {
+        "name": "CH5 hezetasuna"
+      },
+      "t234c5tem": {
+        "name": "CH5 tenperatura"
+      },
+      "t234c5tp": {
+        "name": "CH5 sentsore mota"
+      },
+      "t234c6bat": {
+        "name": "CH6 bateria-egoera"
+      },
+      "t234c6cn": {
+        "name": "CH6 konexio-egoera"
+      },
+      "t234c6hum": {
+        "name": "CH6 hezetasuna"
+      },
+      "t234c6tem": {
+        "name": "CH6 tenperatura"
+      },
+      "t234c6tp": {
+        "name": "CH6 sentsore mota"
+      },
+      "t234c7bat": {
+        "name": "CH7 bateria-egoera"
+      },
+      "t234c7cn": {
+        "name": "CH7 konexio-egoera"
+      },
+      "t234c7hum": {
+        "name": "CH7 hezetasuna"
+      },
+      "t234c7tem": {
+        "name": "CH7 tenperatura"
+      },
+      "t234c7tp": {
+        "name": "CH7 sentsore mota"
+      },
+      "t5ls1dtc": {
+        "name": "Tximistak guztira egun 1ean"
+      },
+      "t5ls1htc": {
+        "name": "Tximistak guztira ordu 1ean"
+      },
+      "t5ls30mtc": {
+        "name": "Azken 30 minutuetako tximistak"
+      },
+      "t5ls5mtc": {
+        "name": "Azken 5 minutuetako tximistak"
+      },
+      "t5lsbat": {
+        "name": "Tximista-sentsorearen bateria-egoera"
+      },
+      "t5lscn": {
+        "name": "Tximista-sentsorearen konexio-egoera"
+      },
+      "t5lsf": {
+        "name": "Azken orduko tximistak"
+      },
+      "t5lskm": {
+        "name": "Tximistaren distantzia"
+      },
+      "t5lst": {
+        "name": "Azken tximistaren ordua"
+      },
+      "t6c1bat": {
+        "name": "CH1 ur-ihes detektagailuaren bateria-egoera"
+      },
+      "t6c1cn": {
+        "name": "CH1 ur-ihes detektagailuaren konexio-egoera"
+      },
+      "t6c1wls": {
+        "name": "CH1 ur-ihesaren egoera"
+      },
+      "t6c2bat": {
+        "name": "CH2 ur-ihes detektagailuaren bateria-egoera"
+      },
+      "t6c2cn": {
+        "name": "CH2 ur-ihes detektagailuaren konexio-egoera"
+      },
+      "t6c2wls": {
+        "name": "CH2 ur-ihesaren egoera"
+      },
+      "t6c3bat": {
+        "name": "CH3 ur-ihes detektagailuaren bateria-egoera"
+      },
+      "t6c3cn": {
+        "name": "CH3 ur-ihes detektagailuaren konexio-egoera"
+      },
+      "t6c3wls": {
+        "name": "CH3 ur-ihesaren egoera"
+      },
+      "t6c4bat": {
+        "name": "CH4 ur-ihes detektagailuaren bateria-egoera"
+      },
+      "t6c4cn": {
+        "name": "CH4 ur-ihes detektagailuaren konexio-egoera"
+      },
+      "t6c4wls": {
+        "name": "CH4 ur-ihesaren egoera"
+      },
+      "t6c5bat": {
+        "name": "CH5 ur-ihes detektagailuaren bateria-egoera"
+      },
+      "t6c5cn": {
+        "name": "CH5 ur-ihes detektagailuaren konexio-egoera"
+      },
+      "t6c5wls": {
+        "name": "CH5 ur-ihesaren egoera"
+      },
+      "t6c6bat": {
+        "name": "CH6 ur-ihes detektagailuaren bateria-egoera"
+      },
+      "t6c6cn": {
+        "name": "CH6 ur-ihes detektagailuaren konexio-egoera"
+      },
+      "t6c6wls": {
+        "name": "CH6 ur-ihesaren egoera"
+      },
+      "t6c7bat": {
+        "name": "CH7 ur-ihes detektagailuaren bateria-egoera"
+      },
+      "t6c7cn": {
+        "name": "CH7 ur-ihes detektagailuaren konexio-egoera"
+      },
+      "t6c7wls": {
+        "name": "CH7 ur-ihesaren egoera"
+      },
+      "t8bat": {
+        "name": "Partikula-sentsorearen bateria-maila"
+      },
+      "t8cn": {
+        "name": "Partikula-sentsorearen konexio-egoera"
+      },
+      "t8pm10": {
+        "name": "PM10 kontzentrazioa"
+      },
+      "t8pm10ai": {
+        "name": "PM10 AQI"
+      },
+      "t8pm25": {
+        "name": "PM2.5 kontzentrazioa"
+      },
+      "t8pm25ai": {
+        "name": "PM2.5 AQI"
+      },
+      "t9bat": {
+        "name": "HCHO/KOL sentsorearen bateria-maila"
+      },
+      "t9cn": {
+        "name": "HCHO/KOL sentsorearen konexio-egoera"
+      },
+      "t9hcho": {
+        "name": "HCHO kontzentrazioa"
+      },
+      "t9voclv": {
+        "name": "KOL maila",
+        "state": {
+          "very_low": "Oso baxua",
+          "low": "Baxua",
+          "moderate": "Ertaina",
+          "high": "Altua",
+          "very_high": "Oso altua"
+        }
+      },
+      "tempf": {
+        "name": "Kanpoko tenperatura"
+      },
+      "uv": {
+        "name": "UV indizea"
+      },
+      "visibility": {
+        "name": "Ikusgarritasuna"
+      },
+      "weeklyrainin": {
+        "name": "Asteko euria"
+      },
+      "wind_direction_raw": {
+        "name": "Haizearen norabidea (gordina)"
+      },
+      "windchillf": {
+        "name": "Haizeak eragindako hoztea"
+      },
+      "winddir": {
+        "name": "Haizearen norabidea"
+      },
+      "winddir_avg2m": {
+        "name": "Haizearen norabidea 2 min batez beste"
+      },
+      "windgustdir": {
+        "name": "Boladaren norabidea"
+      },
+      "windgustdir_10m": {
+        "name": "Boladaren norabidea 10 min batez beste"
+      },
+      "windgustmph": {
+        "name": "Haize-bolada"
+      },
+      "windgustmph_10m": {
+        "name": "Boladaren abiadura 10 min batez beste"
+      },
+      "windspdmph_avg2m": {
+        "name": "Haizearen abiadura 2 min batez beste"
+      },
+      "windspeedmph": {
+        "name": "Haizearen abiadura"
+      },
+      "yearlyrainin": {
+        "name": "Urteko euria"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Kontsolaren bateria-maila"
+      },
+      "station_online": {
+        "name": "Estazioa linean"
+      },
+      "t10cn": {
+        "name": "CO2 sentsorearen konexio-egoera"
+      },
+      "t11cn": {
+        "name": "CO sentsorearen konexio-egoera"
+      },
+      "t1bat": {
+        "name": "Kanpoko sentsorearen bateria-egoera"
+      },
+      "t1cn": {
+        "name": "Kanpoko sentsorearen konexio-egoera"
+      },
+      "t234c1bat": {
+        "name": "CH1 bateria-egoera"
+      },
+      "t234c1cn": {
+        "name": "CH1 konexio-egoera"
+      },
+      "t234c2bat": {
+        "name": "CH2 bateria-egoera"
+      },
+      "t234c2cn": {
+        "name": "CH2 konexio-egoera"
+      },
+      "t234c3bat": {
+        "name": "CH3 bateria-egoera"
+      },
+      "t234c3cn": {
+        "name": "CH3 konexio-egoera"
+      },
+      "t234c4bat": {
+        "name": "CH4 bateria-egoera"
+      },
+      "t234c4cn": {
+        "name": "CH4 konexio-egoera"
+      },
+      "t234c5bat": {
+        "name": "CH5 bateria-egoera"
+      },
+      "t234c5cn": {
+        "name": "CH5 konexio-egoera"
+      },
+      "t234c6bat": {
+        "name": "CH6 bateria-egoera"
+      },
+      "t234c6cn": {
+        "name": "CH6 konexio-egoera"
+      },
+      "t234c7bat": {
+        "name": "CH7 bateria-egoera"
+      },
+      "t234c7cn": {
+        "name": "CH7 konexio-egoera"
+      },
+      "t5lsbat": {
+        "name": "Tximista-sentsorearen bateria-egoera"
+      },
+      "t5lscn": {
+        "name": "Tximista-sentsorearen konexio-egoera"
+      },
+      "t6c1bat": {
+        "name": "CH1 ur-ihes detektagailuaren bateria-egoera"
+      },
+      "t6c1cn": {
+        "name": "CH1 ur-ihes detektagailuaren konexio-egoera"
+      },
+      "t6c1wls": {
+        "name": "CH1 ur-ihesaren egoera"
+      },
+      "t6c2bat": {
+        "name": "CH2 ur-ihes detektagailuaren bateria-egoera"
+      },
+      "t6c2cn": {
+        "name": "CH2 ur-ihes detektagailuaren konexio-egoera"
+      },
+      "t6c2wls": {
+        "name": "CH2 ur-ihesaren egoera"
+      },
+      "t6c3bat": {
+        "name": "CH3 ur-ihes detektagailuaren bateria-egoera"
+      },
+      "t6c3cn": {
+        "name": "CH3 ur-ihes detektagailuaren konexio-egoera"
+      },
+      "t6c3wls": {
+        "name": "CH3 ur-ihesaren egoera"
+      },
+      "t6c4bat": {
+        "name": "CH4 ur-ihes detektagailuaren bateria-egoera"
+      },
+      "t6c4cn": {
+        "name": "CH4 ur-ihes detektagailuaren konexio-egoera"
+      },
+      "t6c4wls": {
+        "name": "CH4 ur-ihesaren egoera"
+      },
+      "t6c5bat": {
+        "name": "CH5 ur-ihes detektagailuaren bateria-egoera"
+      },
+      "t6c5cn": {
+        "name": "CH5 ur-ihes detektagailuaren konexio-egoera"
+      },
+      "t6c5wls": {
+        "name": "CH5 ur-ihesaren egoera"
+      },
+      "t6c6bat": {
+        "name": "CH6 ur-ihes detektagailuaren bateria-egoera"
+      },
+      "t6c6cn": {
+        "name": "CH6 ur-ihes detektagailuaren konexio-egoera"
+      },
+      "t6c6wls": {
+        "name": "CH6 ur-ihesaren egoera"
+      },
+      "t6c7bat": {
+        "name": "CH7 ur-ihes detektagailuaren bateria-egoera"
+      },
+      "t6c7cn": {
+        "name": "CH7 ur-ihes detektagailuaren konexio-egoera"
+      },
+      "t6c7wls": {
+        "name": "CH7 ur-ihesaren egoera"
+      },
+      "t8cn": {
+        "name": "Partikula-sentsorearen konexio-egoera"
+      },
+      "t9cn": {
+        "name": "HCHO/KOL sentsorearen konexio-egoera"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Haizearen norabidearen desplazamendua"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Berrezarri desplazamendua"
+      },
+      "set_north": {
+        "name": "Ezarri iparra uneko balioarekin"
+      }
+    }
+  }
+}

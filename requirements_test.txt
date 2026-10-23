@@ -1,0 +1,8 @@
+# Pulls in Home Assistant itself plus the pytest fixtures custom components need.
+#
+# Pinned deliberately. Left floating, CI resolved a different Home Assistant
+# than the one used locally and failed on API differences that had nothing to do
+# with the change being tested — which is exactly the kind of noise that trains
+# people to ignore a red build. Bumping this is a deliberate act, and the suite
+# avoids version-specific registry lookups so the bump stays cheap.
+pytest-homeassistant-custom-component==0.13.358

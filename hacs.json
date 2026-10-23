@@ -1,4 +1,5 @@
 {
   "name": "Personal Weather Station (PWS)",
-  "content_in_root": false
+  "content_in_root": false,
+  "homeassistant": "2025.3.0"
 }

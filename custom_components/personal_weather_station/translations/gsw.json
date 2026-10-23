@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Persönlichi Wetterstation",
+        "description": "Setz da en Stationsschlüssel, wo dini Wetterstatione müend mitschicke, damit ihri Date nöd abglehnt werdet. Wenn du s Fäld leer lasch, werdet alli Aafrage aagno.",
+        "data": {
+          "password": "Stationsschlüssel"
+        }
+      },
+      "station": {
+        "title": "Schritt 1 vo 5 — dini Stazion",
+        "description": "{image}\n\nDini Wetterstazion legt ihri Grät und Sensore sälber a, do gits also nüt zuezfüege. Was chunnt, isch das, wo du i de App vo de Stazion iiträisch.\n\nMach d App uf, luag, ob d Firmware vo de Stazion aktuell isch, und mach denn ihri Iistellige uf."
+      },
+      "settings": {
+        "title": "Schritt 2 vo 5 — Wetterdienscht",
+        "description": "{image}\n\nWähl **Weather server**."
+      },
+      "server": {
+        "title": "Schritt 3 vo 5 — andere Server",
+        "description": "{image}\n\nWähl **Other Server**."
+      },
+      "form": {
+        "title": "Schritt 4 vo 5 — Server-Iistellige",
+        "description": "{image}\n\nFüll s Formular us und drück denn **Save**.\n\n**URL**\n{urls}\nOhni `http://` oder `https://`. Nimm en Adrässe, wo dini Stazion i dim eigene Netz cha erreiche — es git kei Grund, Home Assistant defür is Internet z stelle. Wenn dini Stazion kei Näme cha uflöse, nimm d IP-Adrässe.\n\n**Station ID** — was du wotsch. Drus wird de Grätname i Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 Minute isch en guete Wert.\n\n**API type** — *WSLink API*. Wähl *WUnderground API* nur, wenn dini Stazion kei WSLink aabietet: es überträgt halb so vil Wärt und nur vier Kanäl.\n\n**Upload** — la's aa.\n\n> ⏱️ Es paar Stazione verlüred s WLAN, wenn du uf dem Bildschirm bliibsch hocke. Han d Adrässe parat, trag si ii und speicher."
+      },
+      "confirm": {
+        "title": "Schritt 5 vo 5 — confirm & exit",
+        "description": "{image}\n\nGang zrugg und drück denn **Confirm & Exit**.\n\n> ⚠️ **Confirm & Exit isch das, wo d Iistellige i d Stazion schriibt.** Nur speichere ändered nüt.\n\nDrück uf Wiiter, sobald das erlediget isch."
+      },
+      "received": {
+        "title": "Dini Stazion redt mit Home Assistant",
+        "description": "**{station}** het grad de erscht Datesatz gschickt.\n\nIhri Sensore chömed mit em nächschte und werded us dem gmacht, was d Stazion würklich schickt — do gits nüt uszwähle."
+      },
+      "timeout": {
+        "title": "Es isch no nüt cho",
+        "description": "I de letschte {minutes} Minute het kei Stazion öppis gschickt.{key_hint_extra}\n\nDi üblichi Ursache sind en Adrässe, wo d Stazion nid erreicht, es nid drückts **Confirm & Exit**, oder e Firmware ab 3.02, wo HTTPS verlangt.\n\nD Adrässe, wo mer si druf richtet, sind:\n{urls}\nD Ändpünkt, wo uf Uploads lose, sind:\n{endpoints}\n\nDrück uf Wiiter, zum trotzdem abzschliesse — d Iirichtig bliibt, d Ändpünkt lose würklich, und e Reparatur bringt di do zrugg, bis e Stazion uftaucht."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Scho iigrichtet. Ei einzigi Instanz bedient alli Wetterstatione."
+    },
+    "progress": {
+      "waiting_for_station": "Warte uf de erscht Datesatz vo dinere Stazion…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Persönlichi Wetterstation",
+        "menu_options": {
+          "options": "Iistellige",
+          "instructions": "Wie mer e Station uf Home Assistant uusrichtet"
+        }
+      },
+      "options": {
+        "title": "Persönlichi Wetterstation",
+        "description": "Setz da en Stationsschlüssel, wo dini Wetterstatione müend mitschicke, damit ihri Date nöd abglehnt werdet. Wenn du s Fäld leer lasch, werdet alli Aafrage aagno.",
+        "data": {
+          "password": "Stationsschlüssel",
+          "availability_timeout": "Als nöd verfüegbar markiere nach (Minute)",
+          "debug": "Jedi iigehendi Aafrag protokolliere"
+        },
+        "data_description": {
+          "availability_timeout": "Wie lang e Station cha stumm bliibe, bevor ihri Sensore als nöd verfüegbar markiert werdet. 0 heisst nie markiere.",
+          "debug": "Schriibt de ganz Inhalt vo jedere Aafrag is Home-Assistant-Protokoll. Nützlich bim Iirichte vonere Station, nachher störend."
+        }
+      },
+      "station": {
+        "title": "Schritt 1 vo 5 — dini Stazion",
+        "description": "{image}\n\nDini Wetterstazion legt ihri Grät und Sensore sälber a, do gits also nüt zuezfüege. Was chunnt, isch das, wo du i de App vo de Stazion iiträisch.\n\nMach d App uf, luag, ob d Firmware vo de Stazion aktuell isch, und mach denn ihri Iistellige uf."
+      },
+      "settings": {
+        "title": "Schritt 2 vo 5 — Wetterdienscht",
+        "description": "{image}\n\nWähl **Weather server**."
+      },
+      "server": {
+        "title": "Schritt 3 vo 5 — andere Server",
+        "description": "{image}\n\nWähl **Other Server**."
+      },
+      "form": {
+        "title": "Schritt 4 vo 5 — Server-Iistellige",
+        "description": "{image}\n\nFüll s Formular us und drück denn **Save**.\n\n**URL**\n{urls}\nOhni `http://` oder `https://`. Nimm en Adrässe, wo dini Stazion i dim eigene Netz cha erreiche — es git kei Grund, Home Assistant defür is Internet z stelle. Wenn dini Stazion kei Näme cha uflöse, nimm d IP-Adrässe.\n\n**Station ID** — was du wotsch. Drus wird de Grätname i Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 Minute isch en guete Wert.\n\n**API type** — *WSLink API*. Wähl *WUnderground API* nur, wenn dini Stazion kei WSLink aabietet: es überträgt halb so vil Wärt und nur vier Kanäl.\n\n**Upload** — la's aa.\n\n> ⏱️ Es paar Stazione verlüred s WLAN, wenn du uf dem Bildschirm bliibsch hocke. Han d Adrässe parat, trag si ii und speicher."
+      },
+      "confirm": {
+        "title": "Schritt 5 vo 5 — confirm & exit",
+        "description": "{image}\n\nGang zrugg und drück denn **Confirm & Exit**.\n\n> ⚠️ **Confirm & Exit isch das, wo d Iistellige i d Stazion schriibt.** Nur speichere ändered nüt.\n\nDrück uf Wiiter, sobald das erlediget isch."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Wetterstation abglehnt: falsche Stationsschlüssel",
+      "description": "E Wetterstation uf {ip} het probiert, Date als `{station_id}` z schicke, ohni de erwarteti Stationsschlüssel mitzschicke.\n\nPrüef, öb de Schlüssel i de Station oder i de WSLink-App mit dem übereistimmt, wo da iigstellt isch. Die Meldig verschwindet vo selber, sobald e Aafrag vo {ip} aagno wird."
+    },
+    "missing_device_id": {
+      "title": "Wetterstation abglehnt: kei Stationskennig",
+      "description": "E Wetterstation uf {ip} het Date ohni Stationskennig gschickt.\n\nSetz i de WSLink-App e Sender ID, oder en ID-Parameter i de Stationskonfiguration. Die Meldig verschwindet vo selber, sobald e Aafrag vo {ip} aagno wird."
+    },
+    "legacy_entity_ids": {
+      "title": "D Entitäts-IDs widerholed de Stationsname",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "D Entitäts-IDs chürze",
+            "description": "Bis zur Version 1.0.8 het die Integration Entitäts-IDs baut, wo de Stationsname zwöimal drin händ, zum Bispil `{example_old}`. Neui Statione machid das nüme.\n\n**{count} Entitäte** chönd umbenennt werde, zum Bispil zu `{example_new}`.\n\nDe Verlauf und d Langzytstatistike folged de Umbenennig automatisch. **Automatisierige, Skript, Szene und Dashboards nöd** — alles, wo uf di alte IDs zeigt, muesch du sälber aapasse.\n\nWenn dus lieber so lah wotsch, ignorier die Reparatur."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Verbindigs-, Läck- und Batteriewärt sind no Zahle",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "I binäri Sensore umwandle",
+            "description": "Verbindigs-, Wasserläck- und Batteriewärt werde als 1 oder 0 gschickt. Bis Version 1.0.8 sind si als numerischi Sensore zeigt worde, öppe `{example}`, wo sich mit de Standardkarte für Läckaasch, Verbindig und schwachi Batterie im Home Assistant nid bruuche lönd. Neui Stazione überchömed binäri Sensore, wo **Nass / Trochne**, **Verbunde / Trennt** und **Aa / Uus** zeiged.\n\n**{count} Entitäte** chöi umgstellt werde. D Batteriestufe 0~5 vo de Luftqualitätssensore bhalted ihre Prozentwärt: sächs Stuefe sind meh, als es Ii/Uus cha trage.\n\nE Plattform-Wächsel isch kei Umbenennig: di alte Entitäte werded glöscht und als `binary_sensor` neu aaglegt. **Ihre ufzeichnet Verlauf gaht verlore** — die Wärt hend kei Langziitstatistik, drum isch nume de rohi Verlauf betroffe — und **Automatisierige, Skript, Szene und Dashboards, wo druf zeiged, müend aapasst werde**. D neue Entitäte tauched bim nächschte Upload vo de Stazion uf.\n\nWenn du si lieber so wotsch la, ignorier die Reparatur."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "No kei Wetterstation het öppis gschickt",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Richte dini Wetterstation ii",
+            "description": "Dini Wetterstation macht d Grät und d Sensore — da gits nüt zum Zuefüege.\n\nMach i de App vo de Station dini Station uf, denn **Settings → Weather server → Other Server**, und füll uus:\n\n**URL**\n{urls}\nOhni `http://` oder `https://`. Nimm e Adress, wo dini Station i dim eigne Netz erreiche cha — es git kein Grund, Home Assistant defür is Internet z stelle. Wenn dini Station kei Näme uflöse cha, nimm d IP-Adress.\n\n**Station ID** — was du wotsch. Das wird de Grätname i Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 Minute isch en guete Wert.\n\n**API type** — *WSLink API*.\n\n**Upload** — lass es aa.\n\nDrück **Save**, gang zrugg und drück denn **Confirm & Exit**.\n\n> ⚠️ **Erst Confirm & Exit schriibt d Iistellige i d Station.** Nur spichere ändered nüt. Dini Sensore tauchid e Sekunde später uf.\n\nD lauschende Ändpünkt sind:\n{endpoints}"
+          },
+          "received": {
+            "title": "Dini Station isch dure",
+            "description": "**{station}** het ihri erschti Übertragig gschickt. Ihri Sensore werded grad aagleit, und es chömed no meh dezue, sobald d Station si meldet.\n\nDie Meldig chunt nöd zrugg."
+          },
+          "timeout": {
+            "title": "No nüt übercho",
+            "description": "I {minutes} Minute isch kei Übertragig cho.\n\nNach Wahrschiinlichkeit:\n\n  - **Häsch Confirm & Exit drückt?** Nur de Server-Bildschirm spichere schriibt nüt i d Station.\n  - D **URL** mues {urls_inline} sii, ohni `http://`, und für d Station i dim Netz erreichbar.\n  - **Upload** mues uf dem Bildschirm aa sii.\n  - Es paar Bresser-Firmwares ab **3.02** wiiseret eifachs HTTP zrugg und bruuchid e Adress mit HTTPS.\n  - S Übertragigsintervall isch villicht eifach länger als d Wartezyt.\n  - **Stationsschlüssel**: {key_hint}.\n\nWenn d Station Home Assistant erreicht het, aber abgleht worde isch, wird das separat under **Iistellige → System → Reparature** gmeldet.\n\nDu chasch zuemache. Es bliibt da, bis e Station uftaucht, und wenn dus wieder ufmachsch, fangt d Wartezyt vo vorne aa."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Warte uf di erschti Übertragig vo dinere Station…"
+        },
+        "abort": {
+          "not_received": "Es isch no nüt cho, drum bliibt das offe. Es bliibt i de Reparature, bis e Station uftaucht, und du chasch es wieder ufmache zum nomal warte."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "D Stazion {station} schickt Wärt, wo verworfe werde",
+      "description": "**{count} Parameter** vo **{station}** werde nid erkennt, drum werde ihri Wärt bi jedem Uebertrag verworfe:\n\n{parameters}\n\nDe üblich Grund isch e Stazion, wo meh meldet, als ihres Protokoll cha trage. Weather Underground het nume **4 Plätz** für zuesätzligi Sensore; wenn dini Stazion **WSLink** als *API type* aabietet, macht e Wächsel dert ane sibe Kanäl und öppe doppelt so vil Wärt zuegänglich.\n\nWenn's das nid isch, si genau die Parameternäme, wo e Fählermäldig bruucht: mach eini uf im [Issue-Tracker]({issue_tracker}) uf, denn chöi si zuegfüegt werde.\n\nDu chasch das au ignoriere — es isch nüt kaputt, die bestimmte Wärt chöme eifach nid aa."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "D Station {device} het no kei Windrichtig gschickt, drum gits nüt zum Kalibriere. Wart uf di nächst Übertragig und probiers nomal."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Absolute Luftdruck"
+      },
+      "apiver": {
+        "name": "API-Version"
+      },
+      "aqbc": {
+        "name": "Schwarze Chohlestoff"
+      },
+      "aqco": {
+        "name": "Chohlemonoxid"
+      },
+      "aqcot": {
+        "name": "Chohlemonoxid i Spure"
+      },
+      "aqec": {
+        "name": "Elementare Chohlestoff"
+      },
+      "aqno": {
+        "name": "Stickstoffmonoxid"
+      },
+      "aqno2": {
+        "name": "NO2 X berächnet"
+      },
+      "aqno2t": {
+        "name": "Stickstoffdioxid"
+      },
+      "aqno2y": {
+        "name": "NO2 Y berächnet"
+      },
+      "aqno3": {
+        "name": "NO3-Ion"
+      },
+      "aqnox": {
+        "name": "Stickoxid"
+      },
+      "aqnoy": {
+        "name": "Reaktive Gsamtstickstoff"
+      },
+      "aqoc": {
+        "name": "Organische Chohlestoff"
+      },
+      "aqozone": {
+        "name": "Ozon"
+      },
+      "aqpm10": {
+        "name": "PM10-Masse"
+      },
+      "aqpm2_5": {
+        "name": "PM2.5-Masse"
+      },
+      "aqso2": {
+        "name": "Schwefeldioxid"
+      },
+      "aqso2t": {
+        "name": "Schwefeldioxid i Spure"
+      },
+      "aqso4": {
+        "name": "SO4-Ion"
+      },
+      "aquv_aeth": {
+        "name": "Aethalometer Kanal 2"
+      },
+      "baromin": {
+        "name": "Druck"
+      },
+      "clouds": {
+        "name": "Bewölkig"
+      },
+      "dailyrainin": {
+        "name": "Täglichi Räge"
+      },
+      "dewptf": {
+        "name": "Taupunkt"
+      },
+      "humidity": {
+        "name": "Usse-Füechtigkeit"
+      },
+      "inbat": {
+        "name": "Batteriestand vo de Konsole"
+      },
+      "indoorhumidity": {
+        "name": "Inne-Füechtigkeit"
+      },
+      "indoortempf": {
+        "name": "Inne-Temperatur"
+      },
+      "inhum": {
+        "name": "Inne-Füechtigkeit"
+      },
+      "intem": {
+        "name": "Inne-Temperatur"
+      },
+      "last_update": {
+        "name": "Letschte Empfang"
+      },
+      "leafwetness": {
+        "name": "Blattnässi"
+      },
+      "leafwetness2": {
+        "name": "CH2 blattnässi"
+      },
+      "lowbatt": {
+        "name": "Batterie schwach"
+      },
+      "monthlyrainin": {
+        "name": "Monatlichi Räge"
+      },
+      "rainin": {
+        "name": "Stündliche Räge"
+      },
+      "rbar": {
+        "name": "Relative Luftdruck"
+      },
+      "rtfreq": {
+        "name": "Aktualisierigsintervall"
+      },
+      "soilmoisture": {
+        "name": "Bodefüechtigkeit"
+      },
+      "soilmoisture2": {
+        "name": "CH2 bodefüechtigkeit"
+      },
+      "soilmoisture3": {
+        "name": "CH3 bodefüechtigkeit"
+      },
+      "soilmoisture4": {
+        "name": "CH4 bodefüechtigkeit"
+      },
+      "soiltemp2f": {
+        "name": "CH2 bodetemperatur"
+      },
+      "soiltemp3f": {
+        "name": "CH3 bodetemperatur"
+      },
+      "soiltemp4f": {
+        "name": "CH4 bodetemperatur"
+      },
+      "soiltempf": {
+        "name": "Bodetemperatur"
+      },
+      "solarradiation": {
+        "name": "Sunnestrahlig"
+      },
+      "t10bat": {
+        "name": "Batteriestand vom CO2-Sensor"
+      },
+      "t10cn": {
+        "name": "Verbindigszuestand vom CO2-Sensor"
+      },
+      "t10co2": {
+        "name": "CO2-Konzentration"
+      },
+      "t11bat": {
+        "name": "Batteriestand vom CO-Sensor"
+      },
+      "t11cn": {
+        "name": "Verbindigszuestand vom CO-Sensor"
+      },
+      "t11co": {
+        "name": "CO-Konzentration"
+      },
+      "t1bat": {
+        "name": "Batteriezuestand vom Ussesensor"
+      },
+      "t1chill": {
+        "name": "Windchill-Temperatur"
+      },
+      "t1cn": {
+        "name": "Verbindigszuestand vom Ussesensor"
+      },
+      "t1dew": {
+        "name": "Taupunkttemperatur"
+      },
+      "t1feels": {
+        "name": "Gfüehlti Temperatur"
+      },
+      "t1heat": {
+        "name": "Hitzindex"
+      },
+      "t1hum": {
+        "name": "Usse-Füechtigkeit"
+      },
+      "t1raindy": {
+        "name": "Täglichi Niiderschlagsmängi"
+      },
+      "t1rainhr": {
+        "name": "Stündlichi Niiderschlagsmängi"
+      },
+      "t1rainmth": {
+        "name": "Monatlichi Niiderschlagsmängi"
+      },
+      "t1rainra": {
+        "name": "Rägerate"
+      },
+      "t1rainwy": {
+        "name": "Wüchentlichi Niiderschlagsmängi"
+      },
+      "t1rainyr": {
+        "name": "Jährlichi Niiderschlagsmängi"
+      },
+      "t1solrad": {
+        "name": "Liechtstärchi"
+      },
+      "t1tem": {
+        "name": "Usse-Temperatur"
+      },
+      "t1uvi": {
+        "name": "UV-Index"
+      },
+      "t1wbgt": {
+        "name": "WBGT-Temperatur"
+      },
+      "t1wdir": {
+        "name": "Windrichtig"
+      },
+      "t1wgust": {
+        "name": "Windböi"
+      },
+      "t1ws": {
+        "name": "Windgschwindigkeit"
+      },
+      "t1ws10mav": {
+        "name": "Windgschwindigkeit 10 Min. Mittel"
+      },
+      "t234c1bat": {
+        "name": "CH1 batteriezuestand"
+      },
+      "t234c1cn": {
+        "name": "CH1 verbindigszuestand"
+      },
+      "t234c1hum": {
+        "name": "CH1 füechtigkeit"
+      },
+      "t234c1tem": {
+        "name": "CH1 temperatur"
+      },
+      "t234c1tp": {
+        "name": "CH1 sensortyp"
+      },
+      "t234c2bat": {
+        "name": "CH2 batteriezuestand"
+      },
+      "t234c2cn": {
+        "name": "CH2 verbindigszuestand"
+      },
+      "t234c2hum": {
+        "name": "CH2 füechtigkeit"
+      },
+      "t234c2tem": {
+        "name": "CH2 temperatur"
+      },
+      "t234c2tp": {
+        "name": "CH2 sensortyp"
+      },
+      "t234c3bat": {
+        "name": "CH3 batteriezuestand"
+      },
+      "t234c3cn": {
+        "name": "CH3 verbindigszuestand"
+      },
+      "t234c3hum": {
+        "name": "CH3 füechtigkeit"
+      },
+      "t234c3tem": {
+        "name": "CH3 temperatur"
+      },
+      "t234c3tp": {
+        "name": "CH3 sensortyp"
+      },
+      "t234c4bat": {
+        "name": "CH4 batteriezuestand"
+      },
+      "t234c4cn": {
+        "name": "CH4 verbindigszuestand"
+      },
+      "t234c4hum": {
+        "name": "CH4 füechtigkeit"
+      },
+      "t234c4tem": {
+        "name": "CH4 temperatur"
+      },
+      "t234c4tp": {
+        "name": "CH4 sensortyp"
+      },
+      "t234c5bat": {
+        "name": "CH5 batteriezuestand"
+      },
+      "t234c5cn": {
+        "name": "CH5 verbindigszuestand"
+      },
+      "t234c5hum": {
+        "name": "CH5 füechtigkeit"
+      },
+      "t234c5tem": {
+        "name": "CH5 temperatur"
+      },
+      "t234c5tp": {
+        "name": "CH5 sensortyp"
+      },
+      "t234c6bat": {
+        "name": "CH6 batteriezuestand"
+      },
+      "t234c6cn": {
+        "name": "CH6 verbindigszuestand"
+      },
+      "t234c6hum": {
+        "name": "CH6 füechtigkeit"
+      },
+      "t234c6tem": {
+        "name": "CH6 temperatur"
+      },
+      "t234c6tp": {
+        "name": "CH6 sensortyp"
+      },
+      "t234c7bat": {
+        "name": "CH7 batteriezuestand"
+      },
+      "t234c7cn": {
+        "name": "CH7 verbindigszuestand"
+      },
+      "t234c7hum": {
+        "name": "CH7 füechtigkeit"
+      },
+      "t234c7tem": {
+        "name": "CH7 temperatur"
+      },
+      "t234c7tp": {
+        "name": "CH7 sensortyp"
+      },
+      "t5ls1dtc": {
+        "name": "Blitz total a 1 Tag"
+      },
+      "t5ls1htc": {
+        "name": "Blitz total i 1 Stund"
+      },
+      "t5ls30mtc": {
+        "name": "Blitz i de letschte 30 Minute"
+      },
+      "t5ls5mtc": {
+        "name": "Blitz i de letschte 5 Minute"
+      },
+      "t5lsbat": {
+        "name": "Batteriezuestand vom Blitzsensor"
+      },
+      "t5lscn": {
+        "name": "Verbindigszuestand vom Blitzsensor"
+      },
+      "t5lsf": {
+        "name": "Blitz i de letschte Stund"
+      },
+      "t5lskm": {
+        "name": "Blitzdistanz"
+      },
+      "t5lst": {
+        "name": "Ziit vom letschte Blitz"
+      },
+      "t6c1bat": {
+        "name": "CH1 batteriezuestand vom Leck-Sensor"
+      },
+      "t6c1cn": {
+        "name": "CH1 verbindigszuestand vom Leck-Sensor"
+      },
+      "t6c1wls": {
+        "name": "CH1 wasserleck-Zuestand"
+      },
+      "t6c2bat": {
+        "name": "CH2 batteriezuestand vom Leck-Sensor"
+      },
+      "t6c2cn": {
+        "name": "CH2 verbindigszuestand vom Leck-Sensor"
+      },
+      "t6c2wls": {
+        "name": "CH2 wasserleck-Zuestand"
+      },
+      "t6c3bat": {
+        "name": "CH3 batteriezuestand vom Leck-Sensor"
+      },
+      "t6c3cn": {
+        "name": "CH3 verbindigszuestand vom Leck-Sensor"
+      },
+      "t6c3wls": {
+        "name": "CH3 wasserleck-Zuestand"
+      },
+      "t6c4bat": {
+        "name": "CH4 batteriezuestand vom Leck-Sensor"
+      },
+      "t6c4cn": {
+        "name": "CH4 verbindigszuestand vom Leck-Sensor"
+      },
+      "t6c4wls": {
+        "name": "CH4 wasserleck-Zuestand"
+      },
+      "t6c5bat": {
+        "name": "CH5 batteriezuestand vom Leck-Sensor"
+      },
+      "t6c5cn": {
+        "name": "CH5 verbindigszuestand vom Leck-Sensor"
+      },
+      "t6c5wls": {
+        "name": "CH5 wasserleck-Zuestand"
+      },
+      "t6c6bat": {
+        "name": "CH6 batteriezuestand vom Leck-Sensor"
+      },
+      "t6c6cn": {
+        "name": "CH6 verbindigszuestand vom Leck-Sensor"
+      },
+      "t6c6wls": {
+        "name": "CH6 wasserleck-Zuestand"
+      },
+      "t6c7bat": {
+        "name": "CH7 batteriezuestand vom Leck-Sensor"
+      },
+      "t6c7cn": {
+        "name": "CH7 verbindigszuestand vom Leck-Sensor"
+      },
+      "t6c7wls": {
+        "name": "CH7 wasserleck-Zuestand"
+      },
+      "t8bat": {
+        "name": "Batteriestand vom Fiinstaubsensor"
+      },
+      "t8cn": {
+        "name": "Verbindigszuestand vom Fiinstaubsensor"
+      },
+      "t8pm10": {
+        "name": "PM10-Konzentration"
+      },
+      "t8pm10ai": {
+        "name": "PM10 AQI"
+      },
+      "t8pm25": {
+        "name": "PM2.5-Konzentration"
+      },
+      "t8pm25ai": {
+        "name": "PM2.5 AQI"
+      },
+      "t9bat": {
+        "name": "Batteriestand vom HCHO/VOC-Sensor"
+      },
+      "t9cn": {
+        "name": "Verbindigszuestand vom HCHO/VOC-Sensor"
+      },
+      "t9hcho": {
+        "name": "HCHO-Konzentration"
+      },
+      "t9voclv": {
+        "name": "VOC-Stufe",
+        "state": {
+          "very_low": "Sehr nidrig",
+          "low": "Nidrig",
+          "moderate": "Mittel",
+          "high": "Hoch",
+          "very_high": "Sehr hoch"
+        }
+      },
+      "tempf": {
+        "name": "Usse-Temperatur"
+      },
+      "uv": {
+        "name": "UV-Index"
+      },
+      "visibility": {
+        "name": "Sichtwiiti"
+      },
+      "weeklyrainin": {
+        "name": "Wüchentlichi Räge"
+      },
+      "wind_direction_raw": {
+        "name": "Windrichtig (roh)"
+      },
+      "windchillf": {
+        "name": "Windchill"
+      },
+      "winddir": {
+        "name": "Windrichtig"
+      },
+      "winddir_avg2m": {
+        "name": "Windrichtig 2 Min. Mittel"
+      },
+      "windgustdir": {
+        "name": "Böierichtig"
+      },
+      "windgustdir_10m": {
+        "name": "Böierichtig 10 Min. Mittel"
+      },
+      "windgustmph": {
+        "name": "Windböi"
+      },
+      "windgustmph_10m": {
+        "name": "Böiegschwindigkeit 10 Min. Mittel"
+      },
+      "windspdmph_avg2m": {
+        "name": "Windgschwindigkeit 2 Min. Mittel"
+      },
+      "windspeedmph": {
+        "name": "Windgschwindigkeit"
+      },
+      "yearlyrainin": {
+        "name": "Jährlichi Räge"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Batteriestand vo de Konsole"
+      },
+      "station_online": {
+        "name": "Stazion online"
+      },
+      "t10cn": {
+        "name": "Verbindigszuestand vom CO2-Sensor"
+      },
+      "t11cn": {
+        "name": "Verbindigszuestand vom CO-Sensor"
+      },
+      "t1bat": {
+        "name": "Batteriezuestand vom Ussesensor"
+      },
+      "t1cn": {
+        "name": "Verbindigszuestand vom Ussesensor"
+      },
+      "t234c1bat": {
+        "name": "CH1 batteriezuestand"
+      },
+      "t234c1cn": {
+        "name": "CH1 verbindigszuestand"
+      },
+      "t234c2bat": {
+        "name": "CH2 batteriezuestand"
+      },
+      "t234c2cn": {
+        "name": "CH2 verbindigszuestand"
+      },
+      "t234c3bat": {
+        "name": "CH3 batteriezuestand"
+      },
+      "t234c3cn": {
+        "name": "CH3 verbindigszuestand"
+      },
+      "t234c4bat": {
+        "name": "CH4 batteriezuestand"
+      },
+      "t234c4cn": {
+        "name": "CH4 verbindigszuestand"
+      },
+      "t234c5bat": {
+        "name": "CH5 batteriezuestand"
+      },
+      "t234c5cn": {
+        "name": "CH5 verbindigszuestand"
+      },
+      "t234c6bat": {
+        "name": "CH6 batteriezuestand"
+      },
+      "t234c6cn": {
+        "name": "CH6 verbindigszuestand"
+      },
+      "t234c7bat": {
+        "name": "CH7 batteriezuestand"
+      },
+      "t234c7cn": {
+        "name": "CH7 verbindigszuestand"
+      },
+      "t5lsbat": {
+        "name": "Batteriezuestand vom Blitzsensor"
+      },
+      "t5lscn": {
+        "name": "Verbindigszuestand vom Blitzsensor"
+      },
+      "t6c1bat": {
+        "name": "CH1 batteriezuestand vom Leck-Sensor"
+      },
+      "t6c1cn": {
+        "name": "CH1 verbindigszuestand vom Leck-Sensor"
+      },
+      "t6c1wls": {
+        "name": "CH1 wasserleck-Zuestand"
+      },
+      "t6c2bat": {
+        "name": "CH2 batteriezuestand vom Leck-Sensor"
+      },
+      "t6c2cn": {
+        "name": "CH2 verbindigszuestand vom Leck-Sensor"
+      },
+      "t6c2wls": {
+        "name": "CH2 wasserleck-Zuestand"
+      },
+      "t6c3bat": {
+        "name": "CH3 batteriezuestand vom Leck-Sensor"
+      },
+      "t6c3cn": {
+        "name": "CH3 verbindigszuestand vom Leck-Sensor"
+      },
+      "t6c3wls": {
+        "name": "CH3 wasserleck-Zuestand"
+      },
+      "t6c4bat": {
+        "name": "CH4 batteriezuestand vom Leck-Sensor"
+      },
+      "t6c4cn": {
+        "name": "CH4 verbindigszuestand vom Leck-Sensor"
+      },
+      "t6c4wls": {
+        "name": "CH4 wasserleck-Zuestand"
+      },
+      "t6c5bat": {
+        "name": "CH5 batteriezuestand vom Leck-Sensor"
+      },
+      "t6c5cn": {
+        "name": "CH5 verbindigszuestand vom Leck-Sensor"
+      },
+      "t6c5wls": {
+        "name": "CH5 wasserleck-Zuestand"
+      },
+      "t6c6bat": {
+        "name": "CH6 batteriezuestand vom Leck-Sensor"
+      },
+      "t6c6cn": {
+        "name": "CH6 verbindigszuestand vom Leck-Sensor"
+      },
+      "t6c6wls": {
+        "name": "CH6 wasserleck-Zuestand"
+      },
+      "t6c7bat": {
+        "name": "CH7 batteriezuestand vom Leck-Sensor"
+      },
+      "t6c7cn": {
+        "name": "CH7 verbindigszuestand vom Leck-Sensor"
+      },
+      "t6c7wls": {
+        "name": "CH7 wasserleck-Zuestand"
+      },
+      "t8cn": {
+        "name": "Verbindigszuestand vom Fiinstaubsensor"
+      },
+      "t9cn": {
+        "name": "Verbindigszuestand vom HCHO/VOC-Sensor"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Windrichtigs-Offset"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Offset zrugsetze"
+      },
+      "set_north": {
+        "name": "Norde uf de aktuell Wert setze"
+      }
+    }
+  }
+}

@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Estació meteorològica personal",
+        "description": "Definiu aquí una clau d'estació que les vostres estacions meteorològiques hauran de transmetre perquè les seves dades no siguin rebutjades. Si deixeu el camp buit, s'acceptaran totes les sol·licituds.",
+        "data": {
+          "password": "Clau d'estació"
+        }
+      },
+      "station": {
+        "title": "Pas 1 de 5 — la vostra estació",
+        "description": "{image}\n\nÉs la vostra estació meteorològica qui crea els seus propis dispositius i sensors, així que aquí no hi ha res a afegir. El que segueix és el que cal escriure a l'aplicació de l'estació.\n\nObriu l'aplicació, comproveu que el microprogramari de l'estació estigui actualitzat i obriu-ne la configuració."
+      },
+      "settings": {
+        "title": "Pas 2 de 5 — servei meteorològic",
+        "description": "{image}\n\nTrieu **Weather server**."
+      },
+      "server": {
+        "title": "Pas 3 de 5 — un altre servidor",
+        "description": "{image}\n\nTrieu **Other Server**."
+      },
+      "form": {
+        "title": "Pas 4 de 5 — configuració del servidor",
+        "description": "{image}\n\nOmpliu el formulari i premeu **Save**.\n\n**URL**\n{urls}\nSense `http://` ni `https://`. Feu servir una adreça que la vostra estació pugui abastar a la vostra xarxa: no hi ha cap raó per exposar Home Assistant a Internet per això. Si l'estació no resol noms, poseu-hi l'adreça IP.\n\n**Station ID** — el que vulgueu. Serà el nom del dispositiu a Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minut és un bon valor.\n\n**API type** — *WSLink API*. Trieu *WUnderground API* només si la vostra estació no ofereix WSLink: transporta la meitat de lectures i només quatre canals.\n\n**Upload** — deixeu-ho activat.\n\n> ⏱️ Algunes estacions perden el Wi-Fi si us entreteniu en aquesta pantalla. Tingueu l'adreça a mà, escriviu-la i deseu."
+      },
+      "confirm": {
+        "title": "Pas 5 de 5 — confirm & exit",
+        "description": "{image}\n\nTorneu enrere i premeu **Confirm & Exit**.\n\n> ⚠️ **És Confirm & Exit qui escriu la configuració a l'estació.** Desar tot sol no canvia res.\n\nPremeu Següent quan ho hàgiu fet."
+      },
+      "received": {
+        "title": "La vostra estació parla amb Home Assistant",
+        "description": "**{station}** acaba d'enviar la primera tramesa.\n\nEls seus sensors apareixeran a la següent, i es creen a partir del que l'estació envia realment: aquí no hi ha res a triar."
+      },
+      "timeout": {
+        "title": "Encara no ha arribat res",
+        "description": "Cap estació no ha enviat dades en els darrers {minutes} minuts.{key_hint_extra}\n\nLes causes habituals són una adreça que l'estació no pot abastar, no haver premut **Confirm & Exit**, o un microprogramari 3.02 o posterior, que exigeix HTTPS.\n\nLes adreces cap a on dirigir-la són:\n{urls}\nEls punts d'entrada a l'escolta són:\n{endpoints}\n\nPremeu Següent per acabar igualment: la configuració es conserva, els punts d'entrada es posen realment a l'escolta, i una reparació us tornarà aquí mentre no aparegui cap estació."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Ja configurat. Una sola instància serveix totes les estacions meteorològiques."
+    },
+    "progress": {
+      "waiting_for_station": "S'espera la primera tramesa de la vostra estació…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Estació meteorològica personal",
+        "menu_options": {
+          "options": "Configuració",
+          "instructions": "Com dirigir una estació cap a Home Assistant"
+        }
+      },
+      "options": {
+        "title": "Estació meteorològica personal",
+        "description": "Definiu aquí una clau d'estació que les vostres estacions meteorològiques hauran de transmetre perquè les seves dades no siguin rebutjades. Si deixeu el camp buit, s'acceptaran totes les sol·licituds.",
+        "data": {
+          "password": "Clau d'estació",
+          "availability_timeout": "Marcar com a no disponible després de (minuts)",
+          "debug": "Registrar cada sol·licitud rebuda"
+        },
+        "data_description": {
+          "availability_timeout": "Quant de temps pot romandre en silenci una estació abans que els seus sensors es marquin com a no disponibles. 0 per no marcar-los mai.",
+          "debug": "Escriu el contingut complet de cada sol·licitud al registre de Home Assistant. Útil mentre configureu una estació, sorollós després."
+        }
+      },
+      "station": {
+        "title": "Pas 1 de 5 — la vostra estació",
+        "description": "{image}\n\nÉs la vostra estació meteorològica qui crea els seus propis dispositius i sensors, així que aquí no hi ha res a afegir. El que segueix és el que cal escriure a l'aplicació de l'estació.\n\nObriu l'aplicació, comproveu que el microprogramari de l'estació estigui actualitzat i obriu-ne la configuració."
+      },
+      "settings": {
+        "title": "Pas 2 de 5 — servei meteorològic",
+        "description": "{image}\n\nTrieu **Weather server**."
+      },
+      "server": {
+        "title": "Pas 3 de 5 — un altre servidor",
+        "description": "{image}\n\nTrieu **Other Server**."
+      },
+      "form": {
+        "title": "Pas 4 de 5 — configuració del servidor",
+        "description": "{image}\n\nOmpliu el formulari i premeu **Save**.\n\n**URL**\n{urls}\nSense `http://` ni `https://`. Feu servir una adreça que la vostra estació pugui abastar a la vostra xarxa: no hi ha cap raó per exposar Home Assistant a Internet per això. Si l'estació no resol noms, poseu-hi l'adreça IP.\n\n**Station ID** — el que vulgueu. Serà el nom del dispositiu a Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minut és un bon valor.\n\n**API type** — *WSLink API*. Trieu *WUnderground API* només si la vostra estació no ofereix WSLink: transporta la meitat de lectures i només quatre canals.\n\n**Upload** — deixeu-ho activat.\n\n> ⏱️ Algunes estacions perden el Wi-Fi si us entreteniu en aquesta pantalla. Tingueu l'adreça a mà, escriviu-la i deseu."
+      },
+      "confirm": {
+        "title": "Pas 5 de 5 — confirm & exit",
+        "description": "{image}\n\nTorneu enrere i premeu **Confirm & Exit**.\n\n> ⚠️ **És Confirm & Exit qui escriu la configuració a l'estació.** Desar tot sol no canvia res.\n\nPremeu Següent quan ho hàgiu fet."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Estació meteorològica rebutjada: clau d'estació incorrecta",
+      "description": "Una estació meteorològica a {ip} ha intentat enviar dades com a `{station_id}` sense transmetre la clau d'estació esperada.\n\nComproveu que la clau configurada a l'estació o a l'aplicació WSLink coincideix amb la definida en aquesta integració. Aquest missatge desapareixerà tot sol quan s'accepti una sol·licitud procedent de {ip}."
+    },
+    "missing_device_id": {
+      "title": "Estació meteorològica rebutjada: sense identificador d'estació",
+      "description": "Una estació meteorològica a {ip} ha enviat dades sense identificador d'estació.\n\nDefiniu un Sender ID a l'aplicació WSLink, o un paràmetre ID a la configuració de l'estació. Aquest missatge desapareixerà tot sol quan s'accepti una sol·licitud procedent de {ip}."
+    },
+    "legacy_entity_ids": {
+      "title": "Els identificadors d'entitat repeteixen el nom de l'estació",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Escurçar els identificadors d'entitat",
+            "description": "Fins a la versió 1.0.8 aquesta integració construïa identificadors d'entitat que porten el nom de l'estació dues vegades, com ara `{example_old}`. Les estacions noves ja no ho fan.\n\n**{count} entitats** es poden reanomenar, per exemple a `{example_new}`.\n\nL'historial i les estadístiques a llarg termini segueixen el canvi de nom automàticament. **Les automatitzacions, scripts, escenes i taulers no** — haureu d'actualitzar vosaltres mateixos tot allò que faci referència als identificadors antics.\n\nSi preferiu deixar-los tal com estan, ignoreu aquesta reparació."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Les lectures de connexió, fuita i bateria encara són nombres",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Convertir en sensors binaris",
+            "description": "Les lectures de connexió, fuita d'aigua i bateria es transmeten com a 1 o 0. Fins a la versió 1.0.8 s'exposaven com a sensors numèrics, per exemple `{example}`, que no serveixen amb les targetes estàndard de fuita, connectivitat i bateria baixa de Home Assistant. Les estacions noves reben sensors binaris que mostren **Mullat / Sec**, **Connectat / Desconnectat** i **Activat / Desactivat**.\n\nEs poden convertir **{count} entitats**. Els nivells de bateria 0~5 dels sensors de qualitat de l'aire mantenen el percentatge: sis graons són més del que un encès/apagat pot portar.\n\nCanviar de plataforma no és un canvi de nom: les entitats antigues s'eliminen i es recreen com a `binary_sensor`. **El seu historial enregistrat es perd** — aquestes lectures no tenen estadístiques a llarg termini, així que només afecta l'historial en brut — i **les automatitzacions, scripts, escenes i taulers que hi apunten s'han d'actualitzar**. Les entitats noves apareixen en el següent enviament de l'estació.\n\nSi preferiu deixar-les tal com estan, ignoreu aquesta reparació."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Cap estació meteorològica no ha enviat encara res",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Configureu la vostra estació meteorològica",
+            "description": "És la vostra estació meteorològica la que crea els dispositius i els sensors — aquí no hi ha res a afegir.\n\nA l'aplicació de l'estació, obriu la vostra estació, després **Settings → Weather server → Other Server**, i ompliu:\n\n**URL**\n{urls}\nSense `http://` ni `https://`. Feu servir una adreça que la vostra estació pugui assolir a la vostra pròpia xarxa — no hi ha cap raó per exposar Home Assistant a internet per això. Si la vostra estació no resol noms, poseu-hi l'adreça IP.\n\n**Station ID** — el que vulgueu. Serà el nom del dispositiu a Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minut és un bon valor.\n\n**API type** — *WSLink API*.\n\n**Upload** — deixeu-ho activat.\n\nPremeu **Save**, torneu enrere i premeu **Confirm & Exit**.\n\n> ⚠️ **És Confirm & Exit el que escriu la configuració a l'estació.** Només desar no canvia res. Els vostres sensors apareixen un segon després.\n\nEls punts d'entrada a l'escolta són:\n{endpoints}"
+          },
+          "received": {
+            "title": "La vostra estació ha passat",
+            "description": "**{station}** ha enviat el seu primer enviament. Els seus sensors s'estan creant ara, i n'apareixeran més a mesura que l'estació els informi.\n\nAquest missatge no tornarà."
+          },
+          "timeout": {
+            "title": "Encara no s'ha rebut res",
+            "description": "No ha arribat cap enviament en {minutes} minuts.\n\nPer ordre de probabilitat:\n\n  - **Heu premut Confirm & Exit?** Només desar la pantalla del servidor no escriu res a l'estació.\n  - L'**URL** ha de ser {urls_inline}, sense `http://`, i accessible per l'estació a la vostra xarxa.\n  - **Upload** ha d'estar activat en aquella pantalla.\n  - Alguns microprogramaris Bresser a partir de la **3.02** rebutgen l'HTTP simple i necessiten una adreça que serveixi HTTPS.\n  - L'interval d'enviament pot ser simplement més llarg que l'espera.\n  - **Clau d'estació**: {key_hint}.\n\nSi l'estació ha arribat a Home Assistant però ha estat rebutjada, es notifica per separat a **Configuració → Sistema → Reparacions**.\n\nPodeu tancar. Es manté aquí fins que aparegui una estació, i tornar-ho a obrir reinicia l'espera."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Esperant el primer enviament de la vostra estació…"
+        },
+        "abort": {
+          "not_received": "Encara no ha arribat res, així que això queda obert. Es manté a Reparacions fins que aparegui una estació, i podeu tornar-ho a obrir per esperar de nou."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "L'estació {station} envia lectures que es descarten",
+      "description": "**{count} paràmetres** de **{station}** no es reconeixen, de manera que els seus valors es descarten en cada enviament:\n\n{parameters}\n\nLa causa habitual és una estació que informa de més coses de les que el seu protocol pot transportar. Weather Underground només té **4 llocs** per a sensors addicionals; si la vostra estació ofereix **WSLink** com a *API type*, canviar-hi exposa set canals i aproximadament el doble de lectures.\n\nSi no és això, aquests noms de paràmetre són exactament el que necessita un informe d'error: obriu-ne un al [seguiment d'incidències]({issue_tracker}) i es podran afegir.\n\nTambé podeu ignorar-ho: no hi ha res trencat, simplement aquests valors concrets no arriben."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "L'estació {device} encara no ha transmès cap direcció del vent, així que no hi ha res amb què calibrar. Espereu el proper enviament i torneu-ho a provar."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Pressió atmosfèrica absoluta"
+      },
+      "apiver": {
+        "name": "Versió de l'API"
+      },
+      "aqbc": {
+        "name": "Carboni negre"
+      },
+      "aqco": {
+        "name": "Monòxid de carboni"
+      },
+      "aqcot": {
+        "name": "Monòxid de carboni en traces"
+      },
+      "aqec": {
+        "name": "Carboni elemental"
+      },
+      "aqno": {
+        "name": "Monòxid de nitrogen"
+      },
+      "aqno2": {
+        "name": "NO2 X calculat"
+      },
+      "aqno2t": {
+        "name": "Diòxid de nitrogen"
+      },
+      "aqno2y": {
+        "name": "NO2 Y calculat"
+      },
+      "aqno3": {
+        "name": "Ió NO3"
+      },
+      "aqnox": {
+        "name": "Òxids de nitrogen"
+      },
+      "aqnoy": {
+        "name": "Nitrogen reactiu total"
+      },
+      "aqoc": {
+        "name": "Carboni orgànic"
+      },
+      "aqozone": {
+        "name": "Ozó"
+      },
+      "aqpm10": {
+        "name": "Massa de PM10"
+      },
+      "aqpm2_5": {
+        "name": "Massa de PM2.5"
+      },
+      "aqso2": {
+        "name": "Diòxid de sofre"
+      },
+      "aqso2t": {
+        "name": "Diòxid de sofre en traces"
+      },
+      "aqso4": {
+        "name": "Ió SO4"
+      },
+      "aquv_aeth": {
+        "name": "Etalòmetre canal 2"
+      },
+      "baromin": {
+        "name": "Pressió"
+      },
+      "clouds": {
+        "name": "Nuvolositat"
+      },
+      "dailyrainin": {
+        "name": "Pluja diària"
+      },
+      "dewptf": {
+        "name": "Punt de rosada"
+      },
+      "humidity": {
+        "name": "Humitat exterior"
+      },
+      "inbat": {
+        "name": "Nivell de bateria de la consola"
+      },
+      "indoorhumidity": {
+        "name": "Humitat interior"
+      },
+      "indoortempf": {
+        "name": "Temperatura interior"
+      },
+      "inhum": {
+        "name": "Humitat interior"
+      },
+      "intem": {
+        "name": "Temperatura interior"
+      },
+      "last_update": {
+        "name": "Darrera recepció"
+      },
+      "leafwetness": {
+        "name": "Humectació foliar"
+      },
+      "leafwetness2": {
+        "name": "CH2 humectació foliar"
+      },
+      "lowbatt": {
+        "name": "Bateria baixa"
+      },
+      "monthlyrainin": {
+        "name": "Pluja mensual"
+      },
+      "rainin": {
+        "name": "Pluja horària"
+      },
+      "rbar": {
+        "name": "Pressió atmosfèrica relativa"
+      },
+      "rtfreq": {
+        "name": "Freqüència d'actualització"
+      },
+      "soilmoisture": {
+        "name": "Humitat del sòl"
+      },
+      "soilmoisture2": {
+        "name": "CH2 humitat del sòl"
+      },
+      "soilmoisture3": {
+        "name": "CH3 humitat del sòl"
+      },
+      "soilmoisture4": {
+        "name": "CH4 humitat del sòl"
+      },
+      "soiltemp2f": {
+        "name": "CH2 temperatura del sòl"
+      },
+      "soiltemp3f": {
+        "name": "CH3 temperatura del sòl"
+      },
+      "soiltemp4f": {
+        "name": "CH4 temperatura del sòl"
+      },
+      "soiltempf": {
+        "name": "Temperatura del sòl"
+      },
+      "solarradiation": {
+        "name": "Radiació solar"
+      },
+      "t10bat": {
+        "name": "Nivell de bateria del sensor de CO2"
+      },
+      "t10cn": {
+        "name": "Estat de connexió del sensor de CO2"
+      },
+      "t10co2": {
+        "name": "Concentració de CO2"
+      },
+      "t11bat": {
+        "name": "Nivell de bateria del sensor de CO"
+      },
+      "t11cn": {
+        "name": "Estat de connexió del sensor de CO"
+      },
+      "t11co": {
+        "name": "Concentració de CO"
+      },
+      "t1bat": {
+        "name": "Estat de la bateria del sensor exterior"
+      },
+      "t1chill": {
+        "name": "Temperatura de sensació pel vent"
+      },
+      "t1cn": {
+        "name": "Estat de connexió del sensor exterior"
+      },
+      "t1dew": {
+        "name": "Temperatura del punt de rosada"
+      },
+      "t1feels": {
+        "name": "Sensació tèrmica"
+      },
+      "t1heat": {
+        "name": "Índex de calor"
+      },
+      "t1hum": {
+        "name": "Humitat exterior"
+      },
+      "t1raindy": {
+        "name": "Precipitació diària"
+      },
+      "t1rainhr": {
+        "name": "Precipitació horària"
+      },
+      "t1rainmth": {
+        "name": "Precipitació mensual"
+      },
+      "t1rainra": {
+        "name": "Intensitat de pluja"
+      },
+      "t1rainwy": {
+        "name": "Precipitació setmanal"
+      },
+      "t1rainyr": {
+        "name": "Precipitació anual"
+      },
+      "t1solrad": {
+        "name": "Intensitat lumínica"
+      },
+      "t1tem": {
+        "name": "Temperatura exterior"
+      },
+      "t1uvi": {
+        "name": "Índex UV"
+      },
+      "t1wbgt": {
+        "name": "Temperatura WBGT"
+      },
+      "t1wdir": {
+        "name": "Direcció del vent"
+      },
+      "t1wgust": {
+        "name": "Ratxa de vent"
+      },
+      "t1ws": {
+        "name": "Velocitat del vent"
+      },
+      "t1ws10mav": {
+        "name": "Velocitat del vent mitjana 10 min"
+      },
+      "t234c1bat": {
+        "name": "CH1 estat de la bateria"
+      },
+      "t234c1cn": {
+        "name": "CH1 estat de connexió"
+      },
+      "t234c1hum": {
+        "name": "CH1 humitat"
+      },
+      "t234c1tem": {
+        "name": "CH1 temperatura"
+      },
+      "t234c1tp": {
+        "name": "CH1 tipus de sensor"
+      },
+      "t234c2bat": {
+        "name": "CH2 estat de la bateria"
+      },
+      "t234c2cn": {
+        "name": "CH2 estat de connexió"
+      },
+      "t234c2hum": {
+        "name": "CH2 humitat"
+      },
+      "t234c2tem": {
+        "name": "CH2 temperatura"
+      },
+      "t234c2tp": {
+        "name": "CH2 tipus de sensor"
+      },
+      "t234c3bat": {
+        "name": "CH3 estat de la bateria"
+      },
+      "t234c3cn": {
+        "name": "CH3 estat de connexió"
+      },
+      "t234c3hum": {
+        "name": "CH3 humitat"
+      },
+      "t234c3tem": {
+        "name": "CH3 temperatura"
+      },
+      "t234c3tp": {
+        "name": "CH3 tipus de sensor"
+      },
+      "t234c4bat": {
+        "name": "CH4 estat de la bateria"
+      },
+      "t234c4cn": {
+        "name": "CH4 estat de connexió"
+      },
+      "t234c4hum": {
+        "name": "CH4 humitat"
+      },
+      "t234c4tem": {
+        "name": "CH4 temperatura"
+      },
+      "t234c4tp": {
+        "name": "CH4 tipus de sensor"
+      },
+      "t234c5bat": {
+        "name": "CH5 estat de la bateria"
+      },
+      "t234c5cn": {
+        "name": "CH5 estat de connexió"
+      },
+      "t234c5hum": {
+        "name": "CH5 humitat"
+      },
+      "t234c5tem": {
+        "name": "CH5 temperatura"
+      },
+      "t234c5tp": {
+        "name": "CH5 tipus de sensor"
+      },
+      "t234c6bat": {
+        "name": "CH6 estat de la bateria"
+      },
+      "t234c6cn": {
+        "name": "CH6 estat de connexió"
+      },
+      "t234c6hum": {
+        "name": "CH6 humitat"
+      },
+      "t234c6tem": {
+        "name": "CH6 temperatura"
+      },
+      "t234c6tp": {
+        "name": "CH6 tipus de sensor"
+      },
+      "t234c7bat": {
+        "name": "CH7 estat de la bateria"
+      },
+      "t234c7cn": {
+        "name": "CH7 estat de connexió"
+      },
+      "t234c7hum": {
+        "name": "CH7 humitat"
+      },
+      "t234c7tem": {
+        "name": "CH7 temperatura"
+      },
+      "t234c7tp": {
+        "name": "CH7 tipus de sensor"
+      },
+      "t5ls1dtc": {
+        "name": "Llamps totals en 1 dia"
+      },
+      "t5ls1htc": {
+        "name": "Llamps totals en 1 hora"
+      },
+      "t5ls30mtc": {
+        "name": "Llamps dels darrers 30 minuts"
+      },
+      "t5ls5mtc": {
+        "name": "Llamps dels darrers 5 minuts"
+      },
+      "t5lsbat": {
+        "name": "Estat de la bateria del sensor de llamps"
+      },
+      "t5lscn": {
+        "name": "Estat de connexió del sensor de llamps"
+      },
+      "t5lsf": {
+        "name": "Llamps de la darrera hora"
+      },
+      "t5lskm": {
+        "name": "Distància del llamp"
+      },
+      "t5lst": {
+        "name": "Hora del darrer llamp"
+      },
+      "t6c1bat": {
+        "name": "CH1 estat de la bateria del detector de fuites"
+      },
+      "t6c1cn": {
+        "name": "CH1 estat de connexió del detector de fuites"
+      },
+      "t6c1wls": {
+        "name": "CH1 estat de fuita d'aigua"
+      },
+      "t6c2bat": {
+        "name": "CH2 estat de la bateria del detector de fuites"
+      },
+      "t6c2cn": {
+        "name": "CH2 estat de connexió del detector de fuites"
+      },
+      "t6c2wls": {
+        "name": "CH2 estat de fuita d'aigua"
+      },
+      "t6c3bat": {
+        "name": "CH3 estat de la bateria del detector de fuites"
+      },
+      "t6c3cn": {
+        "name": "CH3 estat de connexió del detector de fuites"
+      },
+      "t6c3wls": {
+        "name": "CH3 estat de fuita d'aigua"
+      },
+      "t6c4bat": {
+        "name": "CH4 estat de la bateria del detector de fuites"
+      },
+      "t6c4cn": {
+        "name": "CH4 estat de connexió del detector de fuites"
+      },
+      "t6c4wls": {
+        "name": "CH4 estat de fuita d'aigua"
+      },
+      "t6c5bat": {
+        "name": "CH5 estat de la bateria del detector de fuites"
+      },
+      "t6c5cn": {
+        "name": "CH5 estat de connexió del detector de fuites"
+      },
+      "t6c5wls": {
+        "name": "CH5 estat de fuita d'aigua"
+      },
+      "t6c6bat": {
+        "name": "CH6 estat de la bateria del detector de fuites"
+      },
+      "t6c6cn": {
+        "name": "CH6 estat de connexió del detector de fuites"
+      },
+      "t6c6wls": {
+        "name": "CH6 estat de fuita d'aigua"
+      },
+      "t6c7bat": {
+        "name": "CH7 estat de la bateria del detector de fuites"
+      },
+      "t6c7cn": {
+        "name": "CH7 estat de connexió del detector de fuites"
+      },
+      "t6c7wls": {
+        "name": "CH7 estat de fuita d'aigua"
+      },
+      "t8bat": {
+        "name": "Nivell de bateria del sensor de partícules"
+      },
+      "t8cn": {
+        "name": "Estat de connexió del sensor de partícules"
+      },
+      "t8pm10": {
+        "name": "Concentració de PM10"
+      },
+      "t8pm10ai": {
+        "name": "AQI de PM10"
+      },
+      "t8pm25": {
+        "name": "Concentració de PM2.5"
+      },
+      "t8pm25ai": {
+        "name": "AQI de PM2.5"
+      },
+      "t9bat": {
+        "name": "Nivell de bateria del sensor HCHO/COV"
+      },
+      "t9cn": {
+        "name": "Estat de connexió del sensor HCHO/COV"
+      },
+      "t9hcho": {
+        "name": "Concentració d'HCHO"
+      },
+      "t9voclv": {
+        "name": "Nivell de COV",
+        "state": {
+          "very_low": "Molt baix",
+          "low": "Baix",
+          "moderate": "Moderat",
+          "high": "Alt",
+          "very_high": "Molt alt"
+        }
+      },
+      "tempf": {
+        "name": "Temperatura exterior"
+      },
+      "uv": {
+        "name": "Índex UV"
+      },
+      "visibility": {
+        "name": "Visibilitat"
+      },
+      "weeklyrainin": {
+        "name": "Pluja setmanal"
+      },
+      "wind_direction_raw": {
+        "name": "Direcció del vent (bruta)"
+      },
+      "windchillf": {
+        "name": "Sensació tèrmica pel vent"
+      },
+      "winddir": {
+        "name": "Direcció del vent"
+      },
+      "winddir_avg2m": {
+        "name": "Direcció del vent mitjana 2 min"
+      },
+      "windgustdir": {
+        "name": "Direcció de la ratxa"
+      },
+      "windgustdir_10m": {
+        "name": "Direcció de ratxa mitjana 10 min"
+      },
+      "windgustmph": {
+        "name": "Ratxa de vent"
+      },
+      "windgustmph_10m": {
+        "name": "Velocitat de ratxa mitjana 10 min"
+      },
+      "windspdmph_avg2m": {
+        "name": "Velocitat del vent mitjana 2 min"
+      },
+      "windspeedmph": {
+        "name": "Velocitat del vent"
+      },
+      "yearlyrainin": {
+        "name": "Pluja anual"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Nivell de bateria de la consola"
+      },
+      "station_online": {
+        "name": "Estació en línia"
+      },
+      "t10cn": {
+        "name": "Estat de connexió del sensor de CO2"
+      },
+      "t11cn": {
+        "name": "Estat de connexió del sensor de CO"
+      },
+      "t1bat": {
+        "name": "Estat de la bateria del sensor exterior"
+      },
+      "t1cn": {
+        "name": "Estat de connexió del sensor exterior"
+      },
+      "t234c1bat": {
+        "name": "CH1 estat de la bateria"
+      },
+      "t234c1cn": {
+        "name": "CH1 estat de connexió"
+      },
+      "t234c2bat": {
+        "name": "CH2 estat de la bateria"
+      },
+      "t234c2cn": {
+        "name": "CH2 estat de connexió"
+      },
+      "t234c3bat": {
+        "name": "CH3 estat de la bateria"
+      },
+      "t234c3cn": {
+        "name": "CH3 estat de connexió"
+      },
+      "t234c4bat": {
+        "name": "CH4 estat de la bateria"
+      },
+      "t234c4cn": {
+        "name": "CH4 estat de connexió"
+      },
+      "t234c5bat": {
+        "name": "CH5 estat de la bateria"
+      },
+      "t234c5cn": {
+        "name": "CH5 estat de connexió"
+      },
+      "t234c6bat": {
+        "name": "CH6 estat de la bateria"
+      },
+      "t234c6cn": {
+        "name": "CH6 estat de connexió"
+      },
+      "t234c7bat": {
+        "name": "CH7 estat de la bateria"
+      },
+      "t234c7cn": {
+        "name": "CH7 estat de connexió"
+      },
+      "t5lsbat": {
+        "name": "Estat de la bateria del sensor de llamps"
+      },
+      "t5lscn": {
+        "name": "Estat de connexió del sensor de llamps"
+      },
+      "t6c1bat": {
+        "name": "CH1 estat de la bateria del detector de fuites"
+      },
+      "t6c1cn": {
+        "name": "CH1 estat de connexió del detector de fuites"
+      },
+      "t6c1wls": {
+        "name": "CH1 estat de fuita d'aigua"
+      },
+      "t6c2bat": {
+        "name": "CH2 estat de la bateria del detector de fuites"
+      },
+      "t6c2cn": {
+        "name": "CH2 estat de connexió del detector de fuites"
+      },
+      "t6c2wls": {
+        "name": "CH2 estat de fuita d'aigua"
+      },
+      "t6c3bat": {
+        "name": "CH3 estat de la bateria del detector de fuites"
+      },
+      "t6c3cn": {
+        "name": "CH3 estat de connexió del detector de fuites"
+      },
+      "t6c3wls": {
+        "name": "CH3 estat de fuita d'aigua"
+      },
+      "t6c4bat": {
+        "name": "CH4 estat de la bateria del detector de fuites"
+      },
+      "t6c4cn": {
+        "name": "CH4 estat de connexió del detector de fuites"
+      },
+      "t6c4wls": {
+        "name": "CH4 estat de fuita d'aigua"
+      },
+      "t6c5bat": {
+        "name": "CH5 estat de la bateria del detector de fuites"
+      },
+      "t6c5cn": {
+        "name": "CH5 estat de connexió del detector de fuites"
+      },
+      "t6c5wls": {
+        "name": "CH5 estat de fuita d'aigua"
+      },
+      "t6c6bat": {
+        "name": "CH6 estat de la bateria del detector de fuites"
+      },
+      "t6c6cn": {
+        "name": "CH6 estat de connexió del detector de fuites"
+      },
+      "t6c6wls": {
+        "name": "CH6 estat de fuita d'aigua"
+      },
+      "t6c7bat": {
+        "name": "CH7 estat de la bateria del detector de fuites"
+      },
+      "t6c7cn": {
+        "name": "CH7 estat de connexió del detector de fuites"
+      },
+      "t6c7wls": {
+        "name": "CH7 estat de fuita d'aigua"
+      },
+      "t8cn": {
+        "name": "Estat de connexió del sensor de partícules"
+      },
+      "t9cn": {
+        "name": "Estat de connexió del sensor HCHO/COV"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Desplaçament de direcció del vent"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Restablir el desplaçament"
+      },
+      "set_north": {
+        "name": "Fixar el nord amb el valor actual"
+      }
+    }
+  }
+}

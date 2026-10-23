@@ -1,2 +1,7 @@
-/__pycache__
-/.idea
+__pycache__/
+*.pyc
+.idea/
+.venv/
+.pytest_cache/
+.coverage
+.ruff_cache/

@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Stáisiún aimsire pearsanta",
+        "description": "Socraigh eochair stáisiúin anseo nach mór do do stáisiúin aimsire a sheoladh ionas nach ndiúltófar dá gcuid sonraí. Má fhágann tú an réimse folamh, glacfar le gach iarratas.",
+        "data": {
+          "password": "Eochair an stáisiúin"
+        }
+      },
+      "station": {
+        "title": "Céim 1 as 5 — do stáisiún",
+        "description": "{image}\n\nCruthaíonn do stáisiún aimsire a ghléasanna agus a bhraiteoirí féin, mar sin níl aon rud le cur leis anseo. Is é seo a leanas an rud atá le clóscríobh in aip an stáisiúin.\n\nOscail an aip, deimhnigh go bhfuil dochtearraí an stáisiúin cothrom le dáta, agus oscail a shocruithe."
+      },
+      "settings": {
+        "title": "Céim 2 as 5 — seirbhís aimsire",
+        "description": "{image}\n\nRoghnaigh **Weather server**."
+      },
+      "server": {
+        "title": "Céim 3 as 5 — freastalaí eile",
+        "description": "{image}\n\nRoghnaigh **Other Server**."
+      },
+      "form": {
+        "title": "Céim 4 as 5 — socruithe an fhreastalaí",
+        "description": "{image}\n\nLíon isteach an fhoirm, ansin brúigh **Save**.\n\n**URL**\n{urls}\nGan `http://` ná `https://`. Bain úsáid as seoladh ar féidir le do stáisiún teacht air ar do líonra féin — níl aon chúis Home Assistant a nochtadh don idirlíon chuige seo. Mura réitíonn do stáisiún ainmneacha, cuir an seoladh IP isteach.\n\n**Station ID** — cibé rud is mian leat. Is é sin ainm an ghléis in Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — is luach maith é 1 nóiméad.\n\n**API type** — *WSLink API*. Ná roghnaigh *WUnderground API* ach mura gcuireann do stáisiún WSLink ar fáil: iompraíonn sé leath oiread léamh agus ceithre chainéal amháin.\n\n**Upload** — fág ar siúl é.\n\n> ⏱️ Cailleann roinnt stáisiún an Wi-Fi má mhoillíonn tú ar an scáileán seo. Bíodh an seoladh réidh agat, líon isteach é, agus sábháil."
+      },
+      "confirm": {
+        "title": "Céim 5 as 5 — confirm & exit",
+        "description": "{image}\n\nTéigh ar ais, ansin brúigh **Confirm & Exit**.\n\n> ⚠️ **Is é Confirm & Exit a scríobhann na socruithe chuig an stáisiún.** Ní athraíonn sábháil leis féin faic.\n\nBrúigh Ar Aghaidh a luaithe atá sé sin déanta agat."
+      },
+      "received": {
+        "title": "Tá do stáisiún ag caint le Home Assistant",
+        "description": "Sheol **{station}** a chéad uaslódáil díreach anois.\n\nTiocfaidh a bhraiteoirí chun solais leis an gcéad cheann eile, agus cruthaítear iad as a seolann an stáisiún i ndáiríre — níl aon rud le roghnú anseo."
+      },
+      "timeout": {
+        "title": "Níl aon rud tagtha fós",
+        "description": "Níor sheol aon stáisiún faic le {minutes} nóiméad anuas.{key_hint_extra}\n\nIs iad na cúiseanna is coitianta ná seoladh nach féidir leis an stáisiún teacht air, **Confirm & Exit** gan brú, nó dochtearraí ó 3.02 ar aghaidh, a éilíonn HTTPS.\n\nIs iad na seoltaí lena dhíriú orthu:\n{urls}\nIs iad na críochphointí atá ag éisteacht le huaslódálacha:\n{endpoints}\n\nBrúigh Ar Aghaidh chun críochnú mar sin féin — coinnítear an socrú, tosaíonn na críochphointí ag éisteacht i ndáiríre, agus tabharfaidh deisiú ar ais anseo thú go dtí go dtiocfaidh stáisiún chun solais."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Cumraithe cheana féin. Freastalaíonn aon ásc amháin ar gach stáisiún aimsire."
+    },
+    "progress": {
+      "waiting_for_station": "Ag fanacht le chéad uaslódáil do stáisiúin…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Stáisiún aimsire pearsanta",
+        "menu_options": {
+          "options": "Socruithe",
+          "instructions": "Conas stáisiún a dhíriú ar Home Assistant"
+        }
+      },
+      "options": {
+        "title": "Stáisiún aimsire pearsanta",
+        "description": "Socraigh eochair stáisiúin anseo nach mór do do stáisiúin aimsire a sheoladh ionas nach ndiúltófar dá gcuid sonraí. Má fhágann tú an réimse folamh, glacfar le gach iarratas.",
+        "data": {
+          "password": "Eochair an stáisiúin",
+          "availability_timeout": "Marcáil mar neamhinfhaighte tar éis (nóiméad)",
+          "debug": "Logáil gach iarratas isteach"
+        },
+        "data_description": {
+          "availability_timeout": "Cá fhad is féidir le stáisiún fanacht ina thost sula marcálfar a bhraiteoirí mar neamhinfhaighte. Ciallaíonn 0 gan iad a mharcáil riamh.",
+          "debug": "Scríobhann ábhar iomlán gach iarratais i logleabhar Home Assistant. Úsáideach agus stáisiún á shocrú, callánach ina dhiaidh sin."
+        }
+      },
+      "station": {
+        "title": "Céim 1 as 5 — do stáisiún",
+        "description": "{image}\n\nCruthaíonn do stáisiún aimsire a ghléasanna agus a bhraiteoirí féin, mar sin níl aon rud le cur leis anseo. Is é seo a leanas an rud atá le clóscríobh in aip an stáisiúin.\n\nOscail an aip, deimhnigh go bhfuil dochtearraí an stáisiúin cothrom le dáta, agus oscail a shocruithe."
+      },
+      "settings": {
+        "title": "Céim 2 as 5 — seirbhís aimsire",
+        "description": "{image}\n\nRoghnaigh **Weather server**."
+      },
+      "server": {
+        "title": "Céim 3 as 5 — freastalaí eile",
+        "description": "{image}\n\nRoghnaigh **Other Server**."
+      },
+      "form": {
+        "title": "Céim 4 as 5 — socruithe an fhreastalaí",
+        "description": "{image}\n\nLíon isteach an fhoirm, ansin brúigh **Save**.\n\n**URL**\n{urls}\nGan `http://` ná `https://`. Bain úsáid as seoladh ar féidir le do stáisiún teacht air ar do líonra féin — níl aon chúis Home Assistant a nochtadh don idirlíon chuige seo. Mura réitíonn do stáisiún ainmneacha, cuir an seoladh IP isteach.\n\n**Station ID** — cibé rud is mian leat. Is é sin ainm an ghléis in Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — is luach maith é 1 nóiméad.\n\n**API type** — *WSLink API*. Ná roghnaigh *WUnderground API* ach mura gcuireann do stáisiún WSLink ar fáil: iompraíonn sé leath oiread léamh agus ceithre chainéal amháin.\n\n**Upload** — fág ar siúl é.\n\n> ⏱️ Cailleann roinnt stáisiún an Wi-Fi má mhoillíonn tú ar an scáileán seo. Bíodh an seoladh réidh agat, líon isteach é, agus sábháil."
+      },
+      "confirm": {
+        "title": "Céim 5 as 5 — confirm & exit",
+        "description": "{image}\n\nTéigh ar ais, ansin brúigh **Confirm & Exit**.\n\n> ⚠️ **Is é Confirm & Exit a scríobhann na socruithe chuig an stáisiún.** Ní athraíonn sábháil leis féin faic.\n\nBrúigh Ar Aghaidh a luaithe atá sé sin déanta agat."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Diúltaíodh don stáisiún aimsire: eochair stáisiúin mhícheart",
+      "description": "Rinne stáisiún aimsire ag {ip} iarracht sonraí a sheoladh mar `{station_id}` gan an eochair stáisiúin a bhí ag teastáil a sheoladh.\n\nSeiceáil go bhfuil an eochair atá cumraithe sa stáisiún nó san aip WSLink ag teacht leis an gceann atá socraithe sa chomhtháthú seo. Imeoidh an teachtaireacht seo aisti féin a luaithe a ghlacfar le hiarratas ó {ip}."
+    },
+    "missing_device_id": {
+      "title": "Diúltaíodh don stáisiún aimsire: gan aitheantóir stáisiúin",
+      "description": "Sheol stáisiún aimsire ag {ip} sonraí gan aitheantóir stáisiúin.\n\nSocraigh Sender ID san aip WSLink, nó paraiméadar ID i gcumraíocht an stáisiúin. Imeoidh an teachtaireacht seo aisti féin a luaithe a ghlacfar le hiarratas ó {ip}."
+    },
+    "legacy_entity_ids": {
+      "title": "Athdhéanann aitheantóirí na n-aonán ainm an stáisiúin",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Giorraigh aitheantóirí na n-aonán",
+            "description": "Suas go dtí leagan 1.0.8 thóg an comhtháthú seo aitheantóirí aonán ina bhfuil ainm an stáisiúin faoi dhó, mar `{example_old}`. Ní dhéanann stáisiúin nua é sin a thuilleadh.\n\nIs féidir **{count} aonán** a athainmniú, mar shampla go `{example_new}`.\n\nLeanann an stair agus na staitisticí fadtéarmacha an t-athainmniú go huathoibríoch. **Ní leanann uathoibrithe, scripteanna, radhairc ná deaisbhoird** — beidh ort féin gach rud a thagraíonn do na sean-aitheantóirí a nuashonrú.\n\nMás fearr leat iad a fhágáil mar atá, déan neamhaird den deisiúchán seo."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Is uimhreacha fós iad léamha ceangail, sceite agus ceallraí",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Tiontaigh go braiteoirí dénártha",
+            "description": "Seoltar léamha ceangail, sceite uisce agus ceallraí mar 1 nó 0. Suas go dtí leagan 1.0.8 nochtaíodh iad mar bhraiteoirí uimhriúla, ar nós `{example}`, nach féidir a úsáid le cártaí caighdeánacha sceite, ceangail agus ceallraí íseal Home Assistant. Faigheann stáisiúin nua braiteoirí dénártha a thaispeánann **Fliuch / Tirim**, **Ceangailte / Dícheangailte** agus **Ann / As**.\n\nIs féidir **{count} aonán** a thiontú. Coinníonn leibhéil cheallraí 0~5 na mbraiteoirí cáilíochta aeir a gcéatadán: is mó sé chéim ná mar is féidir le ann/as a iompar.\n\nNí athainmniú é athrú ardáin: baintear na sean-aonáin agus cruthaítear as an nua iad mar `binary_sensor`. **Cailltear a stair thaifeadta** — níl aon staitisticí fadtéarmacha ag na léamha seo, mar sin ní dhéantar difear ach don amhstair — agus **ní mór uathoibriú, scripteanna, radhairc agus deaisbhoird a dhíríonn orthu a nuashonrú**. Tagann na haonáin nua chun solais leis an gcéad uaslódáil eile ón stáisiún.\n\nMás fearr leat iad a fhágáil mar atá siad, déan neamhaird den deisiú seo."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Níor sheol aon stáisiún aimsire rud ar bith fós",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Socraigh do stáisiún aimsire",
+            "description": "Is é do stáisiún aimsire a chruthaíonn na gléasanna agus na braiteoirí — níl aon rud le cur leis anseo.\n\nIn aip an stáisiúin, oscail do stáisiún, ansin **Settings → Weather server → Other Server**, agus líon isteach:\n\n**URL**\n{urls}\nGan `http://` ná `https://`. Bain úsáid as seoladh ar féidir le do stáisiún teacht air ar do líonra féin — níl aon chúis Home Assistant a nochtadh don idirlíon chuige seo. Mura réitíonn do stáisiún ainmneacha, úsáid an seoladh IP.\n\n**Station ID** — cibé rud is mian leat. Beidh sé ina ainm gléis in Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — is luach maith é 1 nóiméad.\n\n**API type** — *WSLink API*.\n\n**Upload** — fág cumasaithe é.\n\nBrúigh **Save**, téigh ar ais, ansin brúigh **Confirm & Exit**.\n\n> ⚠️ **Is é Confirm & Exit a scríobhann na socruithe chuig an stáisiún.** Ní athraíonn sábháil amháin faic. Tagann do bhraiteoirí i láthair soicind ina dhiaidh.\n\nIs iad na críochphointí atá ag éisteacht:\n{endpoints}"
+          },
+          "received": {
+            "title": "Tháinig do stáisiún tríd",
+            "description": "Sheol **{station}** a chéad uaslódáil. Tá a bhraiteoirí á gcruthú anois, agus tiocfaidh tuilleadh chun cinn de réir mar a thuairiscíonn an stáisiún iad.\n\nNí thiocfaidh an teachtaireacht seo ar ais."
+          },
+          "timeout": {
+            "title": "Faic faighte fós",
+            "description": "Níor tháinig aon uaslódáil i gceann {minutes} nóiméad.\n\nIn ord dóchúlachta:\n\n  - **Ar bhrúigh tú Confirm & Exit?** Ní scríobhann sábháil scáileán an fhreastalaí amháin faic chuig an stáisiún.\n  - Caithfidh an **URL** a bheith {urls_inline}, gan `http://`, agus insroichte ag an stáisiún ar do líonra.\n  - Caithfidh **Upload** a bheith cumasaithe ar an scáileán sin.\n  - Diúltaíonn roinnt dochtearraí Bresser ó **3.02** ar aghaidh do ghnáth-HTTP agus teastaíonn seoladh a fhreastalaíonn ar HTTPS uathu.\n  - D'fhéadfadh an t-eatramh uaslódála a bheith níos faide ná an fanacht go simplí.\n  - **Eochair an stáisiúin**: {key_hint}.\n\nMá shroich an stáisiún Home Assistant ach gur diúltaíodh dó, tuairiscítear é sin ar leithligh in **Socruithe → Córas → Deisiúcháin**.\n\nIs féidir leat é seo a dhúnadh. Fanann sé anseo go dtí go dtagann stáisiún chun cinn, agus tosaíonn a athoscailt an fanacht as an nua."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Ag fanacht le chéad uaslódáil do stáisiúin…"
+        },
+        "abort": {
+          "not_received": "Níor tháinig faic fós, mar sin fágtar é seo ar oscailt. Fanann sé i nDeisiúcháin go dtí go dtagann stáisiún chun cinn, agus is féidir leat é a athoscailt chun fanacht arís."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "Tá an stáisiún {station} ag seoladh léamha atá á gcaitheamh amach",
+      "description": "Ní aithnítear **{count} paraiméadar** ó **{station}**, agus mar sin caitear a luachanna amach le gach uaslódáil:\n\n{parameters}\n\nIs é an chúis is coitianta ná stáisiún a thuairiscíonn níos mó ná mar is féidir lena phrótacal a iompar. Níl ach **4 sliotán** ag Weather Underground do bhraiteoirí breise; má thairgeann do stáisiún **WSLink** mar *API type*, nochtann aistriú chuige seacht gcainéal agus timpeall dhá oiread léamha.\n\nMura é sin é, is iad na hainmneacha paraiméadar seo go díreach a theastaíonn ó thuairisc fhabht: oscail ceann ar an [rianaitheoir saincheisteanna]({issue_tracker}) agus is féidir iad a chur leis.\n\nIs féidir leat neamhaird a dhéanamh de seo freisin — níl aon rud briste, níl na luachanna áirithe seo ag teacht, sin an méid."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "Níor sheol an stáisiún {device} treo gaoithe fós, mar sin níl aon rud le calabrú ina choinne. Fan leis an gcéad uaslódáil eile agus bain triail eile as."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Brú aeir absalóideach"
+      },
+      "apiver": {
+        "name": "Leagan API"
+      },
+      "aqbc": {
+        "name": "Carbón dubh"
+      },
+      "aqco": {
+        "name": "Aonocsaíd charbóin"
+      },
+      "aqcot": {
+        "name": "Aonocsaíd charbóin ar leibhéal rian"
+      },
+      "aqec": {
+        "name": "Carbón eiliminteach"
+      },
+      "aqno": {
+        "name": "Ocsaíd nítriúil"
+      },
+      "aqno2": {
+        "name": "NO2 X ríofa"
+      },
+      "aqno2t": {
+        "name": "Dé-ocsaíd nítrigine"
+      },
+      "aqno2y": {
+        "name": "NO2 Y ríofa"
+      },
+      "aqno3": {
+        "name": "Ian NO3"
+      },
+      "aqnox": {
+        "name": "Ocsaídí nítrigine"
+      },
+      "aqnoy": {
+        "name": "Nítrigin imoibríoch iomlán"
+      },
+      "aqoc": {
+        "name": "Carbón orgánach"
+      },
+      "aqozone": {
+        "name": "Ózón"
+      },
+      "aqpm10": {
+        "name": "Mais PM10"
+      },
+      "aqpm2_5": {
+        "name": "Mais PM2.5"
+      },
+      "aqso2": {
+        "name": "Dé-ocsaíd sulfair"
+      },
+      "aqso2t": {
+        "name": "Dé-ocsaíd sulfair ar leibhéal rian"
+      },
+      "aqso4": {
+        "name": "Ian SO4"
+      },
+      "aquv_aeth": {
+        "name": "Aetalaiméadar cainéal 2"
+      },
+      "baromin": {
+        "name": "Brú"
+      },
+      "clouds": {
+        "name": "Clúdach scamall"
+      },
+      "dailyrainin": {
+        "name": "Báisteach laethúil"
+      },
+      "dewptf": {
+        "name": "Pointe drúchta"
+      },
+      "humidity": {
+        "name": "Bogthaise amuigh"
+      },
+      "inbat": {
+        "name": "Leibhéal ceallraí an chonsóil"
+      },
+      "indoorhumidity": {
+        "name": "Bogthaise istigh"
+      },
+      "indoortempf": {
+        "name": "Teocht istigh"
+      },
+      "inhum": {
+        "name": "Bogthaise istigh"
+      },
+      "intem": {
+        "name": "Teocht istigh"
+      },
+      "last_update": {
+        "name": "Fáltas deireanach"
+      },
+      "leafwetness": {
+        "name": "Fliuchras duilleog"
+      },
+      "leafwetness2": {
+        "name": "CH2 fliuchras duilleog"
+      },
+      "lowbatt": {
+        "name": "Ceallraí íseal"
+      },
+      "monthlyrainin": {
+        "name": "Báisteach mhíosúil"
+      },
+      "rainin": {
+        "name": "Báisteach in aghaidh na huaire"
+      },
+      "rbar": {
+        "name": "Brú aeir coibhneasta"
+      },
+      "rtfreq": {
+        "name": "Minicíocht nuashonraithe"
+      },
+      "soilmoisture": {
+        "name": "Taisleach ithreach"
+      },
+      "soilmoisture2": {
+        "name": "CH2 taisleach ithreach"
+      },
+      "soilmoisture3": {
+        "name": "CH3 taisleach ithreach"
+      },
+      "soilmoisture4": {
+        "name": "CH4 taisleach ithreach"
+      },
+      "soiltemp2f": {
+        "name": "CH2 teocht na hithreach"
+      },
+      "soiltemp3f": {
+        "name": "CH3 teocht na hithreach"
+      },
+      "soiltemp4f": {
+        "name": "CH4 teocht na hithreach"
+      },
+      "soiltempf": {
+        "name": "Teocht na hithreach"
+      },
+      "solarradiation": {
+        "name": "Radaíocht ghréine"
+      },
+      "t10bat": {
+        "name": "Leibhéal ceallraí an bhraiteora CO2"
+      },
+      "t10cn": {
+        "name": "Stádas ceangail an bhraiteora CO2"
+      },
+      "t10co2": {
+        "name": "Tiúchan CO2"
+      },
+      "t11bat": {
+        "name": "Leibhéal ceallraí an bhraiteora CO"
+      },
+      "t11cn": {
+        "name": "Stádas ceangail an bhraiteora CO"
+      },
+      "t11co": {
+        "name": "Tiúchan CO"
+      },
+      "t1bat": {
+        "name": "Stádas ceallraí an bhraiteora amuigh"
+      },
+      "t1chill": {
+        "name": "Teocht fuaraithe gaoithe"
+      },
+      "t1cn": {
+        "name": "Stádas ceangail an bhraiteora amuigh"
+      },
+      "t1dew": {
+        "name": "Teocht an phointe drúchta"
+      },
+      "t1feels": {
+        "name": "Teocht mhothaithe"
+      },
+      "t1heat": {
+        "name": "Innéacs teasa"
+      },
+      "t1hum": {
+        "name": "Bogthaise amuigh"
+      },
+      "t1raindy": {
+        "name": "Toirt bháistí laethúil"
+      },
+      "t1rainhr": {
+        "name": "Toirt bháistí in aghaidh na huaire"
+      },
+      "t1rainmth": {
+        "name": "Toirt bháistí mhíosúil"
+      },
+      "t1rainra": {
+        "name": "Ráta báistí"
+      },
+      "t1rainwy": {
+        "name": "Toirt bháistí sheachtainiúil"
+      },
+      "t1rainyr": {
+        "name": "Toirt bháistí bhliantúil"
+      },
+      "t1solrad": {
+        "name": "Déine solais"
+      },
+      "t1tem": {
+        "name": "Teocht amuigh"
+      },
+      "t1uvi": {
+        "name": "Innéacs UV"
+      },
+      "t1wbgt": {
+        "name": "Teocht WBGT"
+      },
+      "t1wdir": {
+        "name": "Treo na gaoithe"
+      },
+      "t1wgust": {
+        "name": "Séideán gaoithe"
+      },
+      "t1ws": {
+        "name": "Luas na gaoithe"
+      },
+      "t1ws10mav": {
+        "name": "Luas na gaoithe meán 10 nóim"
+      },
+      "t234c1bat": {
+        "name": "CH1 stádas ceallraí"
+      },
+      "t234c1cn": {
+        "name": "CH1 stádas ceangail"
+      },
+      "t234c1hum": {
+        "name": "CH1 bogthaise"
+      },
+      "t234c1tem": {
+        "name": "CH1 teocht"
+      },
+      "t234c1tp": {
+        "name": "CH1 cineál braiteora"
+      },
+      "t234c2bat": {
+        "name": "CH2 stádas ceallraí"
+      },
+      "t234c2cn": {
+        "name": "CH2 stádas ceangail"
+      },
+      "t234c2hum": {
+        "name": "CH2 bogthaise"
+      },
+      "t234c2tem": {
+        "name": "CH2 teocht"
+      },
+      "t234c2tp": {
+        "name": "CH2 cineál braiteora"
+      },
+      "t234c3bat": {
+        "name": "CH3 stádas ceallraí"
+      },
+      "t234c3cn": {
+        "name": "CH3 stádas ceangail"
+      },
+      "t234c3hum": {
+        "name": "CH3 bogthaise"
+      },
+      "t234c3tem": {
+        "name": "CH3 teocht"
+      },
+      "t234c3tp": {
+        "name": "CH3 cineál braiteora"
+      },
+      "t234c4bat": {
+        "name": "CH4 stádas ceallraí"
+      },
+      "t234c4cn": {
+        "name": "CH4 stádas ceangail"
+      },
+      "t234c4hum": {
+        "name": "CH4 bogthaise"
+      },
+      "t234c4tem": {
+        "name": "CH4 teocht"
+      },
+      "t234c4tp": {
+        "name": "CH4 cineál braiteora"
+      },
+      "t234c5bat": {
+        "name": "CH5 stádas ceallraí"
+      },
+      "t234c5cn": {
+        "name": "CH5 stádas ceangail"
+      },
+      "t234c5hum": {
+        "name": "CH5 bogthaise"
+      },
+      "t234c5tem": {
+        "name": "CH5 teocht"
+      },
+      "t234c5tp": {
+        "name": "CH5 cineál braiteora"
+      },
+      "t234c6bat": {
+        "name": "CH6 stádas ceallraí"
+      },
+      "t234c6cn": {
+        "name": "CH6 stádas ceangail"
+      },
+      "t234c6hum": {
+        "name": "CH6 bogthaise"
+      },
+      "t234c6tem": {
+        "name": "CH6 teocht"
+      },
+      "t234c6tp": {
+        "name": "CH6 cineál braiteora"
+      },
+      "t234c7bat": {
+        "name": "CH7 stádas ceallraí"
+      },
+      "t234c7cn": {
+        "name": "CH7 stádas ceangail"
+      },
+      "t234c7hum": {
+        "name": "CH7 bogthaise"
+      },
+      "t234c7tem": {
+        "name": "CH7 teocht"
+      },
+      "t234c7tp": {
+        "name": "CH7 cineál braiteora"
+      },
+      "t5ls1dtc": {
+        "name": "Tintreach san iomlán in 1 lá"
+      },
+      "t5ls1htc": {
+        "name": "Tintreach san iomlán in 1 uair"
+      },
+      "t5ls30mtc": {
+        "name": "Tintreach sna 30 nóiméad dheireanacha"
+      },
+      "t5ls5mtc": {
+        "name": "Tintreach sna 5 nóiméad dheireanacha"
+      },
+      "t5lsbat": {
+        "name": "Stádas ceallraí an bhraiteora tintrí"
+      },
+      "t5lscn": {
+        "name": "Stádas ceangail an bhraiteora tintrí"
+      },
+      "t5lsf": {
+        "name": "Tintreach san uair dheireanach"
+      },
+      "t5lskm": {
+        "name": "Fad na tintrí"
+      },
+      "t5lst": {
+        "name": "Am na tintrí deireanaí"
+      },
+      "t6c1bat": {
+        "name": "CH1 stádas ceallraí an bhraiteora sceite"
+      },
+      "t6c1cn": {
+        "name": "CH1 stádas ceangail an bhraiteora sceite"
+      },
+      "t6c1wls": {
+        "name": "CH1 stádas sceite uisce"
+      },
+      "t6c2bat": {
+        "name": "CH2 stádas ceallraí an bhraiteora sceite"
+      },
+      "t6c2cn": {
+        "name": "CH2 stádas ceangail an bhraiteora sceite"
+      },
+      "t6c2wls": {
+        "name": "CH2 stádas sceite uisce"
+      },
+      "t6c3bat": {
+        "name": "CH3 stádas ceallraí an bhraiteora sceite"
+      },
+      "t6c3cn": {
+        "name": "CH3 stádas ceangail an bhraiteora sceite"
+      },
+      "t6c3wls": {
+        "name": "CH3 stádas sceite uisce"
+      },
+      "t6c4bat": {
+        "name": "CH4 stádas ceallraí an bhraiteora sceite"
+      },
+      "t6c4cn": {
+        "name": "CH4 stádas ceangail an bhraiteora sceite"
+      },
+      "t6c4wls": {
+        "name": "CH4 stádas sceite uisce"
+      },
+      "t6c5bat": {
+        "name": "CH5 stádas ceallraí an bhraiteora sceite"
+      },
+      "t6c5cn": {
+        "name": "CH5 stádas ceangail an bhraiteora sceite"
+      },
+      "t6c5wls": {
+        "name": "CH5 stádas sceite uisce"
+      },
+      "t6c6bat": {
+        "name": "CH6 stádas ceallraí an bhraiteora sceite"
+      },
+      "t6c6cn": {
+        "name": "CH6 stádas ceangail an bhraiteora sceite"
+      },
+      "t6c6wls": {
+        "name": "CH6 stádas sceite uisce"
+      },
+      "t6c7bat": {
+        "name": "CH7 stádas ceallraí an bhraiteora sceite"
+      },
+      "t6c7cn": {
+        "name": "CH7 stádas ceangail an bhraiteora sceite"
+      },
+      "t6c7wls": {
+        "name": "CH7 stádas sceite uisce"
+      },
+      "t8bat": {
+        "name": "Leibhéal ceallraí an bhraiteora cáithníní"
+      },
+      "t8cn": {
+        "name": "Stádas ceangail an bhraiteora cáithníní"
+      },
+      "t8pm10": {
+        "name": "Tiúchan PM10"
+      },
+      "t8pm10ai": {
+        "name": "AQI PM10"
+      },
+      "t8pm25": {
+        "name": "Tiúchan PM2.5"
+      },
+      "t8pm25ai": {
+        "name": "AQI PM2.5"
+      },
+      "t9bat": {
+        "name": "Leibhéal ceallraí an bhraiteora HCHO/VOC"
+      },
+      "t9cn": {
+        "name": "Stádas ceangail an bhraiteora HCHO/VOC"
+      },
+      "t9hcho": {
+        "name": "Tiúchan HCHO"
+      },
+      "t9voclv": {
+        "name": "Leibhéal VOC",
+        "state": {
+          "very_low": "An-íseal",
+          "low": "Íseal",
+          "moderate": "Measartha",
+          "high": "Ard",
+          "very_high": "An-ard"
+        }
+      },
+      "tempf": {
+        "name": "Teocht amuigh"
+      },
+      "uv": {
+        "name": "Innéacs UV"
+      },
+      "visibility": {
+        "name": "Infheictheacht"
+      },
+      "weeklyrainin": {
+        "name": "Báisteach sheachtainiúil"
+      },
+      "wind_direction_raw": {
+        "name": "Treo na gaoithe (amh)"
+      },
+      "windchillf": {
+        "name": "Fuarú gaoithe"
+      },
+      "winddir": {
+        "name": "Treo na gaoithe"
+      },
+      "winddir_avg2m": {
+        "name": "Treo na gaoithe meán 2 nóim"
+      },
+      "windgustdir": {
+        "name": "Treo an tséideáin"
+      },
+      "windgustdir_10m": {
+        "name": "Treo an tséideáin meán 10 nóim"
+      },
+      "windgustmph": {
+        "name": "Séideán gaoithe"
+      },
+      "windgustmph_10m": {
+        "name": "Luas an tséideáin meán 10 nóim"
+      },
+      "windspdmph_avg2m": {
+        "name": "Luas na gaoithe meán 2 nóim"
+      },
+      "windspeedmph": {
+        "name": "Luas na gaoithe"
+      },
+      "yearlyrainin": {
+        "name": "Báisteach bhliantúil"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Leibhéal ceallraí an chonsóil"
+      },
+      "station_online": {
+        "name": "Stáisiún ar líne"
+      },
+      "t10cn": {
+        "name": "Stádas ceangail an bhraiteora CO2"
+      },
+      "t11cn": {
+        "name": "Stádas ceangail an bhraiteora CO"
+      },
+      "t1bat": {
+        "name": "Stádas ceallraí an bhraiteora amuigh"
+      },
+      "t1cn": {
+        "name": "Stádas ceangail an bhraiteora amuigh"
+      },
+      "t234c1bat": {
+        "name": "CH1 stádas ceallraí"
+      },
+      "t234c1cn": {
+        "name": "CH1 stádas ceangail"
+      },
+      "t234c2bat": {
+        "name": "CH2 stádas ceallraí"
+      },
+      "t234c2cn": {
+        "name": "CH2 stádas ceangail"
+      },
+      "t234c3bat": {
+        "name": "CH3 stádas ceallraí"
+      },
+      "t234c3cn": {
+        "name": "CH3 stádas ceangail"
+      },
+      "t234c4bat": {
+        "name": "CH4 stádas ceallraí"
+      },
+      "t234c4cn": {
+        "name": "CH4 stádas ceangail"
+      },
+      "t234c5bat": {
+        "name": "CH5 stádas ceallraí"
+      },
+      "t234c5cn": {
+        "name": "CH5 stádas ceangail"
+      },
+      "t234c6bat": {
+        "name": "CH6 stádas ceallraí"
+      },
+      "t234c6cn": {
+        "name": "CH6 stádas ceangail"
+      },
+      "t234c7bat": {
+        "name": "CH7 stádas ceallraí"
+      },
+      "t234c7cn": {
+        "name": "CH7 stádas ceangail"
+      },
+      "t5lsbat": {
+        "name": "Stádas ceallraí an bhraiteora tintrí"
+      },
+      "t5lscn": {
+        "name": "Stádas ceangail an bhraiteora tintrí"
+      },
+      "t6c1bat": {
+        "name": "CH1 stádas ceallraí an bhraiteora sceite"
+      },
+      "t6c1cn": {
+        "name": "CH1 stádas ceangail an bhraiteora sceite"
+      },
+      "t6c1wls": {
+        "name": "CH1 stádas sceite uisce"
+      },
+      "t6c2bat": {
+        "name": "CH2 stádas ceallraí an bhraiteora sceite"
+      },
+      "t6c2cn": {
+        "name": "CH2 stádas ceangail an bhraiteora sceite"
+      },
+      "t6c2wls": {
+        "name": "CH2 stádas sceite uisce"
+      },
+      "t6c3bat": {
+        "name": "CH3 stádas ceallraí an bhraiteora sceite"
+      },
+      "t6c3cn": {
+        "name": "CH3 stádas ceangail an bhraiteora sceite"
+      },
+      "t6c3wls": {
+        "name": "CH3 stádas sceite uisce"
+      },
+      "t6c4bat": {
+        "name": "CH4 stádas ceallraí an bhraiteora sceite"
+      },
+      "t6c4cn": {
+        "name": "CH4 stádas ceangail an bhraiteora sceite"
+      },
+      "t6c4wls": {
+        "name": "CH4 stádas sceite uisce"
+      },
+      "t6c5bat": {
+        "name": "CH5 stádas ceallraí an bhraiteora sceite"
+      },
+      "t6c5cn": {
+        "name": "CH5 stádas ceangail an bhraiteora sceite"
+      },
+      "t6c5wls": {
+        "name": "CH5 stádas sceite uisce"
+      },
+      "t6c6bat": {
+        "name": "CH6 stádas ceallraí an bhraiteora sceite"
+      },
+      "t6c6cn": {
+        "name": "CH6 stádas ceangail an bhraiteora sceite"
+      },
+      "t6c6wls": {
+        "name": "CH6 stádas sceite uisce"
+      },
+      "t6c7bat": {
+        "name": "CH7 stádas ceallraí an bhraiteora sceite"
+      },
+      "t6c7cn": {
+        "name": "CH7 stádas ceangail an bhraiteora sceite"
+      },
+      "t6c7wls": {
+        "name": "CH7 stádas sceite uisce"
+      },
+      "t8cn": {
+        "name": "Stádas ceangail an bhraiteora cáithníní"
+      },
+      "t9cn": {
+        "name": "Stádas ceangail an bhraiteora HCHO/VOC"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Fritháireamh threo na gaoithe"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Athshocraigh an fritháireamh"
+      },
+      "set_north": {
+        "name": "Socraigh an tuaisceart de réir an luacha reatha"
+      }
+    }
+  }
+}

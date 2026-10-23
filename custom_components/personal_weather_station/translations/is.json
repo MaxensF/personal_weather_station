@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Persónuleg veðurstöð",
+        "description": "Stilltu hér stöðvarlykil sem veðurstöðvarnar þínar verða að senda svo gögnum þeirra sé ekki hafnað. Ef þú skilur reitinn eftir auðan verða allar beiðnir samþykktar.",
+        "data": {
+          "password": "Stöðvarlykill"
+        }
+      },
+      "station": {
+        "title": "Skref 1 af 5 — stöðin þín",
+        "description": "{image}\n\nVeðurstöðin þín býr sjálf til tækin sín og skynjara, svo hér er engu við að bæta. Það sem á eftir fer er það sem á að slá inn í smáforrit stöðvarinnar.\n\nOpnaðu smáforritið, athugaðu hvort fastbúnaður stöðvarinnar sé uppfærður og opnaðu svo stillingar hennar."
+      },
+      "settings": {
+        "title": "Skref 2 af 5 — veðurþjónusta",
+        "description": "{image}\n\nVeldu **Weather server**."
+      },
+      "server": {
+        "title": "Skref 3 af 5 — annar þjónn",
+        "description": "{image}\n\nVeldu **Other Server**."
+      },
+      "form": {
+        "title": "Skref 4 af 5 — stillingar þjónsins",
+        "description": "{image}\n\nFylltu út eyðublaðið og ýttu svo á **Save**.\n\n**URL**\n{urls}\nÁn `http://` eða `https://`. Notaðu vistfang sem stöðin þín nær til á þínu eigin neti — það er engin ástæða til að opna Home Assistant út á netið fyrir þetta. Ef stöðin þín leysir ekki nöfn skaltu nota IP-tölu.\n\n**Station ID** — hvað sem þú vilt. Það verður heiti tækisins í Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 mínúta er gott gildi.\n\n**API type** — *WSLink API*. Veldu *WUnderground API* aðeins ef stöðin þín býður ekki upp á WSLink: hann ber helmingi færri mælingar og aðeins fjórar rásir.\n\n**Upload** — láttu vera kveikt.\n\n> ⏱️ Sumar stöðvar missa Wi-Fi ef þú dvelur á þessum skjá. Hafðu vistfangið tilbúið, sláðu það inn og vistaðu."
+      },
+      "confirm": {
+        "title": "Skref 5 af 5 — confirm & exit",
+        "description": "{image}\n\nFarðu til baka og ýttu svo á **Confirm & Exit**.\n\n> ⚠️ **Það er Confirm & Exit sem skrifar stillingarnar í stöðina.** Að vista eitt og sér breytir engu.\n\nÝttu á Áfram um leið og því er lokið."
+      },
+      "received": {
+        "title": "Stöðin þín talar við Home Assistant",
+        "description": "**{station}** sendi rétt í þessu sína fyrstu sendingu.\n\nSkynjarar hennar birtast með þeirri næstu og eru búnir til úr því sem stöðin sendir í raun — hér er engu að velja."
+      },
+      "timeout": {
+        "title": "Ekkert hefur borist enn",
+        "description": "Engin stöð hefur sent neitt síðustu {minutes} mínúturnar.{key_hint_extra}\n\nVenjulegar orsakir eru vistfang sem stöðin nær ekki til, **Confirm & Exit** sem ekki var ýtt á, eða fastbúnaður frá 3.02 og nýrri, sem krefst HTTPS.\n\nVistföngin til að beina henni á eru:\n{urls}\nEndapunktarnir sem hlusta eftir sendingum eru:\n{endpoints}\n\nÝttu á Áfram til að ljúka þessu samt — uppsetningin varðveitist, endapunktarnir fara í alvöru að hlusta, og viðgerð kemur þér hingað aftur uns stöð birtist."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Þegar uppsett. Eitt eintak þjónar öllum veðurstöðvum."
+    },
+    "progress": {
+      "waiting_for_station": "Bíð eftir fyrstu sendingu stöðvarinnar…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Persónuleg veðurstöð",
+        "menu_options": {
+          "options": "Stillingar",
+          "instructions": "Hvernig á að beina stöð að Home Assistant"
+        }
+      },
+      "options": {
+        "title": "Persónuleg veðurstöð",
+        "description": "Stilltu hér stöðvarlykil sem veðurstöðvarnar þínar verða að senda svo gögnum þeirra sé ekki hafnað. Ef þú skilur reitinn eftir auðan verða allar beiðnir samþykktar.",
+        "data": {
+          "password": "Stöðvarlykill",
+          "availability_timeout": "Merkja sem ótiltækt eftir (mínútur)",
+          "debug": "Skrá hverja innkomna beiðni"
+        },
+        "data_description": {
+          "availability_timeout": "Hversu lengi stöð má þegja áður en nemar hennar eru merktir ótiltækir. 0 til að merkja þá aldrei.",
+          "debug": "Skrifar allt innihald hverrar beiðni í annál Home Assistant. Gagnlegt meðan stöð er sett upp, hávaðasamt eftir það."
+        }
+      },
+      "station": {
+        "title": "Skref 1 af 5 — stöðin þín",
+        "description": "{image}\n\nVeðurstöðin þín býr sjálf til tækin sín og skynjara, svo hér er engu við að bæta. Það sem á eftir fer er það sem á að slá inn í smáforrit stöðvarinnar.\n\nOpnaðu smáforritið, athugaðu hvort fastbúnaður stöðvarinnar sé uppfærður og opnaðu svo stillingar hennar."
+      },
+      "settings": {
+        "title": "Skref 2 af 5 — veðurþjónusta",
+        "description": "{image}\n\nVeldu **Weather server**."
+      },
+      "server": {
+        "title": "Skref 3 af 5 — annar þjónn",
+        "description": "{image}\n\nVeldu **Other Server**."
+      },
+      "form": {
+        "title": "Skref 4 af 5 — stillingar þjónsins",
+        "description": "{image}\n\nFylltu út eyðublaðið og ýttu svo á **Save**.\n\n**URL**\n{urls}\nÁn `http://` eða `https://`. Notaðu vistfang sem stöðin þín nær til á þínu eigin neti — það er engin ástæða til að opna Home Assistant út á netið fyrir þetta. Ef stöðin þín leysir ekki nöfn skaltu nota IP-tölu.\n\n**Station ID** — hvað sem þú vilt. Það verður heiti tækisins í Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 mínúta er gott gildi.\n\n**API type** — *WSLink API*. Veldu *WUnderground API* aðeins ef stöðin þín býður ekki upp á WSLink: hann ber helmingi færri mælingar og aðeins fjórar rásir.\n\n**Upload** — láttu vera kveikt.\n\n> ⏱️ Sumar stöðvar missa Wi-Fi ef þú dvelur á þessum skjá. Hafðu vistfangið tilbúið, sláðu það inn og vistaðu."
+      },
+      "confirm": {
+        "title": "Skref 5 af 5 — confirm & exit",
+        "description": "{image}\n\nFarðu til baka og ýttu svo á **Confirm & Exit**.\n\n> ⚠️ **Það er Confirm & Exit sem skrifar stillingarnar í stöðina.** Að vista eitt og sér breytir engu.\n\nÝttu á Áfram um leið og því er lokið."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Veðurstöð hafnað: rangur stöðvarlykill",
+      "description": "Veðurstöð á {ip} reyndi að senda gögn sem `{station_id}` án þess að senda væntanlegan stöðvarlykil.\n\nAthugaðu hvort lykillinn sem stilltur er í stöðinni eða í WSLink-forritinu passi við þann sem stilltur er í þessari samþættingu. Þessi skilaboð hverfa af sjálfu sér um leið og beiðni frá {ip} er samþykkt."
+    },
+    "missing_device_id": {
+      "title": "Veðurstöð hafnað: engin stöðvarauðkenni",
+      "description": "Veðurstöð á {ip} sendi gögn án stöðvarauðkennis.\n\nStilltu Sender ID í WSLink-forritinu, eða ID-færibreytu í stillingum stöðvarinnar. Þessi skilaboð hverfa af sjálfu sér um leið og beiðni frá {ip} er samþykkt."
+    },
+    "legacy_entity_ids": {
+      "title": "Auðkenni eininga endurtaka heiti stöðvarinnar",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Stytta auðkenni eininganna",
+            "description": "Fram að útgáfu 1.0.8 bjó þessi samþætting til einingaauðkenni sem bera heiti stöðvarinnar tvisvar, eins og `{example_old}`. Nýjar stöðvar gera það ekki lengur.\n\nHægt er að endurnefna **{count} einingar**, til dæmis í `{example_new}`.\n\nSaga og langtímatölfræði fylgja endurnefningunni sjálfkrafa. **Sjálfvirkni, skriftur, senur og mælaborð ekki** — þú þarft sjálf/ur að uppfæra allt sem vísar í gömlu auðkennin.\n\nEf þú vilt frekar hafa þau óbreytt skaltu hunsa þessa viðgerð."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Tengingar-, leka- og rafhlöðugildi eru enn tölur",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Umbreyta í tvíundarnema",
+            "description": "Tengingar-, vatnsleka- og rafhlöðugildi eru send sem 1 eða 0. Fram að útgáfu 1.0.8 birtust þau sem tölulegir skynjarar, svo sem `{example}`, sem nýtast ekki með stöðluðum spjöldum Home Assistant fyrir leka, tengingu og lága rafhlöðu. Nýjar stöðvar fá tvíundarskynjara sem sýna **Blautt / Þurrt**, **Tengt / Ótengt** og **Kveikt / Slökkt**.\n\nHægt er að umbreyta **{count} einingum**. Rafhlöðuþrep 0~5 á loftgæðaskynjurunum halda prósentu sinni: sex þrep eru meira en kveikt/slökkt ræður við.\n\nAð skipta um vettvang er ekki endurnefning: gömlu einingarnar eru fjarlægðar og endurskapaðar sem `binary_sensor`. **Skráð saga þeirra glatast** — þessi gildi hafa enga langtímatölfræði, svo aðeins hrá sagan verður fyrir áhrifum — og **sjálfvirkni, skriftur, senur og mælaborð sem vísa á þau þarf að uppfæra**. Nýju einingarnar birtast við næstu sendingu stöðvarinnar.\n\nViljir þú frekar hafa þau óbreytt skaltu hunsa þessa viðgerð."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Engin veðurstöð hefur sent neitt enn",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Settu upp veðurstöðina þína",
+            "description": "Veðurstöðin þín býr til tækin og nemana — hér er ekkert til að bæta við.\n\nOpnaðu stöðina þína í forriti stöðvarinnar, síðan **Settings → Weather server → Other Server**, og fylltu út:\n\n**URL**\n{urls}\nÁn `http://` eða `https://`. Notaðu vistfang sem stöðin þín nær til á þínu eigin neti — það er engin ástæða til að opna Home Assistant út á netið fyrir þetta. Ef stöðin þín leysir ekki nöfn skaltu nota IP-vistfangið.\n\n**Station ID** — hvað sem þú vilt. Það verður tækjaheitið í Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 mínúta er gott gildi.\n\n**API type** — *WSLink API*.\n\n**Upload** — láttu það vera kveikt.\n\nÝttu á **Save**, farðu til baka og ýttu svo á **Confirm & Exit**.\n\n> ⚠️ **Það er Confirm & Exit sem skrifar stillingarnar í stöðina.** Að vista eitt og sér breytir engu. Nemarnir þínir birtast sekúndu síðar.\n\nEndapunktarnir sem hlusta eru:\n{endpoints}"
+          },
+          "received": {
+            "title": "Stöðin þín komst í gegn",
+            "description": "**{station}** hefur sent sína fyrstu sendingu. Nemar hennar eru að verða til núna og fleiri bætast við eftir því sem stöðin tilkynnir þá.\n\nÞessi skilaboð koma ekki aftur."
+          },
+          "timeout": {
+            "title": "Ekkert borist enn",
+            "description": "Engin sending barst á {minutes} mínútum.\n\nEftir líkum:\n\n  - **Ýttir þú á Confirm & Exit?** Að vista netþjónsskjáinn eitt og sér skrifar ekkert í stöðina.\n  - **URL** verður að vera {urls_inline}, án `http://`, og aðgengilegt stöðinni á netinu þínu.\n  - **Upload** verður að vera kveikt á þeim skjá.\n  - Sumar Bresser-fastbúnaðarútgáfur frá **3.02** hafna venjulegu HTTP og krefjast vistfangs sem þjónar HTTPS.\n  - Sendingarbilið gæti einfaldlega verið lengra en biðin.\n  - **Stöðvarlykill**: {key_hint}.\n\nEf stöðin náði til Home Assistant en var hafnað er það tilkynnt sérstaklega í **Stillingar → Kerfi → Viðgerðir**.\n\nÞú mátt loka þessu. Það helst hér þar til stöð birtist, og að opna það aftur hefur biðina að nýju."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Bíð eftir fyrstu sendingu stöðvarinnar þinnar…"
+        },
+        "abort": {
+          "not_received": "Ekkert hefur borist enn, svo þetta stendur opið. Það helst í Viðgerðum þar til stöð birtist, og þú getur opnað það aftur til að bíða á ný."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "Stöðin {station} sendir mælingar sem er fleygt",
+      "description": "**{count} færibreytur** frá **{station}** þekkjast ekki, svo gildum þeirra er fleygt í hverri sendingu:\n\n{parameters}\n\nVenjuleg ástæða er stöð sem tilkynnir meira en samskiptastaðall hennar ræður við. Weather Underground hefur aðeins **4 sæti** fyrir aukaskynjara; bjóði stöðin þín upp á **WSLink** sem *API type* opnar skipti yfir í hann sjö rásir og um það bil tvöfalt fleiri mælingar.\n\nSé ástæðan ekki sú eru einmitt þessi heiti færibreyta það sem villuskýrsla þarf: opnaðu eina á [villuskránni]({issue_tracker}) og þá má bæta þeim við.\n\nÞú mátt líka hunsa þetta — ekkert er bilað, þessi tilteknu gildi berast einfaldlega ekki."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "Stöðin {device} hefur ekki enn sent neina vindátt, svo það er ekkert til að kvarða eftir. Bíddu eftir næstu sendingu og reyndu aftur."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Algjör loftþrýstingur"
+      },
+      "apiver": {
+        "name": "API-útgáfa"
+      },
+      "aqbc": {
+        "name": "Sótkolefni"
+      },
+      "aqco": {
+        "name": "Kolmónoxíð"
+      },
+      "aqcot": {
+        "name": "Kolmónoxíð í snefilmagni"
+      },
+      "aqec": {
+        "name": "Frumefniskolefni"
+      },
+      "aqno": {
+        "name": "Köfnunarefnismónoxíð"
+      },
+      "aqno2": {
+        "name": "NO2 X reiknað"
+      },
+      "aqno2t": {
+        "name": "Köfnunarefnisdíoxíð"
+      },
+      "aqno2y": {
+        "name": "NO2 Y reiknað"
+      },
+      "aqno3": {
+        "name": "NO3-jón"
+      },
+      "aqnox": {
+        "name": "Köfnunarefnisoxíð"
+      },
+      "aqnoy": {
+        "name": "Heildarhvarfgjarnt köfnunarefni"
+      },
+      "aqoc": {
+        "name": "Lífrænt kolefni"
+      },
+      "aqozone": {
+        "name": "Óson"
+      },
+      "aqpm10": {
+        "name": "PM10-massi"
+      },
+      "aqpm2_5": {
+        "name": "PM2.5-massi"
+      },
+      "aqso2": {
+        "name": "Brennisteinsdíoxíð"
+      },
+      "aqso2t": {
+        "name": "Brennisteinsdíoxíð í snefilmagni"
+      },
+      "aqso4": {
+        "name": "SO4-jón"
+      },
+      "aquv_aeth": {
+        "name": "Aethalómeter rás 2"
+      },
+      "baromin": {
+        "name": "Þrýstingur"
+      },
+      "clouds": {
+        "name": "Skýjahula"
+      },
+      "dailyrainin": {
+        "name": "Úrkoma á sólarhring"
+      },
+      "dewptf": {
+        "name": "Daggarmark"
+      },
+      "humidity": {
+        "name": "Rakastig úti"
+      },
+      "inbat": {
+        "name": "Rafhlöðustaða stjórnstöðvar"
+      },
+      "indoorhumidity": {
+        "name": "Rakastig inni"
+      },
+      "indoortempf": {
+        "name": "Innihiti"
+      },
+      "inhum": {
+        "name": "Rakastig inni"
+      },
+      "intem": {
+        "name": "Innihiti"
+      },
+      "last_update": {
+        "name": "Síðasta móttaka"
+      },
+      "leafwetness": {
+        "name": "Blaðbleyta"
+      },
+      "leafwetness2": {
+        "name": "CH2 blaðbleyta"
+      },
+      "lowbatt": {
+        "name": "Lítil rafhlaða"
+      },
+      "monthlyrainin": {
+        "name": "Úrkoma á mánuði"
+      },
+      "rainin": {
+        "name": "Úrkoma á klukkustund"
+      },
+      "rbar": {
+        "name": "Afstæður loftþrýstingur"
+      },
+      "rtfreq": {
+        "name": "Uppfærslutíðni"
+      },
+      "soilmoisture": {
+        "name": "Jarðvegsraki"
+      },
+      "soilmoisture2": {
+        "name": "CH2 jarðvegsraki"
+      },
+      "soilmoisture3": {
+        "name": "CH3 jarðvegsraki"
+      },
+      "soilmoisture4": {
+        "name": "CH4 jarðvegsraki"
+      },
+      "soiltemp2f": {
+        "name": "CH2 jarðvegshiti"
+      },
+      "soiltemp3f": {
+        "name": "CH3 jarðvegshiti"
+      },
+      "soiltemp4f": {
+        "name": "CH4 jarðvegshiti"
+      },
+      "soiltempf": {
+        "name": "Jarðvegshiti"
+      },
+      "solarradiation": {
+        "name": "Sólgeislun"
+      },
+      "t10bat": {
+        "name": "Rafhlöðustaða CO2-nema"
+      },
+      "t10cn": {
+        "name": "Tengistaða CO2-nema"
+      },
+      "t10co2": {
+        "name": "CO2-styrkur"
+      },
+      "t11bat": {
+        "name": "Rafhlöðustaða CO-nema"
+      },
+      "t11cn": {
+        "name": "Tengistaða CO-nema"
+      },
+      "t11co": {
+        "name": "CO-styrkur"
+      },
+      "t1bat": {
+        "name": "Rafhlöðustaða útinema"
+      },
+      "t1chill": {
+        "name": "Vindkælingarhiti"
+      },
+      "t1cn": {
+        "name": "Tengistaða útinema"
+      },
+      "t1dew": {
+        "name": "Daggarmarkshiti"
+      },
+      "t1feels": {
+        "name": "Skynjaður hiti"
+      },
+      "t1heat": {
+        "name": "Hitastuðull"
+      },
+      "t1hum": {
+        "name": "Rakastig úti"
+      },
+      "t1raindy": {
+        "name": "Sólarhringsúrkoma"
+      },
+      "t1rainhr": {
+        "name": "Klukkustundarúrkoma"
+      },
+      "t1rainmth": {
+        "name": "Mánaðarúrkoma"
+      },
+      "t1rainra": {
+        "name": "Úrkomuákefð"
+      },
+      "t1rainwy": {
+        "name": "Vikuúrkoma"
+      },
+      "t1rainyr": {
+        "name": "Ársúrkoma"
+      },
+      "t1solrad": {
+        "name": "Ljósstyrkur"
+      },
+      "t1tem": {
+        "name": "Útihiti"
+      },
+      "t1uvi": {
+        "name": "UV-stuðull"
+      },
+      "t1wbgt": {
+        "name": "WBGT-hiti"
+      },
+      "t1wdir": {
+        "name": "Vindátt"
+      },
+      "t1wgust": {
+        "name": "Vindhviða"
+      },
+      "t1ws": {
+        "name": "Vindhraði"
+      },
+      "t1ws10mav": {
+        "name": "Vindhraði meðaltal 10 mín"
+      },
+      "t234c1bat": {
+        "name": "CH1 rafhlöðustaða"
+      },
+      "t234c1cn": {
+        "name": "CH1 tengistaða"
+      },
+      "t234c1hum": {
+        "name": "CH1 rakastig"
+      },
+      "t234c1tem": {
+        "name": "CH1 hiti"
+      },
+      "t234c1tp": {
+        "name": "CH1 gerð nema"
+      },
+      "t234c2bat": {
+        "name": "CH2 rafhlöðustaða"
+      },
+      "t234c2cn": {
+        "name": "CH2 tengistaða"
+      },
+      "t234c2hum": {
+        "name": "CH2 rakastig"
+      },
+      "t234c2tem": {
+        "name": "CH2 hiti"
+      },
+      "t234c2tp": {
+        "name": "CH2 gerð nema"
+      },
+      "t234c3bat": {
+        "name": "CH3 rafhlöðustaða"
+      },
+      "t234c3cn": {
+        "name": "CH3 tengistaða"
+      },
+      "t234c3hum": {
+        "name": "CH3 rakastig"
+      },
+      "t234c3tem": {
+        "name": "CH3 hiti"
+      },
+      "t234c3tp": {
+        "name": "CH3 gerð nema"
+      },
+      "t234c4bat": {
+        "name": "CH4 rafhlöðustaða"
+      },
+      "t234c4cn": {
+        "name": "CH4 tengistaða"
+      },
+      "t234c4hum": {
+        "name": "CH4 rakastig"
+      },
+      "t234c4tem": {
+        "name": "CH4 hiti"
+      },
+      "t234c4tp": {
+        "name": "CH4 gerð nema"
+      },
+      "t234c5bat": {
+        "name": "CH5 rafhlöðustaða"
+      },
+      "t234c5cn": {
+        "name": "CH5 tengistaða"
+      },
+      "t234c5hum": {
+        "name": "CH5 rakastig"
+      },
+      "t234c5tem": {
+        "name": "CH5 hiti"
+      },
+      "t234c5tp": {
+        "name": "CH5 gerð nema"
+      },
+      "t234c6bat": {
+        "name": "CH6 rafhlöðustaða"
+      },
+      "t234c6cn": {
+        "name": "CH6 tengistaða"
+      },
+      "t234c6hum": {
+        "name": "CH6 rakastig"
+      },
+      "t234c6tem": {
+        "name": "CH6 hiti"
+      },
+      "t234c6tp": {
+        "name": "CH6 gerð nema"
+      },
+      "t234c7bat": {
+        "name": "CH7 rafhlöðustaða"
+      },
+      "t234c7cn": {
+        "name": "CH7 tengistaða"
+      },
+      "t234c7hum": {
+        "name": "CH7 rakastig"
+      },
+      "t234c7tem": {
+        "name": "CH7 hiti"
+      },
+      "t234c7tp": {
+        "name": "CH7 gerð nema"
+      },
+      "t5ls1dtc": {
+        "name": "Eldingar alls á 1 sólarhring"
+      },
+      "t5ls1htc": {
+        "name": "Eldingar alls á 1 klukkustund"
+      },
+      "t5ls30mtc": {
+        "name": "Eldingar síðustu 30 mínútur"
+      },
+      "t5ls5mtc": {
+        "name": "Eldingar síðustu 5 mínútur"
+      },
+      "t5lsbat": {
+        "name": "Rafhlöðustaða eldinganema"
+      },
+      "t5lscn": {
+        "name": "Tengistaða eldinganema"
+      },
+      "t5lsf": {
+        "name": "Eldingar síðustu klukkustund"
+      },
+      "t5lskm": {
+        "name": "Fjarlægð eldingar"
+      },
+      "t5lst": {
+        "name": "Tími síðustu eldingar"
+      },
+      "t6c1bat": {
+        "name": "CH1 rafhlöðustaða lekanema"
+      },
+      "t6c1cn": {
+        "name": "CH1 tengistaða lekanema"
+      },
+      "t6c1wls": {
+        "name": "CH1 staða vatnsleka"
+      },
+      "t6c2bat": {
+        "name": "CH2 rafhlöðustaða lekanema"
+      },
+      "t6c2cn": {
+        "name": "CH2 tengistaða lekanema"
+      },
+      "t6c2wls": {
+        "name": "CH2 staða vatnsleka"
+      },
+      "t6c3bat": {
+        "name": "CH3 rafhlöðustaða lekanema"
+      },
+      "t6c3cn": {
+        "name": "CH3 tengistaða lekanema"
+      },
+      "t6c3wls": {
+        "name": "CH3 staða vatnsleka"
+      },
+      "t6c4bat": {
+        "name": "CH4 rafhlöðustaða lekanema"
+      },
+      "t6c4cn": {
+        "name": "CH4 tengistaða lekanema"
+      },
+      "t6c4wls": {
+        "name": "CH4 staða vatnsleka"
+      },
+      "t6c5bat": {
+        "name": "CH5 rafhlöðustaða lekanema"
+      },
+      "t6c5cn": {
+        "name": "CH5 tengistaða lekanema"
+      },
+      "t6c5wls": {
+        "name": "CH5 staða vatnsleka"
+      },
+      "t6c6bat": {
+        "name": "CH6 rafhlöðustaða lekanema"
+      },
+      "t6c6cn": {
+        "name": "CH6 tengistaða lekanema"
+      },
+      "t6c6wls": {
+        "name": "CH6 staða vatnsleka"
+      },
+      "t6c7bat": {
+        "name": "CH7 rafhlöðustaða lekanema"
+      },
+      "t6c7cn": {
+        "name": "CH7 tengistaða lekanema"
+      },
+      "t6c7wls": {
+        "name": "CH7 staða vatnsleka"
+      },
+      "t8bat": {
+        "name": "Rafhlöðustaða agnanema"
+      },
+      "t8cn": {
+        "name": "Tengistaða agnanema"
+      },
+      "t8pm10": {
+        "name": "PM10-styrkur"
+      },
+      "t8pm10ai": {
+        "name": "PM10 AQI"
+      },
+      "t8pm25": {
+        "name": "PM2.5-styrkur"
+      },
+      "t8pm25ai": {
+        "name": "PM2.5 AQI"
+      },
+      "t9bat": {
+        "name": "Rafhlöðustaða HCHO/VOC-nema"
+      },
+      "t9cn": {
+        "name": "Tengistaða HCHO/VOC-nema"
+      },
+      "t9hcho": {
+        "name": "HCHO-styrkur"
+      },
+      "t9voclv": {
+        "name": "VOC-stig",
+        "state": {
+          "very_low": "Mjög lágt",
+          "low": "Lágt",
+          "moderate": "Miðlungs",
+          "high": "Hátt",
+          "very_high": "Mjög hátt"
+        }
+      },
+      "tempf": {
+        "name": "Útihiti"
+      },
+      "uv": {
+        "name": "UV-stuðull"
+      },
+      "visibility": {
+        "name": "Skyggni"
+      },
+      "weeklyrainin": {
+        "name": "Úrkoma á viku"
+      },
+      "wind_direction_raw": {
+        "name": "Vindátt (hrá)"
+      },
+      "windchillf": {
+        "name": "Vindkæling"
+      },
+      "winddir": {
+        "name": "Vindátt"
+      },
+      "winddir_avg2m": {
+        "name": "Vindátt meðaltal 2 mín"
+      },
+      "windgustdir": {
+        "name": "Hviðuátt"
+      },
+      "windgustdir_10m": {
+        "name": "Hviðuátt meðaltal 10 mín"
+      },
+      "windgustmph": {
+        "name": "Vindhviða"
+      },
+      "windgustmph_10m": {
+        "name": "Hviðuhraði meðaltal 10 mín"
+      },
+      "windspdmph_avg2m": {
+        "name": "Vindhraði meðaltal 2 mín"
+      },
+      "windspeedmph": {
+        "name": "Vindhraði"
+      },
+      "yearlyrainin": {
+        "name": "Úrkoma á ári"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Rafhlöðustaða stjórnstöðvar"
+      },
+      "station_online": {
+        "name": "Stöð tengd"
+      },
+      "t10cn": {
+        "name": "Tengistaða CO2-nema"
+      },
+      "t11cn": {
+        "name": "Tengistaða CO-nema"
+      },
+      "t1bat": {
+        "name": "Rafhlöðustaða útinema"
+      },
+      "t1cn": {
+        "name": "Tengistaða útinema"
+      },
+      "t234c1bat": {
+        "name": "CH1 rafhlöðustaða"
+      },
+      "t234c1cn": {
+        "name": "CH1 tengistaða"
+      },
+      "t234c2bat": {
+        "name": "CH2 rafhlöðustaða"
+      },
+      "t234c2cn": {
+        "name": "CH2 tengistaða"
+      },
+      "t234c3bat": {
+        "name": "CH3 rafhlöðustaða"
+      },
+      "t234c3cn": {
+        "name": "CH3 tengistaða"
+      },
+      "t234c4bat": {
+        "name": "CH4 rafhlöðustaða"
+      },
+      "t234c4cn": {
+        "name": "CH4 tengistaða"
+      },
+      "t234c5bat": {
+        "name": "CH5 rafhlöðustaða"
+      },
+      "t234c5cn": {
+        "name": "CH5 tengistaða"
+      },
+      "t234c6bat": {
+        "name": "CH6 rafhlöðustaða"
+      },
+      "t234c6cn": {
+        "name": "CH6 tengistaða"
+      },
+      "t234c7bat": {
+        "name": "CH7 rafhlöðustaða"
+      },
+      "t234c7cn": {
+        "name": "CH7 tengistaða"
+      },
+      "t5lsbat": {
+        "name": "Rafhlöðustaða eldinganema"
+      },
+      "t5lscn": {
+        "name": "Tengistaða eldinganema"
+      },
+      "t6c1bat": {
+        "name": "CH1 rafhlöðustaða lekanema"
+      },
+      "t6c1cn": {
+        "name": "CH1 tengistaða lekanema"
+      },
+      "t6c1wls": {
+        "name": "CH1 staða vatnsleka"
+      },
+      "t6c2bat": {
+        "name": "CH2 rafhlöðustaða lekanema"
+      },
+      "t6c2cn": {
+        "name": "CH2 tengistaða lekanema"
+      },
+      "t6c2wls": {
+        "name": "CH2 staða vatnsleka"
+      },
+      "t6c3bat": {
+        "name": "CH3 rafhlöðustaða lekanema"
+      },
+      "t6c3cn": {
+        "name": "CH3 tengistaða lekanema"
+      },
+      "t6c3wls": {
+        "name": "CH3 staða vatnsleka"
+      },
+      "t6c4bat": {
+        "name": "CH4 rafhlöðustaða lekanema"
+      },
+      "t6c4cn": {
+        "name": "CH4 tengistaða lekanema"
+      },
+      "t6c4wls": {
+        "name": "CH4 staða vatnsleka"
+      },
+      "t6c5bat": {
+        "name": "CH5 rafhlöðustaða lekanema"
+      },
+      "t6c5cn": {
+        "name": "CH5 tengistaða lekanema"
+      },
+      "t6c5wls": {
+        "name": "CH5 staða vatnsleka"
+      },
+      "t6c6bat": {
+        "name": "CH6 rafhlöðustaða lekanema"
+      },
+      "t6c6cn": {
+        "name": "CH6 tengistaða lekanema"
+      },
+      "t6c6wls": {
+        "name": "CH6 staða vatnsleka"
+      },
+      "t6c7bat": {
+        "name": "CH7 rafhlöðustaða lekanema"
+      },
+      "t6c7cn": {
+        "name": "CH7 tengistaða lekanema"
+      },
+      "t6c7wls": {
+        "name": "CH7 staða vatnsleka"
+      },
+      "t8cn": {
+        "name": "Tengistaða agnanema"
+      },
+      "t9cn": {
+        "name": "Tengistaða HCHO/VOC-nema"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Frávik vindáttar"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Núllstilla frávik"
+      },
+      "set_north": {
+        "name": "Stilla norður á núverandi gildi"
+      }
+    }
+  }
+}

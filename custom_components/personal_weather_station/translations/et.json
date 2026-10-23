@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Isiklik ilmajaam",
+        "description": "Määrake siin jaamavõti, mille teie ilmajaamad peavad edastama, et nende andmeid ei lükataks tagasi. Kui jätate välja tühjaks, võetakse vastu kõik päringud.",
+        "data": {
+          "password": "Jaamavõti"
+        }
+      },
+      "station": {
+        "title": "Samm 1/5 — teie jaam",
+        "description": "{image}\n\nTeie ilmajaam loob oma seadmed ja andurid ise, nii et siin pole midagi lisada. Järgnev on see, mis tuleb sisestada jaama rakendusse.\n\nAvage rakendus, veenduge, et jaama püsivara on ajakohane, ja avage selle seaded."
+      },
+      "settings": {
+        "title": "Samm 2/5 — ilmateenus",
+        "description": "{image}\n\nValige **Weather server**."
+      },
+      "server": {
+        "title": "Samm 3/5 — muu server",
+        "description": "{image}\n\nValige **Other Server**."
+      },
+      "form": {
+        "title": "Samm 4/5 — serveri seaded",
+        "description": "{image}\n\nTäitke vorm ja vajutage **Save**.\n\n**URL**\n{urls}\nIlma `http://` ja `https://` eesliiteta. Kasutage aadressi, milleni jaam teie enda võrgus ulatub — pole mingit põhjust Home Assistanti selleks internetti avada. Kui jaam nimesid ei lahenda, kasutage IP-aadressi.\n\n**Station ID** — mida iganes soovite. Sellest saab seadme nimi Home Assistantis.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minut on hea väärtus.\n\n**API type** — *WSLink API*. Valige *WUnderground API* ainult siis, kui teie jaam WSLinki ei paku: see kannab poole vähem näite ja ainult neli kanalit.\n\n**Upload** — jätke sisse lülitatuks.\n\n> ⏱️ Mõned jaamad kaotavad Wi-Fi, kui sellel ekraanil viivitada. Hoidke aadress käepärast, sisestage see ja salvestage."
+      },
+      "confirm": {
+        "title": "Samm 5/5 — confirm & exit",
+        "description": "{image}\n\nMinge tagasi ja vajutage **Confirm & Exit**.\n\n> ⚠️ **Just Confirm & Exit kirjutab seaded jaama.** Ainuüksi salvestamine ei muuda midagi.\n\nKui olete seda teinud, vajutage Edasi."
+      },
+      "received": {
+        "title": "Teie jaam räägib Home Assistantiga",
+        "description": "**{station}** saatis just oma esimese saadetise.\n\nSelle andurid ilmuvad järgmisega ja luuakse sellest, mida jaam tegelikult saadab — siin pole midagi valida."
+      },
+      "timeout": {
+        "title": "Midagi pole veel saabunud",
+        "description": "Viimase {minutes} minuti jooksul pole ükski jaam midagi saatnud.{key_hint_extra}\n\nTavalised põhjused on aadress, milleni jaam ei ulatu, vajutamata **Confirm & Exit**, või püsivara alates versioonist 3.02, mis nõuab HTTPS-i.\n\nAadressid, kuhu see suunata:\n{urls}\nSaadetisi kuulavad lõpp-punktid:\n{endpoints}\n\nVajutage Edasi, et sellegipoolest lõpetada — seadistus säilib, lõpp-punktid hakkavad tõesti kuulama ja parandus toob teid siia tagasi, kuni mõni jaam ilmub."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Juba seadistatud. Üksainus eksemplar teenindab kõiki ilmajaamu."
+    },
+    "progress": {
+      "waiting_for_station": "Ootan teie jaama esimest saadetist…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Isiklik ilmajaam",
+        "menu_options": {
+          "options": "Seaded",
+          "instructions": "Kuidas suunata jaam Home Assistanti poole"
+        }
+      },
+      "options": {
+        "title": "Isiklik ilmajaam",
+        "description": "Määrake siin jaamavõti, mille teie ilmajaamad peavad edastama, et nende andmeid ei lükataks tagasi. Kui jätate välja tühjaks, võetakse vastu kõik päringud.",
+        "data": {
+          "password": "Jaamavõti",
+          "availability_timeout": "Märgi kättesaamatuks pärast (minutit)",
+          "debug": "Logi iga sissetulev päring"
+        },
+        "data_description": {
+          "availability_timeout": "Kui kaua tohib jaam vaikida, enne kui tema andurid märgitakse kättesaamatuks. 0 tähendab, et neid ei märgita kunagi.",
+          "debug": "Kirjutab iga päringu kogu sisu Home Assistanti logisse. Kasulik jaama seadistamisel, hiljem lärmakas."
+        }
+      },
+      "station": {
+        "title": "Samm 1/5 — teie jaam",
+        "description": "{image}\n\nTeie ilmajaam loob oma seadmed ja andurid ise, nii et siin pole midagi lisada. Järgnev on see, mis tuleb sisestada jaama rakendusse.\n\nAvage rakendus, veenduge, et jaama püsivara on ajakohane, ja avage selle seaded."
+      },
+      "settings": {
+        "title": "Samm 2/5 — ilmateenus",
+        "description": "{image}\n\nValige **Weather server**."
+      },
+      "server": {
+        "title": "Samm 3/5 — muu server",
+        "description": "{image}\n\nValige **Other Server**."
+      },
+      "form": {
+        "title": "Samm 4/5 — serveri seaded",
+        "description": "{image}\n\nTäitke vorm ja vajutage **Save**.\n\n**URL**\n{urls}\nIlma `http://` ja `https://` eesliiteta. Kasutage aadressi, milleni jaam teie enda võrgus ulatub — pole mingit põhjust Home Assistanti selleks internetti avada. Kui jaam nimesid ei lahenda, kasutage IP-aadressi.\n\n**Station ID** — mida iganes soovite. Sellest saab seadme nimi Home Assistantis.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minut on hea väärtus.\n\n**API type** — *WSLink API*. Valige *WUnderground API* ainult siis, kui teie jaam WSLinki ei paku: see kannab poole vähem näite ja ainult neli kanalit.\n\n**Upload** — jätke sisse lülitatuks.\n\n> ⏱️ Mõned jaamad kaotavad Wi-Fi, kui sellel ekraanil viivitada. Hoidke aadress käepärast, sisestage see ja salvestage."
+      },
+      "confirm": {
+        "title": "Samm 5/5 — confirm & exit",
+        "description": "{image}\n\nMinge tagasi ja vajutage **Confirm & Exit**.\n\n> ⚠️ **Just Confirm & Exit kirjutab seaded jaama.** Ainuüksi salvestamine ei muuda midagi.\n\nKui olete seda teinud, vajutage Edasi."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Ilmajaam tagasi lükatud: vale jaamavõti",
+      "description": "Ilmajaam aadressil {ip} üritas saata andmeid nimega `{station_id}`, edastamata oodatud jaamavõtit.\n\nKontrollige, kas jaamas või WSLinki rakenduses seadistatud võti ühtib selles sidumises määratuga. See teade kaob iseenesest, niipea kui päring aadressilt {ip} vastu võetakse."
+    },
+    "missing_device_id": {
+      "title": "Ilmajaam tagasi lükatud: jaama identifikaator puudub",
+      "description": "Ilmajaam aadressil {ip} saatis andmeid ilma jaama identifikaatorita.\n\nMäärake WSLinki rakenduses Sender ID või jaama seadistuses ID-parameeter. See teade kaob iseenesest, niipea kui päring aadressilt {ip} vastu võetakse."
+    },
+    "legacy_entity_ids": {
+      "title": "Olemi ID-d kordavad jaama nime",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Lühenda olemi ID-sid",
+            "description": "Kuni versioonini 1.0.8 lõi see sidumine olemi ID-sid, mis kannavad jaama nime kaks korda, näiteks `{example_old}`. Uued jaamad seda enam ei tee.\n\n**{count} olemit** saab ümber nimetada, näiteks kujule `{example_new}`.\n\nAjalugu ja pikaajaline statistika järgnevad ümbernimetamisele automaatselt. **Automatiseeringud, skriptid, stseenid ja töölauad mitte** — kõik, mis viitab vanadele ID-dele, tuleb teil endal uuendada.\n\nKui eelistate need niisama jätta, eirake seda parandust."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Ühenduse, lekke ja aku näidud on endiselt arvud",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Teisenda kahendanduriteks",
+            "description": "Ühenduse, veelekke ja aku näidud saadetakse 1 või 0 kujul. Kuni versioonini 1.0.8 kuvati neid arvuliste anduritena, näiteks `{example}`, mis ei sobi Home Assistanti tavapäraste lekke-, ühenduvuse ja tühja aku kaartidega. Uued jaamad saavad kahendandurid, mis näitavad **Märg / Kuiv**, **Ühendatud / Ühendamata** ja **Sees / Väljas**.\n\nTeisendada saab **{count} olemit**. Õhukvaliteedi andurite 0~5 akutasemed säilitavad oma protsendi: kuus astet on rohkem, kui sees/väljas suudab kanda.\n\nPlatvormi vahetus ei ole ümbernimetamine: vanad olemid eemaldatakse ja luuakse uuesti kui `binary_sensor`. **Nende salvestatud ajalugu läheb kaotsi** — neil näitudel pole pikaajalist statistikat, seega puudutab see ainult toorajalugu — ja **automaatikad, skriptid, stseenid ja töölauad, mis neile osutavad, tuleb üle vaadata**. Uued olemid ilmuvad jaama järgmise saadetisega.\n\nKui eelistate need nii jätta, eirake seda parandust."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Ükski ilmajaam pole veel midagi saatnud",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Seadistage oma ilmajaam",
+            "description": "Teie ilmajaam loob seadmed ja andurid — siin pole midagi lisada.\n\nAvage jaama rakenduses oma jaam, seejärel **Settings → Weather server → Other Server**, ja täitke:\n\n**URL**\n{urls}\nIlma `http://` või `https://` eesliiteta. Kasutage aadressi, milleni teie jaam pääseb teie enda võrgus — pole mingit põhjust selleks Home Assistanti internetti avada. Kui teie jaam nimesid ei lahenda, kasutage IP-aadressi.\n\n**Station ID** — mida iganes soovite. Sellest saab seadme nimi Home Assistantis.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minut on hea väärtus.\n\n**API type** — *WSLink API*.\n\n**Upload** — jätke sisse lülitatuks.\n\nVajutage **Save**, minge tagasi ja vajutage **Confirm & Exit**.\n\n> ⚠️ **Just Confirm & Exit kirjutab seaded jaama.** Ainult salvestamine ei muuda midagi. Teie andurid ilmuvad sekund hiljem.\n\nKuulavad lõpp-punktid on:\n{endpoints}"
+          },
+          "received": {
+            "title": "Teie jaam jõudis kohale",
+            "description": "**{station}** saatis oma esimese saadetise. Selle andurid luuakse praegu ja neid tuleb juurde, kui jaam neist teatab.\n\nSee teade enam ei naase."
+          },
+          "timeout": {
+            "title": "Veel pole midagi saabunud",
+            "description": "{minutes} minutiga ei saabunud ühtegi saadetist.\n\nTõenäosuse järjekorras:\n\n  - **Kas vajutasite Confirm & Exit?** Ainult serveriekraani salvestamine ei kirjuta jaama midagi.\n  - **URL** peab olema {urls_inline}, ilma `http://` eesliiteta, ja jaamale teie võrgus kättesaadav.\n  - **Upload** peab sellel ekraanil sisse lülitatud olema.\n  - Mõned Bresseri püsivarad alates **3.02** keelduvad tavalisest HTTP-st ja nõuavad HTTPS-i pakkuvat aadressi.\n  - Saatmisintervall võib lihtsalt olla ootamisest pikem.\n  - **Jaamavõti**: {key_hint}.\n\nKui jaam jõudis Home Assistantini, aga lükati tagasi, teatatakse sellest eraldi kohas **Seaded → Süsteem → Parandused**.\n\nVõite sulgeda. See jääb siia, kuni jaam ilmub, ja uuesti avamine alustab ootamist otsast."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Ootan teie jaama esimest saadetist…"
+        },
+        "abort": {
+          "not_received": "Veel pole midagi saabunud, seega jääb see avatuks. See püsib Parandustes, kuni jaam ilmub, ja saate selle uuesti avada, et jälle oodata."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "Jaam {station} saadab näite, mis visatakse ära",
+      "description": "**{count} parameetrit** jaamast **{station}** ei tunta ära, seega visatakse nende väärtused igal saatmisel ära:\n\n{parameters}\n\nTavaline põhjus on jaam, mis edastab rohkem, kui tema protokoll suudab kanda. Weather Undergroundil on lisaanduritele ainult **4 kohta**; kui teie jaam pakub *API type*'iks **WSLinki**, avab sellele üleminek seitse kanalit ja umbes kaks korda rohkem näite.\n\nKui põhjus pole see, on just need parameetrinimed veateate jaoks vajalikud: avage see [vearegistris]({issue_tracker}) ja need saab lisada.\n\nVõite seda ka eirata — miski ei ole katki, lihtsalt need konkreetsed väärtused ei jõua kohale."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "Jaam {device} ei ole veel tuule suunda edastanud, seega pole millegi järgi kalibreerida. Oodake järgmist saadetist ja proovige uuesti."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Absoluutne õhurõhk"
+      },
+      "apiver": {
+        "name": "API versioon"
+      },
+      "aqbc": {
+        "name": "Must süsinik"
+      },
+      "aqco": {
+        "name": "Süsinikmonooksiid"
+      },
+      "aqcot": {
+        "name": "Süsinikmonooksiid jälgedena"
+      },
+      "aqec": {
+        "name": "Elementaarne süsinik"
+      },
+      "aqno": {
+        "name": "Lämmastikmonooksiid"
+      },
+      "aqno2": {
+        "name": "NO2 X arvutatud"
+      },
+      "aqno2t": {
+        "name": "Lämmastikdioksiid"
+      },
+      "aqno2y": {
+        "name": "NO2 Y arvutatud"
+      },
+      "aqno3": {
+        "name": "NO3 ioon"
+      },
+      "aqnox": {
+        "name": "Lämmastikoksiidid"
+      },
+      "aqnoy": {
+        "name": "Reaktiivne lämmastik kokku"
+      },
+      "aqoc": {
+        "name": "Orgaaniline süsinik"
+      },
+      "aqozone": {
+        "name": "Osoon"
+      },
+      "aqpm10": {
+        "name": "PM10 mass"
+      },
+      "aqpm2_5": {
+        "name": "PM2.5 mass"
+      },
+      "aqso2": {
+        "name": "Vääveldioksiid"
+      },
+      "aqso2t": {
+        "name": "Vääveldioksiid jälgedena"
+      },
+      "aqso4": {
+        "name": "SO4 ioon"
+      },
+      "aquv_aeth": {
+        "name": "Aetalomeeter kanal 2"
+      },
+      "baromin": {
+        "name": "Rõhk"
+      },
+      "clouds": {
+        "name": "Pilvisus"
+      },
+      "dailyrainin": {
+        "name": "Ööpäevane vihm"
+      },
+      "dewptf": {
+        "name": "Kastepunkt"
+      },
+      "humidity": {
+        "name": "Välisõhu niiskus"
+      },
+      "inbat": {
+        "name": "Konsooli aku tase"
+      },
+      "indoorhumidity": {
+        "name": "Siseõhu niiskus"
+      },
+      "indoortempf": {
+        "name": "Sisetemperatuur"
+      },
+      "inhum": {
+        "name": "Siseõhu niiskus"
+      },
+      "intem": {
+        "name": "Sisetemperatuur"
+      },
+      "last_update": {
+        "name": "Viimane vastuvõtt"
+      },
+      "leafwetness": {
+        "name": "Lehemärgus"
+      },
+      "leafwetness2": {
+        "name": "CH2 lehemärgus"
+      },
+      "lowbatt": {
+        "name": "Aku tühjeneb"
+      },
+      "monthlyrainin": {
+        "name": "Kuine vihm"
+      },
+      "rainin": {
+        "name": "Tunnine vihm"
+      },
+      "rbar": {
+        "name": "Suhteline õhurõhk"
+      },
+      "rtfreq": {
+        "name": "Uuendussagedus"
+      },
+      "soilmoisture": {
+        "name": "Mullaniiskus"
+      },
+      "soilmoisture2": {
+        "name": "CH2 mullaniiskus"
+      },
+      "soilmoisture3": {
+        "name": "CH3 mullaniiskus"
+      },
+      "soilmoisture4": {
+        "name": "CH4 mullaniiskus"
+      },
+      "soiltemp2f": {
+        "name": "CH2 mullatemperatuur"
+      },
+      "soiltemp3f": {
+        "name": "CH3 mullatemperatuur"
+      },
+      "soiltemp4f": {
+        "name": "CH4 mullatemperatuur"
+      },
+      "soiltempf": {
+        "name": "Mullatemperatuur"
+      },
+      "solarradiation": {
+        "name": "Päikesekiirgus"
+      },
+      "t10bat": {
+        "name": "CO2 anduri aku tase"
+      },
+      "t10cn": {
+        "name": "CO2 anduri ühenduse olek"
+      },
+      "t10co2": {
+        "name": "CO2 sisaldus"
+      },
+      "t11bat": {
+        "name": "CO anduri aku tase"
+      },
+      "t11cn": {
+        "name": "CO anduri ühenduse olek"
+      },
+      "t11co": {
+        "name": "CO sisaldus"
+      },
+      "t1bat": {
+        "name": "Välisanduri aku olek"
+      },
+      "t1chill": {
+        "name": "Tuulekülma temperatuur"
+      },
+      "t1cn": {
+        "name": "Välisanduri ühenduse olek"
+      },
+      "t1dew": {
+        "name": "Kastepunkti temperatuur"
+      },
+      "t1feels": {
+        "name": "Tajutav temperatuur"
+      },
+      "t1heat": {
+        "name": "Kuumaindeks"
+      },
+      "t1hum": {
+        "name": "Välisõhu niiskus"
+      },
+      "t1raindy": {
+        "name": "Ööpäevane sademehulk"
+      },
+      "t1rainhr": {
+        "name": "Tunnine sademehulk"
+      },
+      "t1rainmth": {
+        "name": "Kuine sademehulk"
+      },
+      "t1rainra": {
+        "name": "Vihma intensiivsus"
+      },
+      "t1rainwy": {
+        "name": "Nädalane sademehulk"
+      },
+      "t1rainyr": {
+        "name": "Aastane sademehulk"
+      },
+      "t1solrad": {
+        "name": "Valguse intensiivsus"
+      },
+      "t1tem": {
+        "name": "Välistemperatuur"
+      },
+      "t1uvi": {
+        "name": "UV-indeks"
+      },
+      "t1wbgt": {
+        "name": "WBGT-temperatuur"
+      },
+      "t1wdir": {
+        "name": "Tuule suund"
+      },
+      "t1wgust": {
+        "name": "Tuuleiil"
+      },
+      "t1ws": {
+        "name": "Tuule kiirus"
+      },
+      "t1ws10mav": {
+        "name": "Tuule kiirus keskm. 10 min"
+      },
+      "t234c1bat": {
+        "name": "CH1 aku olek"
+      },
+      "t234c1cn": {
+        "name": "CH1 ühenduse olek"
+      },
+      "t234c1hum": {
+        "name": "CH1 niiskus"
+      },
+      "t234c1tem": {
+        "name": "CH1 temperatuur"
+      },
+      "t234c1tp": {
+        "name": "CH1 anduri tüüp"
+      },
+      "t234c2bat": {
+        "name": "CH2 aku olek"
+      },
+      "t234c2cn": {
+        "name": "CH2 ühenduse olek"
+      },
+      "t234c2hum": {
+        "name": "CH2 niiskus"
+      },
+      "t234c2tem": {
+        "name": "CH2 temperatuur"
+      },
+      "t234c2tp": {
+        "name": "CH2 anduri tüüp"
+      },
+      "t234c3bat": {
+        "name": "CH3 aku olek"
+      },
+      "t234c3cn": {
+        "name": "CH3 ühenduse olek"
+      },
+      "t234c3hum": {
+        "name": "CH3 niiskus"
+      },
+      "t234c3tem": {
+        "name": "CH3 temperatuur"
+      },
+      "t234c3tp": {
+        "name": "CH3 anduri tüüp"
+      },
+      "t234c4bat": {
+        "name": "CH4 aku olek"
+      },
+      "t234c4cn": {
+        "name": "CH4 ühenduse olek"
+      },
+      "t234c4hum": {
+        "name": "CH4 niiskus"
+      },
+      "t234c4tem": {
+        "name": "CH4 temperatuur"
+      },
+      "t234c4tp": {
+        "name": "CH4 anduri tüüp"
+      },
+      "t234c5bat": {
+        "name": "CH5 aku olek"
+      },
+      "t234c5cn": {
+        "name": "CH5 ühenduse olek"
+      },
+      "t234c5hum": {
+        "name": "CH5 niiskus"
+      },
+      "t234c5tem": {
+        "name": "CH5 temperatuur"
+      },
+      "t234c5tp": {
+        "name": "CH5 anduri tüüp"
+      },
+      "t234c6bat": {
+        "name": "CH6 aku olek"
+      },
+      "t234c6cn": {
+        "name": "CH6 ühenduse olek"
+      },
+      "t234c6hum": {
+        "name": "CH6 niiskus"
+      },
+      "t234c6tem": {
+        "name": "CH6 temperatuur"
+      },
+      "t234c6tp": {
+        "name": "CH6 anduri tüüp"
+      },
+      "t234c7bat": {
+        "name": "CH7 aku olek"
+      },
+      "t234c7cn": {
+        "name": "CH7 ühenduse olek"
+      },
+      "t234c7hum": {
+        "name": "CH7 niiskus"
+      },
+      "t234c7tem": {
+        "name": "CH7 temperatuur"
+      },
+      "t234c7tp": {
+        "name": "CH7 anduri tüüp"
+      },
+      "t5ls1dtc": {
+        "name": "Välgulöögid kokku 1 ööpäeva jooksul"
+      },
+      "t5ls1htc": {
+        "name": "Välgulöögid kokku 1 tunni jooksul"
+      },
+      "t5ls30mtc": {
+        "name": "Välgulöögid viimase 30 minuti jooksul"
+      },
+      "t5ls5mtc": {
+        "name": "Välgulöögid viimase 5 minuti jooksul"
+      },
+      "t5lsbat": {
+        "name": "Välguanduri aku olek"
+      },
+      "t5lscn": {
+        "name": "Välguanduri ühenduse olek"
+      },
+      "t5lsf": {
+        "name": "Välgulöögid viimase tunni jooksul"
+      },
+      "t5lskm": {
+        "name": "Välgu kaugus"
+      },
+      "t5lst": {
+        "name": "Viimase välgulöögi aeg"
+      },
+      "t6c1bat": {
+        "name": "CH1 lekkeanduri aku olek"
+      },
+      "t6c1cn": {
+        "name": "CH1 lekkeanduri ühenduse olek"
+      },
+      "t6c1wls": {
+        "name": "CH1 veelekke olek"
+      },
+      "t6c2bat": {
+        "name": "CH2 lekkeanduri aku olek"
+      },
+      "t6c2cn": {
+        "name": "CH2 lekkeanduri ühenduse olek"
+      },
+      "t6c2wls": {
+        "name": "CH2 veelekke olek"
+      },
+      "t6c3bat": {
+        "name": "CH3 lekkeanduri aku olek"
+      },
+      "t6c3cn": {
+        "name": "CH3 lekkeanduri ühenduse olek"
+      },
+      "t6c3wls": {
+        "name": "CH3 veelekke olek"
+      },
+      "t6c4bat": {
+        "name": "CH4 lekkeanduri aku olek"
+      },
+      "t6c4cn": {
+        "name": "CH4 lekkeanduri ühenduse olek"
+      },
+      "t6c4wls": {
+        "name": "CH4 veelekke olek"
+      },
+      "t6c5bat": {
+        "name": "CH5 lekkeanduri aku olek"
+      },
+      "t6c5cn": {
+        "name": "CH5 lekkeanduri ühenduse olek"
+      },
+      "t6c5wls": {
+        "name": "CH5 veelekke olek"
+      },
+      "t6c6bat": {
+        "name": "CH6 lekkeanduri aku olek"
+      },
+      "t6c6cn": {
+        "name": "CH6 lekkeanduri ühenduse olek"
+      },
+      "t6c6wls": {
+        "name": "CH6 veelekke olek"
+      },
+      "t6c7bat": {
+        "name": "CH7 lekkeanduri aku olek"
+      },
+      "t6c7cn": {
+        "name": "CH7 lekkeanduri ühenduse olek"
+      },
+      "t6c7wls": {
+        "name": "CH7 veelekke olek"
+      },
+      "t8bat": {
+        "name": "Osakeseanduri aku tase"
+      },
+      "t8cn": {
+        "name": "Osakeseanduri ühenduse olek"
+      },
+      "t8pm10": {
+        "name": "PM10 sisaldus"
+      },
+      "t8pm10ai": {
+        "name": "PM10 AQI"
+      },
+      "t8pm25": {
+        "name": "PM2.5 sisaldus"
+      },
+      "t8pm25ai": {
+        "name": "PM2.5 AQI"
+      },
+      "t9bat": {
+        "name": "HCHO/LOÜ anduri aku tase"
+      },
+      "t9cn": {
+        "name": "HCHO/LOÜ anduri ühenduse olek"
+      },
+      "t9hcho": {
+        "name": "HCHO sisaldus"
+      },
+      "t9voclv": {
+        "name": "LOÜ tase",
+        "state": {
+          "very_low": "Väga madal",
+          "low": "Madal",
+          "moderate": "Mõõdukas",
+          "high": "Kõrge",
+          "very_high": "Väga kõrge"
+        }
+      },
+      "tempf": {
+        "name": "Välistemperatuur"
+      },
+      "uv": {
+        "name": "UV-indeks"
+      },
+      "visibility": {
+        "name": "Nähtavus"
+      },
+      "weeklyrainin": {
+        "name": "Nädalane vihm"
+      },
+      "wind_direction_raw": {
+        "name": "Tuule suund (toores)"
+      },
+      "windchillf": {
+        "name": "Tuulekülm"
+      },
+      "winddir": {
+        "name": "Tuule suund"
+      },
+      "winddir_avg2m": {
+        "name": "Tuule suund keskm. 2 min"
+      },
+      "windgustdir": {
+        "name": "Iilide suund"
+      },
+      "windgustdir_10m": {
+        "name": "Iilide suund keskm. 10 min"
+      },
+      "windgustmph": {
+        "name": "Tuuleiil"
+      },
+      "windgustmph_10m": {
+        "name": "Iilide kiirus keskm. 10 min"
+      },
+      "windspdmph_avg2m": {
+        "name": "Tuule kiirus keskm. 2 min"
+      },
+      "windspeedmph": {
+        "name": "Tuule kiirus"
+      },
+      "yearlyrainin": {
+        "name": "Aastane vihm"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Konsooli aku tase"
+      },
+      "station_online": {
+        "name": "Jaam võrgus"
+      },
+      "t10cn": {
+        "name": "CO2 anduri ühenduse olek"
+      },
+      "t11cn": {
+        "name": "CO anduri ühenduse olek"
+      },
+      "t1bat": {
+        "name": "Välisanduri aku olek"
+      },
+      "t1cn": {
+        "name": "Välisanduri ühenduse olek"
+      },
+      "t234c1bat": {
+        "name": "CH1 aku olek"
+      },
+      "t234c1cn": {
+        "name": "CH1 ühenduse olek"
+      },
+      "t234c2bat": {
+        "name": "CH2 aku olek"
+      },
+      "t234c2cn": {
+        "name": "CH2 ühenduse olek"
+      },
+      "t234c3bat": {
+        "name": "CH3 aku olek"
+      },
+      "t234c3cn": {
+        "name": "CH3 ühenduse olek"
+      },
+      "t234c4bat": {
+        "name": "CH4 aku olek"
+      },
+      "t234c4cn": {
+        "name": "CH4 ühenduse olek"
+      },
+      "t234c5bat": {
+        "name": "CH5 aku olek"
+      },
+      "t234c5cn": {
+        "name": "CH5 ühenduse olek"
+      },
+      "t234c6bat": {
+        "name": "CH6 aku olek"
+      },
+      "t234c6cn": {
+        "name": "CH6 ühenduse olek"
+      },
+      "t234c7bat": {
+        "name": "CH7 aku olek"
+      },
+      "t234c7cn": {
+        "name": "CH7 ühenduse olek"
+      },
+      "t5lsbat": {
+        "name": "Välguanduri aku olek"
+      },
+      "t5lscn": {
+        "name": "Välguanduri ühenduse olek"
+      },
+      "t6c1bat": {
+        "name": "CH1 lekkeanduri aku olek"
+      },
+      "t6c1cn": {
+        "name": "CH1 lekkeanduri ühenduse olek"
+      },
+      "t6c1wls": {
+        "name": "CH1 veelekke olek"
+      },
+      "t6c2bat": {
+        "name": "CH2 lekkeanduri aku olek"
+      },
+      "t6c2cn": {
+        "name": "CH2 lekkeanduri ühenduse olek"
+      },
+      "t6c2wls": {
+        "name": "CH2 veelekke olek"
+      },
+      "t6c3bat": {
+        "name": "CH3 lekkeanduri aku olek"
+      },
+      "t6c3cn": {
+        "name": "CH3 lekkeanduri ühenduse olek"
+      },
+      "t6c3wls": {
+        "name": "CH3 veelekke olek"
+      },
+      "t6c4bat": {
+        "name": "CH4 lekkeanduri aku olek"
+      },
+      "t6c4cn": {
+        "name": "CH4 lekkeanduri ühenduse olek"
+      },
+      "t6c4wls": {
+        "name": "CH4 veelekke olek"
+      },
+      "t6c5bat": {
+        "name": "CH5 lekkeanduri aku olek"
+      },
+      "t6c5cn": {
+        "name": "CH5 lekkeanduri ühenduse olek"
+      },
+      "t6c5wls": {
+        "name": "CH5 veelekke olek"
+      },
+      "t6c6bat": {
+        "name": "CH6 lekkeanduri aku olek"
+      },
+      "t6c6cn": {
+        "name": "CH6 lekkeanduri ühenduse olek"
+      },
+      "t6c6wls": {
+        "name": "CH6 veelekke olek"
+      },
+      "t6c7bat": {
+        "name": "CH7 lekkeanduri aku olek"
+      },
+      "t6c7cn": {
+        "name": "CH7 lekkeanduri ühenduse olek"
+      },
+      "t6c7wls": {
+        "name": "CH7 veelekke olek"
+      },
+      "t8cn": {
+        "name": "Osakeseanduri ühenduse olek"
+      },
+      "t9cn": {
+        "name": "HCHO/LOÜ anduri ühenduse olek"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Tuule suuna nihe"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Lähtesta nihe"
+      },
+      "set_north": {
+        "name": "Määra põhi praeguse väärtuse järgi"
+      }
+    }
+  }
+}

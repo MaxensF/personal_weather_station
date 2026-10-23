@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Személyes meteorológiai állomás",
+        "description": "Adjon meg itt egy állomáskulcsot, amelyet a meteorológiai állomásainak továbbítaniuk kell, hogy adataikat ne utasítsa el a rendszer. Ha üresen hagyja a mezőt, minden kérés elfogadásra kerül.",
+        "data": {
+          "password": "Állomáskulcs"
+        }
+      },
+      "station": {
+        "title": "1. lépés az 5-ből — az Ön állomása",
+        "description": "{image}\n\nAz időjárás-állomás maga hozza létre az eszközeit és érzékelőit, tehát ezen az oldalon nincs mit hozzáadni. Az alábbiakat kell beírni az állomás alkalmazásába.\n\nNyissa meg az alkalmazást, ellenőrizze, hogy az állomás firmware-e naprakész, majd nyissa meg a beállításait."
+      },
+      "settings": {
+        "title": "2. lépés az 5-ből — időjárás-szolgáltatás",
+        "description": "{image}\n\nVálassza a **Weather server** lehetőséget."
+      },
+      "server": {
+        "title": "3. lépés az 5-ből — másik kiszolgáló",
+        "description": "{image}\n\nVálassza az **Other Server** lehetőséget."
+      },
+      "form": {
+        "title": "4. lépés az 5-ből — kiszolgálóbeállítások",
+        "description": "{image}\n\nTöltse ki az űrlapot, majd nyomja meg a **Save** gombot.\n\n**URL**\n{urls}\n`http://` és `https://` nélkül. Olyan címet adjon meg, amelyet az állomás a saját hálózatán elér — semmi ok arra, hogy emiatt kitegye a Home Assistantot az internetnek. Ha az állomás nem old fel neveket, írja be az IP-címet.\n\n**Station ID** — amit csak szeretne. Ez lesz az eszköz neve a Home Assistantban.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 perc jó érték.\n\n**API type** — *WSLink API*. A *WUnderground API*-t csak akkor válassza, ha az állomása nem kínál WSLinket: feleannyi mérést és mindössze négy csatornát visz.\n\n**Upload** — hagyja bekapcsolva.\n\n> ⏱️ Néhány állomás elveszíti a Wi-Fit, ha elidőzik ezen a képernyőn. Legyen kéznél a cím, írja be, és mentsen."
+      },
+      "confirm": {
+        "title": "5. lépés az 5-ből — confirm & exit",
+        "description": "{image}\n\nLépjen vissza, majd nyomja meg a **Confirm & Exit** gombot.\n\n> ⚠️ **A beállításokat a Confirm & Exit írja az állomásba.** A puszta mentés semmit sem változtat.\n\nHa ezzel megvan, nyomja meg a Tovább gombot."
+      },
+      "received": {
+        "title": "Az állomása beszél a Home Assistanttal",
+        "description": "A **{station}** épp most küldte el az első adagot.\n\nAz érzékelői a következővel jelennek meg, és abból jönnek létre, amit az állomás valóban küld — itt nincs mit kiválasztani."
+      },
+      "timeout": {
+        "title": "Még semmi sem érkezett",
+        "description": "Az elmúlt {minutes} percben egyetlen állomás sem küldött adatot.{key_hint_extra}\n\nA szokásos okok: olyan cím, amelyet az állomás nem ér el, a meg nem nyomott **Confirm & Exit**, vagy a 3.02-től kezdődő firmware, amely HTTPS-t követel.\n\nA címek, amelyekre irányítani kell:\n{urls}\nA feltöltésekre figyelő végpontok:\n{endpoints}\n\nNyomja meg a Tovább gombot, hogy mégis befejezze — a beállítás megmarad, a végpontok valóban figyelni kezdenek, és egy javítás visszahozza ide, amíg egy állomás fel nem bukkan."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Már konfigurálva. Egyetlen példány szolgálja ki az összes meteorológiai állomást."
+    },
+    "progress": {
+      "waiting_for_station": "Várakozás az állomás első feltöltésére…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Személyes meteorológiai állomás",
+        "menu_options": {
+          "options": "Beállítások",
+          "instructions": "Hogyan irányítson egy állomást a Home Assistant felé"
+        }
+      },
+      "options": {
+        "title": "Személyes meteorológiai állomás",
+        "description": "Adjon meg itt egy állomáskulcsot, amelyet a meteorológiai állomásainak továbbítaniuk kell, hogy adataikat ne utasítsa el a rendszer. Ha üresen hagyja a mezőt, minden kérés elfogadásra kerül.",
+        "data": {
+          "password": "Állomáskulcs",
+          "availability_timeout": "Megjelölés nem elérhetőként ennyi idő után (perc)",
+          "debug": "Minden beérkező kérés naplózása"
+        },
+        "data_description": {
+          "availability_timeout": "Meddig hallgathat egy állomás, mielőtt érzékelőit nem elérhetőként jelöli meg a rendszer. A 0 azt jelenti, hogy soha.",
+          "debug": "Minden kérés teljes tartalmát a Home Assistant naplójába írja. Hasznos egy állomás beállításakor, utána zavaró."
+        }
+      },
+      "station": {
+        "title": "1. lépés az 5-ből — az Ön állomása",
+        "description": "{image}\n\nAz időjárás-állomás maga hozza létre az eszközeit és érzékelőit, tehát ezen az oldalon nincs mit hozzáadni. Az alábbiakat kell beírni az állomás alkalmazásába.\n\nNyissa meg az alkalmazást, ellenőrizze, hogy az állomás firmware-e naprakész, majd nyissa meg a beállításait."
+      },
+      "settings": {
+        "title": "2. lépés az 5-ből — időjárás-szolgáltatás",
+        "description": "{image}\n\nVálassza a **Weather server** lehetőséget."
+      },
+      "server": {
+        "title": "3. lépés az 5-ből — másik kiszolgáló",
+        "description": "{image}\n\nVálassza az **Other Server** lehetőséget."
+      },
+      "form": {
+        "title": "4. lépés az 5-ből — kiszolgálóbeállítások",
+        "description": "{image}\n\nTöltse ki az űrlapot, majd nyomja meg a **Save** gombot.\n\n**URL**\n{urls}\n`http://` és `https://` nélkül. Olyan címet adjon meg, amelyet az állomás a saját hálózatán elér — semmi ok arra, hogy emiatt kitegye a Home Assistantot az internetnek. Ha az állomás nem old fel neveket, írja be az IP-címet.\n\n**Station ID** — amit csak szeretne. Ez lesz az eszköz neve a Home Assistantban.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 perc jó érték.\n\n**API type** — *WSLink API*. A *WUnderground API*-t csak akkor válassza, ha az állomása nem kínál WSLinket: feleannyi mérést és mindössze négy csatornát visz.\n\n**Upload** — hagyja bekapcsolva.\n\n> ⏱️ Néhány állomás elveszíti a Wi-Fit, ha elidőzik ezen a képernyőn. Legyen kéznél a cím, írja be, és mentsen."
+      },
+      "confirm": {
+        "title": "5. lépés az 5-ből — confirm & exit",
+        "description": "{image}\n\nLépjen vissza, majd nyomja meg a **Confirm & Exit** gombot.\n\n> ⚠️ **A beállításokat a Confirm & Exit írja az állomásba.** A puszta mentés semmit sem változtat.\n\nHa ezzel megvan, nyomja meg a Tovább gombot."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Meteorológiai állomás elutasítva: hibás állomáskulcs",
+      "description": "A(z) {ip} címen lévő meteorológiai állomás `{station_id}` néven próbált adatot küldeni anélkül, hogy elküldte volna a várt állomáskulcsot.\n\nEllenőrizze, hogy az állomásban vagy a WSLink alkalmazásban beállított kulcs megegyezik-e az ebben az integrációban megadottal. Ez az üzenet magától eltűnik, amint egy {ip} címről érkező kérés elfogadásra kerül."
+    },
+    "missing_device_id": {
+      "title": "Meteorológiai állomás elutasítva: nincs állomásazonosító",
+      "description": "A(z) {ip} címen lévő meteorológiai állomás állomásazonosító nélkül küldött adatot.\n\nÁllítson be egy Sender ID-t a WSLink alkalmazásban, vagy egy ID paramétert az állomás konfigurációjában. Ez az üzenet magától eltűnik, amint egy {ip} címről érkező kérés elfogadásra kerül."
+    },
+    "legacy_entity_ids": {
+      "title": "Az entitásazonosítók megismétlik az állomás nevét",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Az entitásazonosítók rövidítése",
+            "description": "Az 1.0.8-as verzióig ez az integráció olyan entitásazonosítókat épített, amelyek kétszer tartalmazzák az állomás nevét, például `{example_old}`. Az új állomások ezt már nem teszik.\n\n**{count} entitás** nevezhető át, például erre: `{example_new}`.\n\nAz előzmények és a hosszú távú statisztikák automatikusan követik az átnevezést. **Az automatizálások, szkriptek, jelenetek és irányítópultok nem** — mindent, ami a régi azonosítókra hivatkozik, önnek kell frissítenie.\n\nHa inkább úgy hagyná őket, hagyja figyelmen kívül ezt a javítást."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "A kapcsolat-, szivárgás- és akkumulátorértékek még számok",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Átalakítás bináris érzékelőkké",
+            "description": "A kapcsolat, a vízszivárgás és az akkumulátor értékeit 1 vagy 0 formájában küldi az állomás. Az 1.0.8-as változatig numerikus érzékelőként jelentek meg, például `{example}`, amelyek nem használhatók a Home Assistant szokásos szivárgás-, kapcsolat- és gyenge akkumulátor kártyáival. Az új állomások bináris érzékelőket kapnak, amelyek a **Nedves / Száraz**, **Csatlakoztatva / Leválasztva** és **Be / Ki** állapotot mutatják.\n\n**{count} entitás** alakítható át. A levegőminőség-érzékelők 0~5-ös akkumulátorszintjei megtartják a százalékukat: hat fokozat több annál, mint amennyit egy be/ki elbír.\n\nA platformváltás nem átnevezés: a régi entitások törlődnek, és `binary_sensor` néven jönnek létre újra. **A rögzített előzményeik elvesznek** — ezeknek az értékeknek nincs hosszú távú statisztikájuk, tehát csak a nyers előzmény érintett — és **a rájuk mutató automatizálásokat, szkripteket, jeleneteket és vezérlőpultokat frissíteni kell**. Az új entitások az állomás következő feltöltésekor jelennek meg.\n\nHa inkább úgy hagyná őket, ahogy vannak, hagyja figyelmen kívül ezt a javítást."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Még egyetlen meteorológiai állomás sem küldött semmit",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Állítsa be a meteorológiai állomását",
+            "description": "A meteorológiai állomása hozza létre az eszközöket és az érzékelőket — itt nincs mit hozzáadni.\n\nAz állomás alkalmazásában nyissa meg az állomását, majd **Settings → Weather server → Other Server**, és töltse ki:\n\n**URL**\n{urls}\n`http://` vagy `https://` nélkül. Olyan címet használjon, amelyet az állomása el tud érni a saját hálózatán — semmi ok arra, hogy ehhez az internet felé nyissa meg a Home Assistantot. Ha az állomása nem old fel neveket, adja meg az IP-címet.\n\n**Station ID** — amit szeretne. Ez lesz az eszköz neve a Home Assistantban.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 perc jó érték.\n\n**API type** — *WSLink API*.\n\n**Upload** — hagyja bekapcsolva.\n\nNyomja meg a **Save** gombot, lépjen vissza, majd nyomja meg a **Confirm & Exit** gombot.\n\n> ⚠️ **A beállításokat a Confirm & Exit írja az állomásba.** A puszta mentés semmit sem változtat. Az érzékelői egy másodperccel később jelennek meg.\n\nA figyelő végpontok:\n{endpoints}"
+          },
+          "received": {
+            "title": "Az állomása átjutott",
+            "description": "A(z) **{station}** elküldte az első feltöltését. Az érzékelői most jönnek létre, és továbbiak jelennek meg, ahogy az állomás jelenti őket.\n\nEz az üzenet nem tér vissza."
+          },
+          "timeout": {
+            "title": "Még semmi sem érkezett",
+            "description": "{minutes} perc alatt nem érkezett feltöltés.\n\nValószínűségi sorrendben:\n\n  - **Megnyomta a Confirm & Exit gombot?** A kiszolgáló képernyőjének puszta mentése semmit sem ír az állomásba.\n  - Az **URL** legyen {urls_inline}, `http://` nélkül, és az állomás számára elérhető a hálózatán.\n  - Az **Upload** legyen bekapcsolva azon a képernyőn.\n  - Egyes Bresser firmware-ek a **3.02** verziótól elutasítják az egyszerű HTTP-t, és HTTPS-t kiszolgáló címet igényelnek.\n  - A feltöltési időköz egyszerűen hosszabb lehet a várakozásnál.\n  - **Állomáskulcs**: {key_hint}.\n\nHa az állomás elérte a Home Assistantot, de elutasításra került, arról külön értesítés jelenik meg a **Beállítások → Rendszer → Javítások** alatt.\n\nBezárhatja. Itt marad, amíg egy állomás fel nem tűnik, és újranyitása elölről kezdi a várakozást."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Várakozás az állomása első feltöltésére…"
+        },
+        "abort": {
+          "not_received": "Még semmi sem érkezett, ezért ez nyitva marad. A Javítások között marad, amíg egy állomás fel nem tűnik, és újranyitva ismét várakozhat."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "A(z) {station} állomás olyan méréseket küld, amelyek eldobódnak",
+      "description": "A(z) **{station}** állomás **{count} paraméterét** nem ismerjük fel, ezért az értékeik minden feltöltéskor eldobódnak:\n\n{parameters}\n\nA szokásos ok az, hogy az állomás többet jelent, mint amennyit a protokollja elbír. A Weather Undergroundban mindössze **4 hely** van további érzékelőknek; ha az állomás *API type* gyanánt felkínálja a **WSLink**-et, az arra váltás hét csatornát és nagyjából kétszer annyi mérést tesz elérhetővé.\n\nHa nem ez az ok, akkor éppen ezekre a paraméternevekre van szüksége egy hibajelentésnek: nyisson egyet a [hibakövetőben]({issue_tracker}), és fel lehet venni őket.\n\nFigyelmen kívül is hagyhatja — semmi nem romlott el, csak ezek az értékek nem érkeznek meg."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "A(z) {device} állomás még nem küldött szélirányt, így nincs mihez kalibrálni. Várja meg a következő feltöltést, és próbálja újra."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Abszolút légnyomás"
+      },
+      "apiver": {
+        "name": "API verzió"
+      },
+      "aqbc": {
+        "name": "Fekete szén"
+      },
+      "aqco": {
+        "name": "Szén-monoxid"
+      },
+      "aqcot": {
+        "name": "Szén-monoxid nyomokban"
+      },
+      "aqec": {
+        "name": "Elemi szén"
+      },
+      "aqno": {
+        "name": "Nitrogén-monoxid"
+      },
+      "aqno2": {
+        "name": "NO2 X számított"
+      },
+      "aqno2t": {
+        "name": "Nitrogén-dioxid"
+      },
+      "aqno2y": {
+        "name": "NO2 Y számított"
+      },
+      "aqno3": {
+        "name": "NO3 ion"
+      },
+      "aqnox": {
+        "name": "Nitrogén-oxidok"
+      },
+      "aqnoy": {
+        "name": "Teljes reaktív nitrogén"
+      },
+      "aqoc": {
+        "name": "Szerves szén"
+      },
+      "aqozone": {
+        "name": "Ózon"
+      },
+      "aqpm10": {
+        "name": "PM10 tömeg"
+      },
+      "aqpm2_5": {
+        "name": "PM2.5 tömeg"
+      },
+      "aqso2": {
+        "name": "Kén-dioxid"
+      },
+      "aqso2t": {
+        "name": "Kén-dioxid nyomokban"
+      },
+      "aqso4": {
+        "name": "SO4 ion"
+      },
+      "aquv_aeth": {
+        "name": "Aethalométer 2. csatorna"
+      },
+      "baromin": {
+        "name": "Nyomás"
+      },
+      "clouds": {
+        "name": "Felhőzet"
+      },
+      "dailyrainin": {
+        "name": "Napi csapadék"
+      },
+      "dewptf": {
+        "name": "Harmatpont"
+      },
+      "humidity": {
+        "name": "Külső páratartalom"
+      },
+      "inbat": {
+        "name": "Konzol akkumulátorszintje"
+      },
+      "indoorhumidity": {
+        "name": "Belső páratartalom"
+      },
+      "indoortempf": {
+        "name": "Belső hőmérséklet"
+      },
+      "inhum": {
+        "name": "Belső páratartalom"
+      },
+      "intem": {
+        "name": "Belső hőmérséklet"
+      },
+      "last_update": {
+        "name": "Utolsó fogadás"
+      },
+      "leafwetness": {
+        "name": "Levélnedvesség"
+      },
+      "leafwetness2": {
+        "name": "CH2 levélnedvesség"
+      },
+      "lowbatt": {
+        "name": "Alacsony töltöttség"
+      },
+      "monthlyrainin": {
+        "name": "Havi csapadék"
+      },
+      "rainin": {
+        "name": "Órás csapadék"
+      },
+      "rbar": {
+        "name": "Relatív légnyomás"
+      },
+      "rtfreq": {
+        "name": "Frissítési gyakoriság"
+      },
+      "soilmoisture": {
+        "name": "Talajnedvesség"
+      },
+      "soilmoisture2": {
+        "name": "CH2 talajnedvesség"
+      },
+      "soilmoisture3": {
+        "name": "CH3 talajnedvesség"
+      },
+      "soilmoisture4": {
+        "name": "CH4 talajnedvesség"
+      },
+      "soiltemp2f": {
+        "name": "CH2 talajhőmérséklet"
+      },
+      "soiltemp3f": {
+        "name": "CH3 talajhőmérséklet"
+      },
+      "soiltemp4f": {
+        "name": "CH4 talajhőmérséklet"
+      },
+      "soiltempf": {
+        "name": "Talajhőmérséklet"
+      },
+      "solarradiation": {
+        "name": "Napsugárzás"
+      },
+      "t10bat": {
+        "name": "CO2 érzékelő akkumulátorszintje"
+      },
+      "t10cn": {
+        "name": "CO2 érzékelő kapcsolatának állapota"
+      },
+      "t10co2": {
+        "name": "CO2 koncentráció"
+      },
+      "t11bat": {
+        "name": "CO érzékelő akkumulátorszintje"
+      },
+      "t11cn": {
+        "name": "CO érzékelő kapcsolatának állapota"
+      },
+      "t11co": {
+        "name": "CO koncentráció"
+      },
+      "t1bat": {
+        "name": "Kültéri érzékelő akkumulátorának állapota"
+      },
+      "t1chill": {
+        "name": "Szélhidegérzet hőmérséklete"
+      },
+      "t1cn": {
+        "name": "Kültéri érzékelő kapcsolatának állapota"
+      },
+      "t1dew": {
+        "name": "Harmatpont hőmérséklete"
+      },
+      "t1feels": {
+        "name": "Hőérzet"
+      },
+      "t1heat": {
+        "name": "Hőindex"
+      },
+      "t1hum": {
+        "name": "Külső páratartalom"
+      },
+      "t1raindy": {
+        "name": "Napi csapadékmennyiség"
+      },
+      "t1rainhr": {
+        "name": "Órás csapadékmennyiség"
+      },
+      "t1rainmth": {
+        "name": "Havi csapadékmennyiség"
+      },
+      "t1rainra": {
+        "name": "Csapadékintenzitás"
+      },
+      "t1rainwy": {
+        "name": "Heti csapadékmennyiség"
+      },
+      "t1rainyr": {
+        "name": "Éves csapadékmennyiség"
+      },
+      "t1solrad": {
+        "name": "Fényerősség"
+      },
+      "t1tem": {
+        "name": "Külső hőmérséklet"
+      },
+      "t1uvi": {
+        "name": "UV-index"
+      },
+      "t1wbgt": {
+        "name": "WBGT hőmérséklet"
+      },
+      "t1wdir": {
+        "name": "Szélirány"
+      },
+      "t1wgust": {
+        "name": "Széllökés"
+      },
+      "t1ws": {
+        "name": "Szélsebesség"
+      },
+      "t1ws10mav": {
+        "name": "Szélsebesség 10 perces átlag"
+      },
+      "t234c1bat": {
+        "name": "CH1 akkumulátor állapota"
+      },
+      "t234c1cn": {
+        "name": "CH1 kapcsolat állapota"
+      },
+      "t234c1hum": {
+        "name": "CH1 páratartalom"
+      },
+      "t234c1tem": {
+        "name": "CH1 hőmérséklet"
+      },
+      "t234c1tp": {
+        "name": "CH1 érzékelő típusa"
+      },
+      "t234c2bat": {
+        "name": "CH2 akkumulátor állapota"
+      },
+      "t234c2cn": {
+        "name": "CH2 kapcsolat állapota"
+      },
+      "t234c2hum": {
+        "name": "CH2 páratartalom"
+      },
+      "t234c2tem": {
+        "name": "CH2 hőmérséklet"
+      },
+      "t234c2tp": {
+        "name": "CH2 érzékelő típusa"
+      },
+      "t234c3bat": {
+        "name": "CH3 akkumulátor állapota"
+      },
+      "t234c3cn": {
+        "name": "CH3 kapcsolat állapota"
+      },
+      "t234c3hum": {
+        "name": "CH3 páratartalom"
+      },
+      "t234c3tem": {
+        "name": "CH3 hőmérséklet"
+      },
+      "t234c3tp": {
+        "name": "CH3 érzékelő típusa"
+      },
+      "t234c4bat": {
+        "name": "CH4 akkumulátor állapota"
+      },
+      "t234c4cn": {
+        "name": "CH4 kapcsolat állapota"
+      },
+      "t234c4hum": {
+        "name": "CH4 páratartalom"
+      },
+      "t234c4tem": {
+        "name": "CH4 hőmérséklet"
+      },
+      "t234c4tp": {
+        "name": "CH4 érzékelő típusa"
+      },
+      "t234c5bat": {
+        "name": "CH5 akkumulátor állapota"
+      },
+      "t234c5cn": {
+        "name": "CH5 kapcsolat állapota"
+      },
+      "t234c5hum": {
+        "name": "CH5 páratartalom"
+      },
+      "t234c5tem": {
+        "name": "CH5 hőmérséklet"
+      },
+      "t234c5tp": {
+        "name": "CH5 érzékelő típusa"
+      },
+      "t234c6bat": {
+        "name": "CH6 akkumulátor állapota"
+      },
+      "t234c6cn": {
+        "name": "CH6 kapcsolat állapota"
+      },
+      "t234c6hum": {
+        "name": "CH6 páratartalom"
+      },
+      "t234c6tem": {
+        "name": "CH6 hőmérséklet"
+      },
+      "t234c6tp": {
+        "name": "CH6 érzékelő típusa"
+      },
+      "t234c7bat": {
+        "name": "CH7 akkumulátor állapota"
+      },
+      "t234c7cn": {
+        "name": "CH7 kapcsolat állapota"
+      },
+      "t234c7hum": {
+        "name": "CH7 páratartalom"
+      },
+      "t234c7tem": {
+        "name": "CH7 hőmérséklet"
+      },
+      "t234c7tp": {
+        "name": "CH7 érzékelő típusa"
+      },
+      "t5ls1dtc": {
+        "name": "Villámok összesen 1 nap alatt"
+      },
+      "t5ls1htc": {
+        "name": "Villámok összesen 1 óra alatt"
+      },
+      "t5ls30mtc": {
+        "name": "Villámok az elmúlt 30 percben"
+      },
+      "t5ls5mtc": {
+        "name": "Villámok az elmúlt 5 percben"
+      },
+      "t5lsbat": {
+        "name": "Villámérzékelő akkumulátorának állapota"
+      },
+      "t5lscn": {
+        "name": "Villámérzékelő kapcsolatának állapota"
+      },
+      "t5lsf": {
+        "name": "Villámok az elmúlt órában"
+      },
+      "t5lskm": {
+        "name": "Villám távolsága"
+      },
+      "t5lst": {
+        "name": "Utolsó villámcsapás ideje"
+      },
+      "t6c1bat": {
+        "name": "CH1 szivárgásérzékelő akkumulátorának állapota"
+      },
+      "t6c1cn": {
+        "name": "CH1 szivárgásérzékelő kapcsolatának állapota"
+      },
+      "t6c1wls": {
+        "name": "CH1 vízszivárgás állapota"
+      },
+      "t6c2bat": {
+        "name": "CH2 szivárgásérzékelő akkumulátorának állapota"
+      },
+      "t6c2cn": {
+        "name": "CH2 szivárgásérzékelő kapcsolatának állapota"
+      },
+      "t6c2wls": {
+        "name": "CH2 vízszivárgás állapota"
+      },
+      "t6c3bat": {
+        "name": "CH3 szivárgásérzékelő akkumulátorának állapota"
+      },
+      "t6c3cn": {
+        "name": "CH3 szivárgásérzékelő kapcsolatának állapota"
+      },
+      "t6c3wls": {
+        "name": "CH3 vízszivárgás állapota"
+      },
+      "t6c4bat": {
+        "name": "CH4 szivárgásérzékelő akkumulátorának állapota"
+      },
+      "t6c4cn": {
+        "name": "CH4 szivárgásérzékelő kapcsolatának állapota"
+      },
+      "t6c4wls": {
+        "name": "CH4 vízszivárgás állapota"
+      },
+      "t6c5bat": {
+        "name": "CH5 szivárgásérzékelő akkumulátorának állapota"
+      },
+      "t6c5cn": {
+        "name": "CH5 szivárgásérzékelő kapcsolatának állapota"
+      },
+      "t6c5wls": {
+        "name": "CH5 vízszivárgás állapota"
+      },
+      "t6c6bat": {
+        "name": "CH6 szivárgásérzékelő akkumulátorának állapota"
+      },
+      "t6c6cn": {
+        "name": "CH6 szivárgásérzékelő kapcsolatának állapota"
+      },
+      "t6c6wls": {
+        "name": "CH6 vízszivárgás állapota"
+      },
+      "t6c7bat": {
+        "name": "CH7 szivárgásérzékelő akkumulátorának állapota"
+      },
+      "t6c7cn": {
+        "name": "CH7 szivárgásérzékelő kapcsolatának állapota"
+      },
+      "t6c7wls": {
+        "name": "CH7 vízszivárgás állapota"
+      },
+      "t8bat": {
+        "name": "Részecskeérzékelő akkumulátorszintje"
+      },
+      "t8cn": {
+        "name": "Részecskeérzékelő kapcsolatának állapota"
+      },
+      "t8pm10": {
+        "name": "PM10 koncentráció"
+      },
+      "t8pm10ai": {
+        "name": "PM10 AQI"
+      },
+      "t8pm25": {
+        "name": "PM2.5 koncentráció"
+      },
+      "t8pm25ai": {
+        "name": "PM2.5 AQI"
+      },
+      "t9bat": {
+        "name": "HCHO/VOC érzékelő akkumulátorszintje"
+      },
+      "t9cn": {
+        "name": "HCHO/VOC érzékelő kapcsolatának állapota"
+      },
+      "t9hcho": {
+        "name": "HCHO koncentráció"
+      },
+      "t9voclv": {
+        "name": "VOC szint",
+        "state": {
+          "very_low": "Nagyon alacsony",
+          "low": "Alacsony",
+          "moderate": "Közepes",
+          "high": "Magas",
+          "very_high": "Nagyon magas"
+        }
+      },
+      "tempf": {
+        "name": "Külső hőmérséklet"
+      },
+      "uv": {
+        "name": "UV-index"
+      },
+      "visibility": {
+        "name": "Látótávolság"
+      },
+      "weeklyrainin": {
+        "name": "Heti csapadék"
+      },
+      "wind_direction_raw": {
+        "name": "Szélirány (nyers)"
+      },
+      "windchillf": {
+        "name": "Szélhidegérzet"
+      },
+      "winddir": {
+        "name": "Szélirány"
+      },
+      "winddir_avg2m": {
+        "name": "Szélirány 2 perces átlag"
+      },
+      "windgustdir": {
+        "name": "Széllökés iránya"
+      },
+      "windgustdir_10m": {
+        "name": "Széllökés iránya 10 perces átlag"
+      },
+      "windgustmph": {
+        "name": "Széllökés"
+      },
+      "windgustmph_10m": {
+        "name": "Széllökés sebessége 10 perces átlag"
+      },
+      "windspdmph_avg2m": {
+        "name": "Szélsebesség 2 perces átlag"
+      },
+      "windspeedmph": {
+        "name": "Szélsebesség"
+      },
+      "yearlyrainin": {
+        "name": "Éves csapadék"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Konzol akkumulátorszintje"
+      },
+      "station_online": {
+        "name": "Állomás online"
+      },
+      "t10cn": {
+        "name": "CO2 érzékelő kapcsolatának állapota"
+      },
+      "t11cn": {
+        "name": "CO érzékelő kapcsolatának állapota"
+      },
+      "t1bat": {
+        "name": "Kültéri érzékelő akkumulátorának állapota"
+      },
+      "t1cn": {
+        "name": "Kültéri érzékelő kapcsolatának állapota"
+      },
+      "t234c1bat": {
+        "name": "CH1 akkumulátor állapota"
+      },
+      "t234c1cn": {
+        "name": "CH1 kapcsolat állapota"
+      },
+      "t234c2bat": {
+        "name": "CH2 akkumulátor állapota"
+      },
+      "t234c2cn": {
+        "name": "CH2 kapcsolat állapota"
+      },
+      "t234c3bat": {
+        "name": "CH3 akkumulátor állapota"
+      },
+      "t234c3cn": {
+        "name": "CH3 kapcsolat állapota"
+      },
+      "t234c4bat": {
+        "name": "CH4 akkumulátor állapota"
+      },
+      "t234c4cn": {
+        "name": "CH4 kapcsolat állapota"
+      },
+      "t234c5bat": {
+        "name": "CH5 akkumulátor állapota"
+      },
+      "t234c5cn": {
+        "name": "CH5 kapcsolat állapota"
+      },
+      "t234c6bat": {
+        "name": "CH6 akkumulátor állapota"
+      },
+      "t234c6cn": {
+        "name": "CH6 kapcsolat állapota"
+      },
+      "t234c7bat": {
+        "name": "CH7 akkumulátor állapota"
+      },
+      "t234c7cn": {
+        "name": "CH7 kapcsolat állapota"
+      },
+      "t5lsbat": {
+        "name": "Villámérzékelő akkumulátorának állapota"
+      },
+      "t5lscn": {
+        "name": "Villámérzékelő kapcsolatának állapota"
+      },
+      "t6c1bat": {
+        "name": "CH1 szivárgásérzékelő akkumulátorának állapota"
+      },
+      "t6c1cn": {
+        "name": "CH1 szivárgásérzékelő kapcsolatának állapota"
+      },
+      "t6c1wls": {
+        "name": "CH1 vízszivárgás állapota"
+      },
+      "t6c2bat": {
+        "name": "CH2 szivárgásérzékelő akkumulátorának állapota"
+      },
+      "t6c2cn": {
+        "name": "CH2 szivárgásérzékelő kapcsolatának állapota"
+      },
+      "t6c2wls": {
+        "name": "CH2 vízszivárgás állapota"
+      },
+      "t6c3bat": {
+        "name": "CH3 szivárgásérzékelő akkumulátorának állapota"
+      },
+      "t6c3cn": {
+        "name": "CH3 szivárgásérzékelő kapcsolatának állapota"
+      },
+      "t6c3wls": {
+        "name": "CH3 vízszivárgás állapota"
+      },
+      "t6c4bat": {
+        "name": "CH4 szivárgásérzékelő akkumulátorának állapota"
+      },
+      "t6c4cn": {
+        "name": "CH4 szivárgásérzékelő kapcsolatának állapota"
+      },
+      "t6c4wls": {
+        "name": "CH4 vízszivárgás állapota"
+      },
+      "t6c5bat": {
+        "name": "CH5 szivárgásérzékelő akkumulátorának állapota"
+      },
+      "t6c5cn": {
+        "name": "CH5 szivárgásérzékelő kapcsolatának állapota"
+      },
+      "t6c5wls": {
+        "name": "CH5 vízszivárgás állapota"
+      },
+      "t6c6bat": {
+        "name": "CH6 szivárgásérzékelő akkumulátorának állapota"
+      },
+      "t6c6cn": {
+        "name": "CH6 szivárgásérzékelő kapcsolatának állapota"
+      },
+      "t6c6wls": {
+        "name": "CH6 vízszivárgás állapota"
+      },
+      "t6c7bat": {
+        "name": "CH7 szivárgásérzékelő akkumulátorának állapota"
+      },
+      "t6c7cn": {
+        "name": "CH7 szivárgásérzékelő kapcsolatának állapota"
+      },
+      "t6c7wls": {
+        "name": "CH7 vízszivárgás állapota"
+      },
+      "t8cn": {
+        "name": "Részecskeérzékelő kapcsolatának állapota"
+      },
+      "t9cn": {
+        "name": "HCHO/VOC érzékelő kapcsolatának állapota"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Szélirány eltolása"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Eltolás visszaállítása"
+      },
+      "set_north": {
+        "name": "Észak beállítása a jelenlegi értékre"
+      }
+    }
+  }
+}

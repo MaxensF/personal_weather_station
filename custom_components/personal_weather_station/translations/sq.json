@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Stacion meteorologjik personal",
+        "description": "Vendosni këtu një çelës stacioni që stacionet tuaja meteorologjike duhet ta transmetojnë që të dhënat e tyre të mos refuzohen. Nëse e lini fushën bosh, të gjitha kërkesat do të pranohen.",
+        "data": {
+          "password": "Çelësi i stacionit"
+        }
+      },
+      "station": {
+        "title": "Hapi 1 nga 5 — stacioni juaj",
+        "description": "{image}\n\nStacioni juaj meteorologjik i krijon vetë pajisjet dhe sensorët e vet, prandaj këtu nuk ka çfarë të shtohet. Ajo që vijon është ajo që duhet shtypur në aplikacionin e stacionit.\n\nHapni aplikacionin, kontrolloni që firmware-i i stacionit të jetë i përditësuar, dhe hapni cilësimet e tij."
+      },
+      "settings": {
+        "title": "Hapi 2 nga 5 — shërbimi i motit",
+        "description": "{image}\n\nZgjidhni **Weather server**."
+      },
+      "server": {
+        "title": "Hapi 3 nga 5 — server tjetër",
+        "description": "{image}\n\nZgjidhni **Other Server**."
+      },
+      "form": {
+        "title": "Hapi 4 nga 5 — cilësimet e serverit",
+        "description": "{image}\n\nPlotësoni formularin, pastaj shtypni **Save**.\n\n**URL**\n{urls}\nPa `http://` dhe pa `https://`. Përdorni një adresë që stacioni juaj mund ta arrijë në rrjetin tuaj — nuk ka asnjë arsye ta ekspozoni Home Assistant në internet për këtë. Nëse stacioni nuk i zgjidh emrat, vendosni adresën IP.\n\n**Station ID** — çfarë të doni. Ky bëhet emri i pajisjes në Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minutë është vlerë e mirë.\n\n**API type** — *WSLink API*. Zgjidhni *WUnderground API* vetëm nëse stacioni juaj nuk ofron WSLink: ai bart gjysmën e matjeve dhe vetëm katër kanale.\n\n**Upload** — lëreni të aktivizuar.\n\n> ⏱️ Disa stacione e humbin Wi-Fi nëse zvarriteni në këtë ekran. Mbajeni adresën pranë, plotësojeni dhe ruajeni."
+      },
+      "confirm": {
+        "title": "Hapi 5 nga 5 — confirm & exit",
+        "description": "{image}\n\nKthehuni prapa, pastaj shtypni **Confirm & Exit**.\n\n> ⚠️ **Është Confirm & Exit ai që i shkruan cilësimet në stacion.** Vetëm ruajtja nuk ndryshon asgjë.\n\nShtypni Tjetër sapo ta keni bërë."
+      },
+      "received": {
+        "title": "Stacioni juaj po flet me Home Assistant",
+        "description": "**{station}** sapo dërgoi ngarkimin e tij të parë.\n\nSensorët e tij shfaqen te i ardhshmi dhe krijohen nga ajo që stacioni dërgon vërtet — këtu nuk ka asgjë për të zgjedhur."
+      },
+      "timeout": {
+        "title": "Ende nuk ka mbërritur asgjë",
+        "description": "Asnjë stacion nuk ka dërguar gjë në {minutes} minutat e fundit.{key_hint_extra}\n\nShkaqet e zakonshme janë një adresë që stacioni nuk e arrin, **Confirm & Exit** i pashtypur, ose firmware nga 3.02 e tutje, që kërkon HTTPS.\n\nAdresat drejt të cilave ta drejtoni janë:\n{urls}\nPikat që presin ngarkime janë:\n{endpoints}\n\nShtypni Tjetër për ta përfunduar gjithsesi — konfigurimi ruhet, pikat fillojnë vërtet të dëgjojnë, dhe një riparim do t'ju sjellë këtu derisa të shfaqet një stacion."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Tashmë i konfiguruar. Një instancë e vetme u shërben të gjitha stacioneve meteorologjike."
+    },
+    "progress": {
+      "waiting_for_station": "Në pritje të ngarkimit të parë të stacionit tuaj…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Stacion meteorologjik personal",
+        "menu_options": {
+          "options": "Cilësimet",
+          "instructions": "Si ta drejtoni një stacion drejt Home Assistant"
+        }
+      },
+      "options": {
+        "title": "Stacion meteorologjik personal",
+        "description": "Vendosni këtu një çelës stacioni që stacionet tuaja meteorologjike duhet ta transmetojnë që të dhënat e tyre të mos refuzohen. Nëse e lini fushën bosh, të gjitha kërkesat do të pranohen.",
+        "data": {
+          "password": "Çelësi i stacionit",
+          "availability_timeout": "Shëno si të padisponueshëm pas (minuta)",
+          "debug": "Regjistro çdo kërkesë hyrëse"
+        },
+        "data_description": {
+          "availability_timeout": "Sa gjatë mund të heshtë një stacion para se sensorët e saj të shënohen si të padisponueshëm. 0 do të thotë kurrë.",
+          "debug": "Shkruan të gjithë përmbajtjen e çdo kërkese në regjistrin e Home Assistant. E dobishme gjatë konfigurimit të një stacioni, e zhurmshme më pas."
+        }
+      },
+      "station": {
+        "title": "Hapi 1 nga 5 — stacioni juaj",
+        "description": "{image}\n\nStacioni juaj meteorologjik i krijon vetë pajisjet dhe sensorët e vet, prandaj këtu nuk ka çfarë të shtohet. Ajo që vijon është ajo që duhet shtypur në aplikacionin e stacionit.\n\nHapni aplikacionin, kontrolloni që firmware-i i stacionit të jetë i përditësuar, dhe hapni cilësimet e tij."
+      },
+      "settings": {
+        "title": "Hapi 2 nga 5 — shërbimi i motit",
+        "description": "{image}\n\nZgjidhni **Weather server**."
+      },
+      "server": {
+        "title": "Hapi 3 nga 5 — server tjetër",
+        "description": "{image}\n\nZgjidhni **Other Server**."
+      },
+      "form": {
+        "title": "Hapi 4 nga 5 — cilësimet e serverit",
+        "description": "{image}\n\nPlotësoni formularin, pastaj shtypni **Save**.\n\n**URL**\n{urls}\nPa `http://` dhe pa `https://`. Përdorni një adresë që stacioni juaj mund ta arrijë në rrjetin tuaj — nuk ka asnjë arsye ta ekspozoni Home Assistant në internet për këtë. Nëse stacioni nuk i zgjidh emrat, vendosni adresën IP.\n\n**Station ID** — çfarë të doni. Ky bëhet emri i pajisjes në Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minutë është vlerë e mirë.\n\n**API type** — *WSLink API*. Zgjidhni *WUnderground API* vetëm nëse stacioni juaj nuk ofron WSLink: ai bart gjysmën e matjeve dhe vetëm katër kanale.\n\n**Upload** — lëreni të aktivizuar.\n\n> ⏱️ Disa stacione e humbin Wi-Fi nëse zvarriteni në këtë ekran. Mbajeni adresën pranë, plotësojeni dhe ruajeni."
+      },
+      "confirm": {
+        "title": "Hapi 5 nga 5 — confirm & exit",
+        "description": "{image}\n\nKthehuni prapa, pastaj shtypni **Confirm & Exit**.\n\n> ⚠️ **Është Confirm & Exit ai që i shkruan cilësimet në stacion.** Vetëm ruajtja nuk ndryshon asgjë.\n\nShtypni Tjetër sapo ta keni bërë."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Stacioni meteorologjik u refuzua: çelës stacioni i gabuar",
+      "description": "Një stacion meteorologjik në {ip} u përpoq të dërgonte të dhëna si `{station_id}` pa transmetuar çelësin e pritur të stacionit.\n\nKontrolloni nëse çelësi i konfiguruar në stacion ose në aplikacionin WSLink përputhet me atë të vendosur në këtë integrim. Ky mesazh zhduket vetë sapo një kërkesë nga {ip} të pranohet."
+    },
+    "missing_device_id": {
+      "title": "Stacioni meteorologjik u refuzua: pa identifikues stacioni",
+      "description": "Një stacion meteorologjik në {ip} dërgoi të dhëna pa identifikues stacioni.\n\nVendosni një Sender ID në aplikacionin WSLink, ose një parametër ID në konfigurimin e stacionit. Ky mesazh zhduket vetë sapo një kërkesë nga {ip} të pranohet."
+    },
+    "legacy_entity_ids": {
+      "title": "Identifikuesit e entiteteve përsërisin emrin e stacionit",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Shkurtoni identifikuesit e entiteteve",
+            "description": "Deri te versioni 1.0.8 ky integrim ndërtonte identifikues entitetesh që e mbajnë emrin e stacionit dy herë, si `{example_old}`. Stacionet e reja nuk e bëjnë më këtë.\n\n**{count} entitete** mund të riemërtohen, për shembull në `{example_new}`.\n\nHistoriku dhe statistikat afatgjata e ndjekin riemërtimin automatikisht. **Automatizimet, skriptet, skenat dhe panelet jo** — gjithçka që i referohet identifikuesve të vjetër do t'ju duhet ta përditësoni vetë.\n\nNëse preferoni t'i lini ashtu siç janë, shpërfillni këtë riparim."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Leximet e lidhjes, rrjedhjes dhe baterisë janë ende numra",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Konvertoni në sensorë binarë",
+            "description": "Leximet e lidhjes, rrjedhjes së ujit dhe baterisë dërgohen si 1 ose 0. Deri te versioni 1.0.8 ato shfaqeshin si sensorë numerikë, si `{example}`, që nuk përdoren dot me kartat standarde të rrjedhjes, lidhjes dhe baterisë së ulët në Home Assistant. Stacionet e reja marrin sensorë binarë që tregojnë **I lagësht / I thatë**, **I lidhur / I shkëputur** dhe **Ndezur / Fikur**.\n\nMund të konvertohen **{count} entitete**. Nivelet e baterisë 0~5 të sensorëve të cilësisë së ajrit e ruajnë përqindjen: gjashtë shkallë janë më shumë nga sa mund të mbajë një ndezur/fikur.\n\nNdryshimi i platformës nuk është riemërtim: entitetet e vjetra hiqen dhe rikrijohen si `binary_sensor`. **Historiku i tyre i regjistruar humbet** — këto lexime nuk kanë statistika afatgjata, prandaj preket vetëm historiku i papërpunuar — dhe **automatizimet, skriptet, skenat dhe panelet që i drejtohen atyre duhen përditësuar**. Entitetet e reja shfaqen në ngarkimin e ardhshëm të stacionit.\n\nNëse parapëlqeni t'i lini ashtu siç janë, shpërfillni këtë riparim."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Asnjë stacion meteorologjik nuk ka dërguar ende asgjë",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Konfiguroni stacionin tuaj meteorologjik",
+            "description": "Është stacioni juaj meteorologjik që krijon pajisjet dhe sensorët — këtu nuk ka asgjë për të shtuar.\n\nNë aplikacionin e stacionit hapni stacionin tuaj, pastaj **Settings → Weather server → Other Server**, dhe plotësoni:\n\n**URL**\n{urls}\nPa `http://` ose `https://`. Përdorni një adresë që stacioni juaj mund ta arrijë në rrjetin tuaj — nuk ka asnjë arsye ta ekspozoni Home Assistant në internet për këtë. Nëse stacioni juaj nuk i zgjidh emrat, vendosni adresën IP.\n\n**Station ID** — çfarë të doni. Do të bëhet emri i pajisjes në Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minutë është vlerë e mirë.\n\n**API type** — *WSLink API*.\n\n**Upload** — lëreni të aktivizuar.\n\nShtypni **Save**, kthehuni prapa, pastaj shtypni **Confirm & Exit**.\n\n> ⚠️ **Është Confirm & Exit që i shkruan cilësimet në stacion.** Vetëm ruajtja nuk ndryshon asgjë. Sensorët tuaj shfaqen një sekondë më vonë.\n\nPikat fundore që dëgjojnë janë:\n{endpoints}"
+          },
+          "received": {
+            "title": "Stacioni juaj kaloi",
+            "description": "**{station}** dërgoi ngarkimin e tij të parë. Sensorët e tij po krijohen tani, dhe do të shfaqen të tjerë ndërsa stacioni i raporton.\n\nKy mesazh nuk do të kthehet."
+          },
+          "timeout": {
+            "title": "Ende asgjë e marrë",
+            "description": "Asnjë ngarkim nuk mbërriti brenda {minutes} minutash.\n\nSipas radhës së mundësisë:\n\n  - **A shtypët Confirm & Exit?** Vetëm ruajtja e ekranit të serverit nuk shkruan asgjë në stacion.\n  - **URL** duhet të jetë {urls_inline}, pa `http://`, dhe i arritshëm nga stacioni në rrjetin tuaj.\n  - **Upload** duhet të jetë i aktivizuar në atë ekran.\n  - Disa firmware Bresser nga **3.02** e tutje refuzojnë HTTP-në e thjeshtë dhe kërkojnë një adresë që shërben HTTPS.\n  - Intervali i ngarkimit mund të jetë thjesht më i gjatë se pritja.\n  - **Çelësi i stacionit**: {key_hint}.\n\nNëse stacioni arriti te Home Assistant por u refuzua, kjo raportohet veçmas te **Cilësimet → Sistemi → Riparimet**.\n\nMund ta mbyllni. Qëndron këtu derisa të shfaqet një stacion, dhe rihapja e nis pritjen nga fillimi."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Duke pritur ngarkimin e parë të stacionit tuaj…"
+        },
+        "abort": {
+          "not_received": "Ende nuk ka mbërritur asgjë, prandaj kjo mbetet e hapur. Qëndron te Riparimet derisa të shfaqet një stacion, dhe mund ta rihapni për të pritur sërish."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "Stacioni {station} po dërgon matje që po hidhen tutje",
+      "description": "**{count} parametra** nga **{station}** nuk njihen, prandaj vlerat e tyre hidhen tutje në çdo dërgim:\n\n{parameters}\n\nShkaku i zakonshëm është një stacion që raporton më shumë nga sa mund të mbajë protokolli i tij. Weather Underground ka vetëm **4 vende** për sensorë shtesë; nëse stacioni juaj ofron **WSLink** si *API type*, kalimi tek ai zbulon shtatë kanale dhe afërsisht dyfishin e matjeve.\n\nNëse shkaku nuk është ky, pikërisht këta emra parametrash janë ç'i duhet një raporti gabimi: hapni një në [gjurmuesin e problemeve]({issue_tracker}) dhe do të mund të shtohen.\n\nMund ta shpërfillni edhe këtë — asgjë nuk është prishur, thjesht këto vlera të caktuara nuk mbërrijnë."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "Stacioni {device} nuk ka dërguar ende asnjë drejtim ere, prandaj nuk ka asgjë për t'u kalibruar. Prisni ngarkimin e radhës dhe provoni përsëri."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Presioni absolut i ajrit"
+      },
+      "apiver": {
+        "name": "Versioni i API-t"
+      },
+      "aqbc": {
+        "name": "Karbon i zi"
+      },
+      "aqco": {
+        "name": "Monoksid karboni"
+      },
+      "aqcot": {
+        "name": "Monoksid karboni në gjurmë"
+      },
+      "aqec": {
+        "name": "Karbon elementar"
+      },
+      "aqno": {
+        "name": "Monoksid azoti"
+      },
+      "aqno2": {
+        "name": "NO2 X i llogaritur"
+      },
+      "aqno2t": {
+        "name": "Dioksid azoti"
+      },
+      "aqno2y": {
+        "name": "NO2 Y i llogaritur"
+      },
+      "aqno3": {
+        "name": "Joni NO3"
+      },
+      "aqnox": {
+        "name": "Oksidet e azotit"
+      },
+      "aqnoy": {
+        "name": "Azoti reaktiv total"
+      },
+      "aqoc": {
+        "name": "Karbon organik"
+      },
+      "aqozone": {
+        "name": "Ozoni"
+      },
+      "aqpm10": {
+        "name": "Masa e PM10"
+      },
+      "aqpm2_5": {
+        "name": "Masa e PM2.5"
+      },
+      "aqso2": {
+        "name": "Dioksid squfuri"
+      },
+      "aqso2t": {
+        "name": "Dioksid squfuri në gjurmë"
+      },
+      "aqso4": {
+        "name": "Joni SO4"
+      },
+      "aquv_aeth": {
+        "name": "Etalometër kanali 2"
+      },
+      "baromin": {
+        "name": "Presioni"
+      },
+      "clouds": {
+        "name": "Vranësira"
+      },
+      "dailyrainin": {
+        "name": "Shi ditor"
+      },
+      "dewptf": {
+        "name": "Pika e vesës"
+      },
+      "humidity": {
+        "name": "Lagështia e jashtme"
+      },
+      "inbat": {
+        "name": "Niveli i baterisë së konsolës"
+      },
+      "indoorhumidity": {
+        "name": "Lagështia e brendshme"
+      },
+      "indoortempf": {
+        "name": "Temperatura e brendshme"
+      },
+      "inhum": {
+        "name": "Lagështia e brendshme"
+      },
+      "intem": {
+        "name": "Temperatura e brendshme"
+      },
+      "last_update": {
+        "name": "Marrja e fundit"
+      },
+      "leafwetness": {
+        "name": "Lagështia e gjetheve"
+      },
+      "leafwetness2": {
+        "name": "CH2 lagështia e gjetheve"
+      },
+      "lowbatt": {
+        "name": "Bateri e ulët"
+      },
+      "monthlyrainin": {
+        "name": "Shi mujor"
+      },
+      "rainin": {
+        "name": "Shi orar"
+      },
+      "rbar": {
+        "name": "Presioni relativ i ajrit"
+      },
+      "rtfreq": {
+        "name": "Frekuenca e përditësimit"
+      },
+      "soilmoisture": {
+        "name": "Lagështia e tokës"
+      },
+      "soilmoisture2": {
+        "name": "CH2 lagështia e tokës"
+      },
+      "soilmoisture3": {
+        "name": "CH3 lagështia e tokës"
+      },
+      "soilmoisture4": {
+        "name": "CH4 lagështia e tokës"
+      },
+      "soiltemp2f": {
+        "name": "CH2 temperatura e tokës"
+      },
+      "soiltemp3f": {
+        "name": "CH3 temperatura e tokës"
+      },
+      "soiltemp4f": {
+        "name": "CH4 temperatura e tokës"
+      },
+      "soiltempf": {
+        "name": "Temperatura e tokës"
+      },
+      "solarradiation": {
+        "name": "Rrezatimi diellor"
+      },
+      "t10bat": {
+        "name": "Niveli i baterisë së sensorit CO2"
+      },
+      "t10cn": {
+        "name": "Gjendja e lidhjes së sensorit CO2"
+      },
+      "t10co2": {
+        "name": "Përqendrimi i CO2"
+      },
+      "t11bat": {
+        "name": "Niveli i baterisë së sensorit CO"
+      },
+      "t11cn": {
+        "name": "Gjendja e lidhjes së sensorit CO"
+      },
+      "t11co": {
+        "name": "Përqendrimi i CO"
+      },
+      "t1bat": {
+        "name": "Gjendja e baterisë së sensorit të jashtëm"
+      },
+      "t1chill": {
+        "name": "Temperatura e ftohjes nga era"
+      },
+      "t1cn": {
+        "name": "Gjendja e lidhjes së sensorit të jashtëm"
+      },
+      "t1dew": {
+        "name": "Temperatura e pikës së vesës"
+      },
+      "t1feels": {
+        "name": "Temperatura e ndjerë"
+      },
+      "t1heat": {
+        "name": "Indeksi i nxehtësisë"
+      },
+      "t1hum": {
+        "name": "Lagështia e jashtme"
+      },
+      "t1raindy": {
+        "name": "Reshjet ditore"
+      },
+      "t1rainhr": {
+        "name": "Reshjet orare"
+      },
+      "t1rainmth": {
+        "name": "Reshjet mujore"
+      },
+      "t1rainra": {
+        "name": "Intensiteti i shiut"
+      },
+      "t1rainwy": {
+        "name": "Reshjet javore"
+      },
+      "t1rainyr": {
+        "name": "Reshjet vjetore"
+      },
+      "t1solrad": {
+        "name": "Intensiteti i dritës"
+      },
+      "t1tem": {
+        "name": "Temperatura e jashtme"
+      },
+      "t1uvi": {
+        "name": "Indeksi UV"
+      },
+      "t1wbgt": {
+        "name": "Temperatura WBGT"
+      },
+      "t1wdir": {
+        "name": "Drejtimi i erës"
+      },
+      "t1wgust": {
+        "name": "Shpërthim ere"
+      },
+      "t1ws": {
+        "name": "Shpejtësia e erës"
+      },
+      "t1ws10mav": {
+        "name": "Shpejtësia e erës mes. 10 min"
+      },
+      "t234c1bat": {
+        "name": "CH1 gjendja e baterisë"
+      },
+      "t234c1cn": {
+        "name": "CH1 gjendja e lidhjes"
+      },
+      "t234c1hum": {
+        "name": "CH1 lagështia"
+      },
+      "t234c1tem": {
+        "name": "CH1 temperatura"
+      },
+      "t234c1tp": {
+        "name": "CH1 lloji i sensorit"
+      },
+      "t234c2bat": {
+        "name": "CH2 gjendja e baterisë"
+      },
+      "t234c2cn": {
+        "name": "CH2 gjendja e lidhjes"
+      },
+      "t234c2hum": {
+        "name": "CH2 lagështia"
+      },
+      "t234c2tem": {
+        "name": "CH2 temperatura"
+      },
+      "t234c2tp": {
+        "name": "CH2 lloji i sensorit"
+      },
+      "t234c3bat": {
+        "name": "CH3 gjendja e baterisë"
+      },
+      "t234c3cn": {
+        "name": "CH3 gjendja e lidhjes"
+      },
+      "t234c3hum": {
+        "name": "CH3 lagështia"
+      },
+      "t234c3tem": {
+        "name": "CH3 temperatura"
+      },
+      "t234c3tp": {
+        "name": "CH3 lloji i sensorit"
+      },
+      "t234c4bat": {
+        "name": "CH4 gjendja e baterisë"
+      },
+      "t234c4cn": {
+        "name": "CH4 gjendja e lidhjes"
+      },
+      "t234c4hum": {
+        "name": "CH4 lagështia"
+      },
+      "t234c4tem": {
+        "name": "CH4 temperatura"
+      },
+      "t234c4tp": {
+        "name": "CH4 lloji i sensorit"
+      },
+      "t234c5bat": {
+        "name": "CH5 gjendja e baterisë"
+      },
+      "t234c5cn": {
+        "name": "CH5 gjendja e lidhjes"
+      },
+      "t234c5hum": {
+        "name": "CH5 lagështia"
+      },
+      "t234c5tem": {
+        "name": "CH5 temperatura"
+      },
+      "t234c5tp": {
+        "name": "CH5 lloji i sensorit"
+      },
+      "t234c6bat": {
+        "name": "CH6 gjendja e baterisë"
+      },
+      "t234c6cn": {
+        "name": "CH6 gjendja e lidhjes"
+      },
+      "t234c6hum": {
+        "name": "CH6 lagështia"
+      },
+      "t234c6tem": {
+        "name": "CH6 temperatura"
+      },
+      "t234c6tp": {
+        "name": "CH6 lloji i sensorit"
+      },
+      "t234c7bat": {
+        "name": "CH7 gjendja e baterisë"
+      },
+      "t234c7cn": {
+        "name": "CH7 gjendja e lidhjes"
+      },
+      "t234c7hum": {
+        "name": "CH7 lagështia"
+      },
+      "t234c7tem": {
+        "name": "CH7 temperatura"
+      },
+      "t234c7tp": {
+        "name": "CH7 lloji i sensorit"
+      },
+      "t5ls1dtc": {
+        "name": "Vetëtimat gjithsej në 1 ditë"
+      },
+      "t5ls1htc": {
+        "name": "Vetëtimat gjithsej në 1 orë"
+      },
+      "t5ls30mtc": {
+        "name": "Vetëtimat në 30 minutat e fundit"
+      },
+      "t5ls5mtc": {
+        "name": "Vetëtimat në 5 minutat e fundit"
+      },
+      "t5lsbat": {
+        "name": "Gjendja e baterisë së sensorit të vetëtimave"
+      },
+      "t5lscn": {
+        "name": "Gjendja e lidhjes së sensorit të vetëtimave"
+      },
+      "t5lsf": {
+        "name": "Vetëtimat në orën e fundit"
+      },
+      "t5lskm": {
+        "name": "Distanca e vetëtimës"
+      },
+      "t5lst": {
+        "name": "Ora e vetëtimës së fundit"
+      },
+      "t6c1bat": {
+        "name": "CH1 gjendja e baterisë së sensorit të rrjedhjes"
+      },
+      "t6c1cn": {
+        "name": "CH1 gjendja e lidhjes së sensorit të rrjedhjes"
+      },
+      "t6c1wls": {
+        "name": "CH1 gjendja e rrjedhjes së ujit"
+      },
+      "t6c2bat": {
+        "name": "CH2 gjendja e baterisë së sensorit të rrjedhjes"
+      },
+      "t6c2cn": {
+        "name": "CH2 gjendja e lidhjes së sensorit të rrjedhjes"
+      },
+      "t6c2wls": {
+        "name": "CH2 gjendja e rrjedhjes së ujit"
+      },
+      "t6c3bat": {
+        "name": "CH3 gjendja e baterisë së sensorit të rrjedhjes"
+      },
+      "t6c3cn": {
+        "name": "CH3 gjendja e lidhjes së sensorit të rrjedhjes"
+      },
+      "t6c3wls": {
+        "name": "CH3 gjendja e rrjedhjes së ujit"
+      },
+      "t6c4bat": {
+        "name": "CH4 gjendja e baterisë së sensorit të rrjedhjes"
+      },
+      "t6c4cn": {
+        "name": "CH4 gjendja e lidhjes së sensorit të rrjedhjes"
+      },
+      "t6c4wls": {
+        "name": "CH4 gjendja e rrjedhjes së ujit"
+      },
+      "t6c5bat": {
+        "name": "CH5 gjendja e baterisë së sensorit të rrjedhjes"
+      },
+      "t6c5cn": {
+        "name": "CH5 gjendja e lidhjes së sensorit të rrjedhjes"
+      },
+      "t6c5wls": {
+        "name": "CH5 gjendja e rrjedhjes së ujit"
+      },
+      "t6c6bat": {
+        "name": "CH6 gjendja e baterisë së sensorit të rrjedhjes"
+      },
+      "t6c6cn": {
+        "name": "CH6 gjendja e lidhjes së sensorit të rrjedhjes"
+      },
+      "t6c6wls": {
+        "name": "CH6 gjendja e rrjedhjes së ujit"
+      },
+      "t6c7bat": {
+        "name": "CH7 gjendja e baterisë së sensorit të rrjedhjes"
+      },
+      "t6c7cn": {
+        "name": "CH7 gjendja e lidhjes së sensorit të rrjedhjes"
+      },
+      "t6c7wls": {
+        "name": "CH7 gjendja e rrjedhjes së ujit"
+      },
+      "t8bat": {
+        "name": "Niveli i baterisë së sensorit të grimcave"
+      },
+      "t8cn": {
+        "name": "Gjendja e lidhjes së sensorit të grimcave"
+      },
+      "t8pm10": {
+        "name": "Përqendrimi i PM10"
+      },
+      "t8pm10ai": {
+        "name": "AQI PM10"
+      },
+      "t8pm25": {
+        "name": "Përqendrimi i PM2.5"
+      },
+      "t8pm25ai": {
+        "name": "AQI PM2.5"
+      },
+      "t9bat": {
+        "name": "Niveli i baterisë së sensorit HCHO/VOC"
+      },
+      "t9cn": {
+        "name": "Gjendja e lidhjes së sensorit HCHO/VOC"
+      },
+      "t9hcho": {
+        "name": "Përqendrimi i HCHO"
+      },
+      "t9voclv": {
+        "name": "Niveli i VOC",
+        "state": {
+          "very_low": "Shumë i ulët",
+          "low": "I ulët",
+          "moderate": "Mesatar",
+          "high": "I lartë",
+          "very_high": "Shumë i lartë"
+        }
+      },
+      "tempf": {
+        "name": "Temperatura e jashtme"
+      },
+      "uv": {
+        "name": "Indeksi UV"
+      },
+      "visibility": {
+        "name": "Dukshmëria"
+      },
+      "weeklyrainin": {
+        "name": "Shi javor"
+      },
+      "wind_direction_raw": {
+        "name": "Drejtimi i erës (i papërpunuar)"
+      },
+      "windchillf": {
+        "name": "Ftohja nga era"
+      },
+      "winddir": {
+        "name": "Drejtimi i erës"
+      },
+      "winddir_avg2m": {
+        "name": "Drejtimi i erës mes. 2 min"
+      },
+      "windgustdir": {
+        "name": "Drejtimi i shpërthimit"
+      },
+      "windgustdir_10m": {
+        "name": "Drejtimi i shpërthimit mes. 10 min"
+      },
+      "windgustmph": {
+        "name": "Shpërthim ere"
+      },
+      "windgustmph_10m": {
+        "name": "Shpejtësia e shpërthimit mes. 10 min"
+      },
+      "windspdmph_avg2m": {
+        "name": "Shpejtësia e erës mes. 2 min"
+      },
+      "windspeedmph": {
+        "name": "Shpejtësia e erës"
+      },
+      "yearlyrainin": {
+        "name": "Shi vjetor"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Niveli i baterisë së konsolës"
+      },
+      "station_online": {
+        "name": "Stacioni në linjë"
+      },
+      "t10cn": {
+        "name": "Gjendja e lidhjes së sensorit CO2"
+      },
+      "t11cn": {
+        "name": "Gjendja e lidhjes së sensorit CO"
+      },
+      "t1bat": {
+        "name": "Gjendja e baterisë së sensorit të jashtëm"
+      },
+      "t1cn": {
+        "name": "Gjendja e lidhjes së sensorit të jashtëm"
+      },
+      "t234c1bat": {
+        "name": "CH1 gjendja e baterisë"
+      },
+      "t234c1cn": {
+        "name": "CH1 gjendja e lidhjes"
+      },
+      "t234c2bat": {
+        "name": "CH2 gjendja e baterisë"
+      },
+      "t234c2cn": {
+        "name": "CH2 gjendja e lidhjes"
+      },
+      "t234c3bat": {
+        "name": "CH3 gjendja e baterisë"
+      },
+      "t234c3cn": {
+        "name": "CH3 gjendja e lidhjes"
+      },
+      "t234c4bat": {
+        "name": "CH4 gjendja e baterisë"
+      },
+      "t234c4cn": {
+        "name": "CH4 gjendja e lidhjes"
+      },
+      "t234c5bat": {
+        "name": "CH5 gjendja e baterisë"
+      },
+      "t234c5cn": {
+        "name": "CH5 gjendja e lidhjes"
+      },
+      "t234c6bat": {
+        "name": "CH6 gjendja e baterisë"
+      },
+      "t234c6cn": {
+        "name": "CH6 gjendja e lidhjes"
+      },
+      "t234c7bat": {
+        "name": "CH7 gjendja e baterisë"
+      },
+      "t234c7cn": {
+        "name": "CH7 gjendja e lidhjes"
+      },
+      "t5lsbat": {
+        "name": "Gjendja e baterisë së sensorit të vetëtimave"
+      },
+      "t5lscn": {
+        "name": "Gjendja e lidhjes së sensorit të vetëtimave"
+      },
+      "t6c1bat": {
+        "name": "CH1 gjendja e baterisë së sensorit të rrjedhjes"
+      },
+      "t6c1cn": {
+        "name": "CH1 gjendja e lidhjes së sensorit të rrjedhjes"
+      },
+      "t6c1wls": {
+        "name": "CH1 gjendja e rrjedhjes së ujit"
+      },
+      "t6c2bat": {
+        "name": "CH2 gjendja e baterisë së sensorit të rrjedhjes"
+      },
+      "t6c2cn": {
+        "name": "CH2 gjendja e lidhjes së sensorit të rrjedhjes"
+      },
+      "t6c2wls": {
+        "name": "CH2 gjendja e rrjedhjes së ujit"
+      },
+      "t6c3bat": {
+        "name": "CH3 gjendja e baterisë së sensorit të rrjedhjes"
+      },
+      "t6c3cn": {
+        "name": "CH3 gjendja e lidhjes së sensorit të rrjedhjes"
+      },
+      "t6c3wls": {
+        "name": "CH3 gjendja e rrjedhjes së ujit"
+      },
+      "t6c4bat": {
+        "name": "CH4 gjendja e baterisë së sensorit të rrjedhjes"
+      },
+      "t6c4cn": {
+        "name": "CH4 gjendja e lidhjes së sensorit të rrjedhjes"
+      },
+      "t6c4wls": {
+        "name": "CH4 gjendja e rrjedhjes së ujit"
+      },
+      "t6c5bat": {
+        "name": "CH5 gjendja e baterisë së sensorit të rrjedhjes"
+      },
+      "t6c5cn": {
+        "name": "CH5 gjendja e lidhjes së sensorit të rrjedhjes"
+      },
+      "t6c5wls": {
+        "name": "CH5 gjendja e rrjedhjes së ujit"
+      },
+      "t6c6bat": {
+        "name": "CH6 gjendja e baterisë së sensorit të rrjedhjes"
+      },
+      "t6c6cn": {
+        "name": "CH6 gjendja e lidhjes së sensorit të rrjedhjes"
+      },
+      "t6c6wls": {
+        "name": "CH6 gjendja e rrjedhjes së ujit"
+      },
+      "t6c7bat": {
+        "name": "CH7 gjendja e baterisë së sensorit të rrjedhjes"
+      },
+      "t6c7cn": {
+        "name": "CH7 gjendja e lidhjes së sensorit të rrjedhjes"
+      },
+      "t6c7wls": {
+        "name": "CH7 gjendja e rrjedhjes së ujit"
+      },
+      "t8cn": {
+        "name": "Gjendja e lidhjes së sensorit të grimcave"
+      },
+      "t9cn": {
+        "name": "Gjendja e lidhjes së sensorit HCHO/VOC"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Zhvendosja e drejtimit të erës"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Rivendos zhvendosjen"
+      },
+      "set_north": {
+        "name": "Cakto veriun sipas vlerës aktuale"
+      }
+    }
+  }
+}

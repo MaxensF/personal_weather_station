@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Asmeninė meteorologijos stotis",
+        "description": "Nustatykite čia stoties raktą, kurį jūsų meteorologijos stotys turi perduoti, kad jų duomenys nebūtų atmesti. Jei paliksite lauką tuščią, bus priimamos visos užklausos.",
+        "data": {
+          "password": "Stoties raktas"
+        }
+      },
+      "station": {
+        "title": "1 žingsnis iš 5 — jūsų stotis",
+        "description": "{image}\n\nJūsų orų stotis pati sukuria savo įrenginius ir jutiklius, tad čia nėra ko pridėti. Toliau nurodyta tai, ką reikia įvesti stoties programėlėje.\n\nAtverkite programėlę, patikrinkite, ar stoties programinė aparatinė įranga atnaujinta, ir atverkite jos nustatymus."
+      },
+      "settings": {
+        "title": "2 žingsnis iš 5 — orų paslauga",
+        "description": "{image}\n\nPasirinkite **Weather server**."
+      },
+      "server": {
+        "title": "3 žingsnis iš 5 — kitas serveris",
+        "description": "{image}\n\nPasirinkite **Other Server**."
+      },
+      "form": {
+        "title": "4 žingsnis iš 5 — serverio nustatymai",
+        "description": "{image}\n\nUžpildykite formą ir paspauskite **Save**.\n\n**URL**\n{urls}\nBe `http://` ir be `https://`. Naudokite adresą, kurį jūsų stotis pasiekia jūsų pačių tinkle — nėra jokios priežasties dėl to atverti Home Assistant internetui. Jei stotis neišsprendžia vardų, įrašykite IP adresą.\n\n**Station ID** — ką tik norite. Tai taps įrenginio pavadinimu Home Assistant sistemoje.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minutė yra gera reikšmė.\n\n**API type** — *WSLink API*. *WUnderground API* rinkitės tik tuo atveju, jei jūsų stotis nesiūlo WSLink: jis perneša dvigubai mažiau rodmenų ir tik keturis kanalus.\n\n**Upload** — palikite įjungtą.\n\n> ⏱️ Kai kurios stotys praranda Wi-Fi, jei užsibūnate šiame ekrane. Turėkite adresą po ranka, įrašykite jį ir įrašykite nustatymus."
+      },
+      "confirm": {
+        "title": "5 žingsnis iš 5 — confirm & exit",
+        "description": "{image}\n\nGrįžkite atgal ir paspauskite **Confirm & Exit**.\n\n> ⚠️ **Būtent Confirm & Exit įrašo nustatymus į stotį.** Vien išsaugojimas nieko nekeičia.\n\nKai tai padarysite, spauskite Toliau."
+      },
+      "received": {
+        "title": "Jūsų stotis kalbasi su Home Assistant",
+        "description": "**{station}** ką tik atsiuntė pirmąją siuntą.\n\nJos jutikliai pasirodys su kita ir sukuriami iš to, ką stotis iš tikrųjų siunčia — čia nėra ko rinktis."
+      },
+      "timeout": {
+        "title": "Kol kas nieko neatkeliavo",
+        "description": "Per pastarąsias {minutes} minutes nė viena stotis nieko neatsiuntė.{key_hint_extra}\n\nĮprastos priežastys – adresas, kurio stotis nepasiekia, nepaspaustas **Confirm & Exit**, arba 3.02 ir naujesnė programinė įranga, reikalaujanti HTTPS.\n\nAdresai, į kuriuos ją nukreipti:\n{urls}\nGaliniai taškai, laukiantys siuntų:\n{endpoints}\n\nSpauskite Toliau, kad vis dėlto užbaigtumėte — sąranka išsaugoma, galiniai taškai iš tikrųjų pradeda klausytis, o taisymas grąžins jus čia, kol pasirodys kokia nors stotis."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Jau sukonfigūruota. Vienas egzempliorius aptarnauja visas meteorologijos stotis."
+    },
+    "progress": {
+      "waiting_for_station": "Laukiama pirmosios jūsų stoties siuntos…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Asmeninė meteorologijos stotis",
+        "menu_options": {
+          "options": "Nustatymai",
+          "instructions": "Kaip nukreipti stotį į Home Assistant"
+        }
+      },
+      "options": {
+        "title": "Asmeninė meteorologijos stotis",
+        "description": "Nustatykite čia stoties raktą, kurį jūsų meteorologijos stotys turi perduoti, kad jų duomenys nebūtų atmesti. Jei paliksite lauką tuščią, bus priimamos visos užklausos.",
+        "data": {
+          "password": "Stoties raktas",
+          "availability_timeout": "Pažymėti kaip nepasiekiamą po (minučių)",
+          "debug": "Registruoti kiekvieną gaunamą užklausą"
+        },
+        "data_description": {
+          "availability_timeout": "Kiek laiko stotis gali tylėti, kol jos jutikliai bus pažymėti kaip nepasiekiami. 0 reiškia niekada jų nežymėti.",
+          "debug": "Įrašo visą kiekvienos užklausos turinį į Home Assistant žurnalą. Naudinga nustatant stotį, vėliau triukšminga."
+        }
+      },
+      "station": {
+        "title": "1 žingsnis iš 5 — jūsų stotis",
+        "description": "{image}\n\nJūsų orų stotis pati sukuria savo įrenginius ir jutiklius, tad čia nėra ko pridėti. Toliau nurodyta tai, ką reikia įvesti stoties programėlėje.\n\nAtverkite programėlę, patikrinkite, ar stoties programinė aparatinė įranga atnaujinta, ir atverkite jos nustatymus."
+      },
+      "settings": {
+        "title": "2 žingsnis iš 5 — orų paslauga",
+        "description": "{image}\n\nPasirinkite **Weather server**."
+      },
+      "server": {
+        "title": "3 žingsnis iš 5 — kitas serveris",
+        "description": "{image}\n\nPasirinkite **Other Server**."
+      },
+      "form": {
+        "title": "4 žingsnis iš 5 — serverio nustatymai",
+        "description": "{image}\n\nUžpildykite formą ir paspauskite **Save**.\n\n**URL**\n{urls}\nBe `http://` ir be `https://`. Naudokite adresą, kurį jūsų stotis pasiekia jūsų pačių tinkle — nėra jokios priežasties dėl to atverti Home Assistant internetui. Jei stotis neišsprendžia vardų, įrašykite IP adresą.\n\n**Station ID** — ką tik norite. Tai taps įrenginio pavadinimu Home Assistant sistemoje.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minutė yra gera reikšmė.\n\n**API type** — *WSLink API*. *WUnderground API* rinkitės tik tuo atveju, jei jūsų stotis nesiūlo WSLink: jis perneša dvigubai mažiau rodmenų ir tik keturis kanalus.\n\n**Upload** — palikite įjungtą.\n\n> ⏱️ Kai kurios stotys praranda Wi-Fi, jei užsibūnate šiame ekrane. Turėkite adresą po ranka, įrašykite jį ir įrašykite nustatymus."
+      },
+      "confirm": {
+        "title": "5 žingsnis iš 5 — confirm & exit",
+        "description": "{image}\n\nGrįžkite atgal ir paspauskite **Confirm & Exit**.\n\n> ⚠️ **Būtent Confirm & Exit įrašo nustatymus į stotį.** Vien išsaugojimas nieko nekeičia.\n\nKai tai padarysite, spauskite Toliau."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Meteorologijos stotis atmesta: neteisingas stoties raktas",
+      "description": "Meteorologijos stotis adresu {ip} bandė siųsti duomenis kaip `{station_id}` neperdavusi laukiamo stoties rakto.\n\nPatikrinkite, ar stotyje arba WSLink programėlėje nustatytas raktas sutampa su nurodytu šioje integracijoje. Šis pranešimas dings savaime, kai tik bus priimta užklausa iš {ip}."
+    },
+    "missing_device_id": {
+      "title": "Meteorologijos stotis atmesta: nėra stoties identifikatoriaus",
+      "description": "Meteorologijos stotis adresu {ip} atsiuntė duomenis be stoties identifikatoriaus.\n\nNustatykite Sender ID WSLink programėlėje arba ID parametrą stoties konfigūracijoje. Šis pranešimas dings savaime, kai tik bus priimta užklausa iš {ip}."
+    },
+    "legacy_entity_ids": {
+      "title": "Objektų identifikatoriai kartoja stoties pavadinimą",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Sutrumpinti objektų identifikatorius",
+            "description": "Iki 1.0.8 versijos ši integracija kūrė objektų identifikatorius, kuriuose stoties pavadinimas yra du kartus, pavyzdžiui `{example_old}`. Naujos stotys taip nebedaro.\n\n**{count} objektų** galima pervadinti, pavyzdžiui į `{example_new}`.\n\nIstorija ir ilgalaikė statistika pervadinimą seka automatiškai. **Automatizacijos, scenarijai, scenos ir skydeliai — ne** — viską, kas nurodo senus identifikatorius, turėsite atnaujinti patys.\n\nJei norite palikti juos tokius, kokie yra, nepaisykite šio taisymo."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Ryšio, nuotėkio ir baterijos rodmenys vis dar yra skaičiai",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Konvertuoti į dvejetainius jutiklius",
+            "description": "Ryšio, vandens nuotėkio ir baterijos rodmenys siunčiami kaip 1 arba 0. Iki 1.0.8 versijos jie buvo rodomi kaip skaitiniai jutikliai, pavyzdžiui `{example}`, kurių negalima naudoti su standartinėmis Home Assistant nuotėkio, ryšio ir senkančios baterijos kortelėmis. Naujos stotys gauna dvejetainius jutiklius, rodančius **Šlapia / Sausa**, **Prisijungęs / Atsijungęs** ir **Įjungta / Išjungta**.\n\nGalima konvertuoti **{count} objektus**. Oro kokybės jutiklių 0~5 baterijos lygiai išlaiko savo procentus: šeši laipteliai yra daugiau, nei gali panešti įjungta/išjungta.\n\nPlatformos keitimas nėra pervadinimas: seni objektai pašalinami ir sukuriami iš naujo kaip `binary_sensor`. **Jų įrašyta istorija prarandama** — šie rodmenys neturi ilgalaikės statistikos, tad paliečiama tik neapdorota istorija — ir **į juos nukreiptas automatizacijas, scenarijus, scenas ir skydelius reikės atnaujinti**. Nauji objektai atsiranda per kitą stoties siuntą.\n\nJei mieliau paliktumėte juos tokius, kokie yra, nepaisykite šio taisymo."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Nė viena meteorologijos stotis dar nieko neatsiuntė",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Nustatykite savo meteorologijos stotį",
+            "description": "Jūsų meteorologijos stotis kuria įrenginius ir jutiklius — čia nėra ko pridėti.\n\nStoties programėlėje atidarykite savo stotį, tada **Settings → Weather server → Other Server**, ir užpildykite:\n\n**URL**\n{urls}\nBe `http://` ar `https://`. Naudokite adresą, kurį jūsų stotis pasiekia jūsų pačių tinkle — nėra jokios priežasties dėl to atverti Home Assistant internetui. Jei jūsų stotis neišsprendžia vardų, įrašykite IP adresą.\n\n**Station ID** — ką norite. Tai taps įrenginio pavadinimu Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minutė yra gera reikšmė.\n\n**API type** — *WSLink API*.\n\n**Upload** — palikite įjungtą.\n\nPaspauskite **Save**, grįžkite atgal ir paspauskite **Confirm & Exit**.\n\n> ⚠️ **Būtent Confirm & Exit įrašo nustatymus į stotį.** Vien išsaugojimas nieko nekeičia. Jūsų jutikliai pasirodo po sekundės.\n\nKlausantys galiniai taškai:\n{endpoints}"
+          },
+          "received": {
+            "title": "Jūsų stotis prasibrovė",
+            "description": "**{station}** atsiuntė pirmąjį siuntimą. Jos jutikliai kuriami dabar, o daugiau atsiras stočiai apie juos pranešant.\n\nŠis pranešimas nebegrįš."
+          },
+          "timeout": {
+            "title": "Kol kas nieko negauta",
+            "description": "Per {minutes} minutes neatėjo joks siuntimas.\n\nPagal tikimybę:\n\n  - **Ar paspaudėte Confirm & Exit?** Vien serverio ekrano išsaugojimas į stotį nieko neįrašo.\n  - **URL** turi būti {urls_inline}, be `http://`, ir pasiekiamas stočiai jūsų tinkle.\n  - Tame ekrane turi būti įjungtas **Upload**.\n  - Kai kurios Bresser programinės aparatinės įrangos versijos nuo **3.02** atmeta paprastą HTTP ir reikalauja HTTPS teikiančio adreso.\n  - Siuntimo intervalas gali būti tiesiog ilgesnis nei laukimas.\n  - **Stoties raktas**: {key_hint}.\n\nJei stotis pasiekė Home Assistant, bet buvo atmesta, tai atskirai pranešama **Nustatymai → Sistema → Taisymai**.\n\nGalite uždaryti. Tai lieka čia, kol pasirodys stotis, o atvėrus iš naujo laukimas prasideda nuo pradžių."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Laukiama pirmojo jūsų stoties siuntimo…"
+        },
+        "abort": {
+          "not_received": "Kol kas nieko neatėjo, todėl tai lieka atidaryta. Tai lieka Taisymuose, kol pasirodys stotis, ir galite atverti iš naujo, kad vėl palauktumėte."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "Stotis {station} siunčia rodmenis, kurie yra atmetami",
+      "description": "**{count} parametrai** iš **{station}** neatpažįstami, todėl jų reikšmės atmetamos kiekvieną kartą siunčiant:\n\n{parameters}\n\nĮprasta priežastis – stotis praneša daugiau, nei gali panešti jos protokolas. Weather Underground turi tik **4 vietas** papildomiems jutikliams; jei jūsų stotis siūlo **WSLink** kaip *API type*, perėjimas prie jo atveria septynis kanalus ir maždaug dvigubai daugiau rodmenų.\n\nJei priežastis ne ta, būtent šie parametrų pavadinimai ir reikalingi klaidos pranešimui: atverkite jį [klaidų sekiklyje]({issue_tracker}) ir juos bus galima pridėti.\n\nTai taip pat galite ignoruoti – niekas nesugedo, tiesiog šios konkrečios reikšmės nepasiekia."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "Stotis {device} dar neperdavė vėjo krypties, todėl nėra pagal ką kalibruoti. Palaukite kito siuntimo ir bandykite dar kartą."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Absoliutus oro slėgis"
+      },
+      "apiver": {
+        "name": "API versija"
+      },
+      "aqbc": {
+        "name": "Juodoji anglis"
+      },
+      "aqco": {
+        "name": "Anglies monoksidas"
+      },
+      "aqcot": {
+        "name": "Anglies monoksidas pėdsakais"
+      },
+      "aqec": {
+        "name": "Elementinė anglis"
+      },
+      "aqno": {
+        "name": "Azoto monoksidas"
+      },
+      "aqno2": {
+        "name": "NO2 X apskaičiuota"
+      },
+      "aqno2t": {
+        "name": "Azoto dioksidas"
+      },
+      "aqno2y": {
+        "name": "NO2 Y apskaičiuota"
+      },
+      "aqno3": {
+        "name": "NO3 jonas"
+      },
+      "aqnox": {
+        "name": "Azoto oksidai"
+      },
+      "aqnoy": {
+        "name": "Bendras reaktyvusis azotas"
+      },
+      "aqoc": {
+        "name": "Organinė anglis"
+      },
+      "aqozone": {
+        "name": "Ozonas"
+      },
+      "aqpm10": {
+        "name": "PM10 masė"
+      },
+      "aqpm2_5": {
+        "name": "PM2.5 masė"
+      },
+      "aqso2": {
+        "name": "Sieros dioksidas"
+      },
+      "aqso2t": {
+        "name": "Sieros dioksidas pėdsakais"
+      },
+      "aqso4": {
+        "name": "SO4 jonas"
+      },
+      "aquv_aeth": {
+        "name": "Etalometras 2 kanalas"
+      },
+      "baromin": {
+        "name": "Slėgis"
+      },
+      "clouds": {
+        "name": "Debesuotumas"
+      },
+      "dailyrainin": {
+        "name": "Paros lietus"
+      },
+      "dewptf": {
+        "name": "Rasos taškas"
+      },
+      "humidity": {
+        "name": "Lauko oro drėgnis"
+      },
+      "inbat": {
+        "name": "Pulto baterijos lygis"
+      },
+      "indoorhumidity": {
+        "name": "Vidaus oro drėgnis"
+      },
+      "indoortempf": {
+        "name": "Vidaus temperatūra"
+      },
+      "inhum": {
+        "name": "Vidaus oro drėgnis"
+      },
+      "intem": {
+        "name": "Vidaus temperatūra"
+      },
+      "last_update": {
+        "name": "Paskutinis gavimas"
+      },
+      "leafwetness": {
+        "name": "Lapų drėgnumas"
+      },
+      "leafwetness2": {
+        "name": "CH2 lapų drėgnumas"
+      },
+      "lowbatt": {
+        "name": "Senka baterija"
+      },
+      "monthlyrainin": {
+        "name": "Mėnesio lietus"
+      },
+      "rainin": {
+        "name": "Valandos lietus"
+      },
+      "rbar": {
+        "name": "Santykinis oro slėgis"
+      },
+      "rtfreq": {
+        "name": "Atnaujinimo dažnis"
+      },
+      "soilmoisture": {
+        "name": "Dirvožemio drėgnis"
+      },
+      "soilmoisture2": {
+        "name": "CH2 dirvožemio drėgnis"
+      },
+      "soilmoisture3": {
+        "name": "CH3 dirvožemio drėgnis"
+      },
+      "soilmoisture4": {
+        "name": "CH4 dirvožemio drėgnis"
+      },
+      "soiltemp2f": {
+        "name": "CH2 dirvožemio temperatūra"
+      },
+      "soiltemp3f": {
+        "name": "CH3 dirvožemio temperatūra"
+      },
+      "soiltemp4f": {
+        "name": "CH4 dirvožemio temperatūra"
+      },
+      "soiltempf": {
+        "name": "Dirvožemio temperatūra"
+      },
+      "solarradiation": {
+        "name": "Saulės spinduliuotė"
+      },
+      "t10bat": {
+        "name": "CO2 jutiklio baterijos lygis"
+      },
+      "t10cn": {
+        "name": "CO2 jutiklio ryšio būsena"
+      },
+      "t10co2": {
+        "name": "CO2 koncentracija"
+      },
+      "t11bat": {
+        "name": "CO jutiklio baterijos lygis"
+      },
+      "t11cn": {
+        "name": "CO jutiklio ryšio būsena"
+      },
+      "t11co": {
+        "name": "CO koncentracija"
+      },
+      "t1bat": {
+        "name": "Lauko jutiklio baterijos būsena"
+      },
+      "t1chill": {
+        "name": "Vėjo atšalimo temperatūra"
+      },
+      "t1cn": {
+        "name": "Lauko jutiklio ryšio būsena"
+      },
+      "t1dew": {
+        "name": "Rasos taško temperatūra"
+      },
+      "t1feels": {
+        "name": "Juntama temperatūra"
+      },
+      "t1heat": {
+        "name": "Karščio indeksas"
+      },
+      "t1hum": {
+        "name": "Lauko oro drėgnis"
+      },
+      "t1raindy": {
+        "name": "Paros krituliai"
+      },
+      "t1rainhr": {
+        "name": "Valandos krituliai"
+      },
+      "t1rainmth": {
+        "name": "Mėnesio krituliai"
+      },
+      "t1rainra": {
+        "name": "Lietaus intensyvumas"
+      },
+      "t1rainwy": {
+        "name": "Savaitės krituliai"
+      },
+      "t1rainyr": {
+        "name": "Metų krituliai"
+      },
+      "t1solrad": {
+        "name": "Šviesos intensyvumas"
+      },
+      "t1tem": {
+        "name": "Lauko temperatūra"
+      },
+      "t1uvi": {
+        "name": "UV indeksas"
+      },
+      "t1wbgt": {
+        "name": "WBGT temperatūra"
+      },
+      "t1wdir": {
+        "name": "Vėjo kryptis"
+      },
+      "t1wgust": {
+        "name": "Vėjo gūsis"
+      },
+      "t1ws": {
+        "name": "Vėjo greitis"
+      },
+      "t1ws10mav": {
+        "name": "Vėjo greitis vid. 10 min"
+      },
+      "t234c1bat": {
+        "name": "CH1 baterijos būsena"
+      },
+      "t234c1cn": {
+        "name": "CH1 ryšio būsena"
+      },
+      "t234c1hum": {
+        "name": "CH1 drėgnis"
+      },
+      "t234c1tem": {
+        "name": "CH1 temperatūra"
+      },
+      "t234c1tp": {
+        "name": "CH1 jutiklio tipas"
+      },
+      "t234c2bat": {
+        "name": "CH2 baterijos būsena"
+      },
+      "t234c2cn": {
+        "name": "CH2 ryšio būsena"
+      },
+      "t234c2hum": {
+        "name": "CH2 drėgnis"
+      },
+      "t234c2tem": {
+        "name": "CH2 temperatūra"
+      },
+      "t234c2tp": {
+        "name": "CH2 jutiklio tipas"
+      },
+      "t234c3bat": {
+        "name": "CH3 baterijos būsena"
+      },
+      "t234c3cn": {
+        "name": "CH3 ryšio būsena"
+      },
+      "t234c3hum": {
+        "name": "CH3 drėgnis"
+      },
+      "t234c3tem": {
+        "name": "CH3 temperatūra"
+      },
+      "t234c3tp": {
+        "name": "CH3 jutiklio tipas"
+      },
+      "t234c4bat": {
+        "name": "CH4 baterijos būsena"
+      },
+      "t234c4cn": {
+        "name": "CH4 ryšio būsena"
+      },
+      "t234c4hum": {
+        "name": "CH4 drėgnis"
+      },
+      "t234c4tem": {
+        "name": "CH4 temperatūra"
+      },
+      "t234c4tp": {
+        "name": "CH4 jutiklio tipas"
+      },
+      "t234c5bat": {
+        "name": "CH5 baterijos būsena"
+      },
+      "t234c5cn": {
+        "name": "CH5 ryšio būsena"
+      },
+      "t234c5hum": {
+        "name": "CH5 drėgnis"
+      },
+      "t234c5tem": {
+        "name": "CH5 temperatūra"
+      },
+      "t234c5tp": {
+        "name": "CH5 jutiklio tipas"
+      },
+      "t234c6bat": {
+        "name": "CH6 baterijos būsena"
+      },
+      "t234c6cn": {
+        "name": "CH6 ryšio būsena"
+      },
+      "t234c6hum": {
+        "name": "CH6 drėgnis"
+      },
+      "t234c6tem": {
+        "name": "CH6 temperatūra"
+      },
+      "t234c6tp": {
+        "name": "CH6 jutiklio tipas"
+      },
+      "t234c7bat": {
+        "name": "CH7 baterijos būsena"
+      },
+      "t234c7cn": {
+        "name": "CH7 ryšio būsena"
+      },
+      "t234c7hum": {
+        "name": "CH7 drėgnis"
+      },
+      "t234c7tem": {
+        "name": "CH7 temperatūra"
+      },
+      "t234c7tp": {
+        "name": "CH7 jutiklio tipas"
+      },
+      "t5ls1dtc": {
+        "name": "Žaibai iš viso per 1 parą"
+      },
+      "t5ls1htc": {
+        "name": "Žaibai iš viso per 1 valandą"
+      },
+      "t5ls30mtc": {
+        "name": "Žaibai per paskutines 30 minučių"
+      },
+      "t5ls5mtc": {
+        "name": "Žaibai per paskutines 5 minutes"
+      },
+      "t5lsbat": {
+        "name": "Žaibo jutiklio baterijos būsena"
+      },
+      "t5lscn": {
+        "name": "Žaibo jutiklio ryšio būsena"
+      },
+      "t5lsf": {
+        "name": "Žaibai per paskutinę valandą"
+      },
+      "t5lskm": {
+        "name": "Žaibo atstumas"
+      },
+      "t5lst": {
+        "name": "Paskutinio žaibo laikas"
+      },
+      "t6c1bat": {
+        "name": "CH1 nuotėkio jutiklio baterijos būsena"
+      },
+      "t6c1cn": {
+        "name": "CH1 nuotėkio jutiklio ryšio būsena"
+      },
+      "t6c1wls": {
+        "name": "CH1 vandens nuotėkio būsena"
+      },
+      "t6c2bat": {
+        "name": "CH2 nuotėkio jutiklio baterijos būsena"
+      },
+      "t6c2cn": {
+        "name": "CH2 nuotėkio jutiklio ryšio būsena"
+      },
+      "t6c2wls": {
+        "name": "CH2 vandens nuotėkio būsena"
+      },
+      "t6c3bat": {
+        "name": "CH3 nuotėkio jutiklio baterijos būsena"
+      },
+      "t6c3cn": {
+        "name": "CH3 nuotėkio jutiklio ryšio būsena"
+      },
+      "t6c3wls": {
+        "name": "CH3 vandens nuotėkio būsena"
+      },
+      "t6c4bat": {
+        "name": "CH4 nuotėkio jutiklio baterijos būsena"
+      },
+      "t6c4cn": {
+        "name": "CH4 nuotėkio jutiklio ryšio būsena"
+      },
+      "t6c4wls": {
+        "name": "CH4 vandens nuotėkio būsena"
+      },
+      "t6c5bat": {
+        "name": "CH5 nuotėkio jutiklio baterijos būsena"
+      },
+      "t6c5cn": {
+        "name": "CH5 nuotėkio jutiklio ryšio būsena"
+      },
+      "t6c5wls": {
+        "name": "CH5 vandens nuotėkio būsena"
+      },
+      "t6c6bat": {
+        "name": "CH6 nuotėkio jutiklio baterijos būsena"
+      },
+      "t6c6cn": {
+        "name": "CH6 nuotėkio jutiklio ryšio būsena"
+      },
+      "t6c6wls": {
+        "name": "CH6 vandens nuotėkio būsena"
+      },
+      "t6c7bat": {
+        "name": "CH7 nuotėkio jutiklio baterijos būsena"
+      },
+      "t6c7cn": {
+        "name": "CH7 nuotėkio jutiklio ryšio būsena"
+      },
+      "t6c7wls": {
+        "name": "CH7 vandens nuotėkio būsena"
+      },
+      "t8bat": {
+        "name": "Dalelių jutiklio baterijos lygis"
+      },
+      "t8cn": {
+        "name": "Dalelių jutiklio ryšio būsena"
+      },
+      "t8pm10": {
+        "name": "PM10 koncentracija"
+      },
+      "t8pm10ai": {
+        "name": "PM10 AQI"
+      },
+      "t8pm25": {
+        "name": "PM2.5 koncentracija"
+      },
+      "t8pm25ai": {
+        "name": "PM2.5 AQI"
+      },
+      "t9bat": {
+        "name": "HCHO/LOJ jutiklio baterijos lygis"
+      },
+      "t9cn": {
+        "name": "HCHO/LOJ jutiklio ryšio būsena"
+      },
+      "t9hcho": {
+        "name": "HCHO koncentracija"
+      },
+      "t9voclv": {
+        "name": "LOJ lygis",
+        "state": {
+          "very_low": "Labai žemas",
+          "low": "Žemas",
+          "moderate": "Vidutinis",
+          "high": "Aukštas",
+          "very_high": "Labai aukštas"
+        }
+      },
+      "tempf": {
+        "name": "Lauko temperatūra"
+      },
+      "uv": {
+        "name": "UV indeksas"
+      },
+      "visibility": {
+        "name": "Matomumas"
+      },
+      "weeklyrainin": {
+        "name": "Savaitės lietus"
+      },
+      "wind_direction_raw": {
+        "name": "Vėjo kryptis (neapdorota)"
+      },
+      "windchillf": {
+        "name": "Vėjo sukeltas atšalimas"
+      },
+      "winddir": {
+        "name": "Vėjo kryptis"
+      },
+      "winddir_avg2m": {
+        "name": "Vėjo kryptis vid. 2 min"
+      },
+      "windgustdir": {
+        "name": "Gūsio kryptis"
+      },
+      "windgustdir_10m": {
+        "name": "Gūsio kryptis vid. 10 min"
+      },
+      "windgustmph": {
+        "name": "Vėjo gūsis"
+      },
+      "windgustmph_10m": {
+        "name": "Gūsio greitis vid. 10 min"
+      },
+      "windspdmph_avg2m": {
+        "name": "Vėjo greitis vid. 2 min"
+      },
+      "windspeedmph": {
+        "name": "Vėjo greitis"
+      },
+      "yearlyrainin": {
+        "name": "Metų lietus"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Pulto baterijos lygis"
+      },
+      "station_online": {
+        "name": "Stotis prisijungusi"
+      },
+      "t10cn": {
+        "name": "CO2 jutiklio ryšio būsena"
+      },
+      "t11cn": {
+        "name": "CO jutiklio ryšio būsena"
+      },
+      "t1bat": {
+        "name": "Lauko jutiklio baterijos būsena"
+      },
+      "t1cn": {
+        "name": "Lauko jutiklio ryšio būsena"
+      },
+      "t234c1bat": {
+        "name": "CH1 baterijos būsena"
+      },
+      "t234c1cn": {
+        "name": "CH1 ryšio būsena"
+      },
+      "t234c2bat": {
+        "name": "CH2 baterijos būsena"
+      },
+      "t234c2cn": {
+        "name": "CH2 ryšio būsena"
+      },
+      "t234c3bat": {
+        "name": "CH3 baterijos būsena"
+      },
+      "t234c3cn": {
+        "name": "CH3 ryšio būsena"
+      },
+      "t234c4bat": {
+        "name": "CH4 baterijos būsena"
+      },
+      "t234c4cn": {
+        "name": "CH4 ryšio būsena"
+      },
+      "t234c5bat": {
+        "name": "CH5 baterijos būsena"
+      },
+      "t234c5cn": {
+        "name": "CH5 ryšio būsena"
+      },
+      "t234c6bat": {
+        "name": "CH6 baterijos būsena"
+      },
+      "t234c6cn": {
+        "name": "CH6 ryšio būsena"
+      },
+      "t234c7bat": {
+        "name": "CH7 baterijos būsena"
+      },
+      "t234c7cn": {
+        "name": "CH7 ryšio būsena"
+      },
+      "t5lsbat": {
+        "name": "Žaibo jutiklio baterijos būsena"
+      },
+      "t5lscn": {
+        "name": "Žaibo jutiklio ryšio būsena"
+      },
+      "t6c1bat": {
+        "name": "CH1 nuotėkio jutiklio baterijos būsena"
+      },
+      "t6c1cn": {
+        "name": "CH1 nuotėkio jutiklio ryšio būsena"
+      },
+      "t6c1wls": {
+        "name": "CH1 vandens nuotėkio būsena"
+      },
+      "t6c2bat": {
+        "name": "CH2 nuotėkio jutiklio baterijos būsena"
+      },
+      "t6c2cn": {
+        "name": "CH2 nuotėkio jutiklio ryšio būsena"
+      },
+      "t6c2wls": {
+        "name": "CH2 vandens nuotėkio būsena"
+      },
+      "t6c3bat": {
+        "name": "CH3 nuotėkio jutiklio baterijos būsena"
+      },
+      "t6c3cn": {
+        "name": "CH3 nuotėkio jutiklio ryšio būsena"
+      },
+      "t6c3wls": {
+        "name": "CH3 vandens nuotėkio būsena"
+      },
+      "t6c4bat": {
+        "name": "CH4 nuotėkio jutiklio baterijos būsena"
+      },
+      "t6c4cn": {
+        "name": "CH4 nuotėkio jutiklio ryšio būsena"
+      },
+      "t6c4wls": {
+        "name": "CH4 vandens nuotėkio būsena"
+      },
+      "t6c5bat": {
+        "name": "CH5 nuotėkio jutiklio baterijos būsena"
+      },
+      "t6c5cn": {
+        "name": "CH5 nuotėkio jutiklio ryšio būsena"
+      },
+      "t6c5wls": {
+        "name": "CH5 vandens nuotėkio būsena"
+      },
+      "t6c6bat": {
+        "name": "CH6 nuotėkio jutiklio baterijos būsena"
+      },
+      "t6c6cn": {
+        "name": "CH6 nuotėkio jutiklio ryšio būsena"
+      },
+      "t6c6wls": {
+        "name": "CH6 vandens nuotėkio būsena"
+      },
+      "t6c7bat": {
+        "name": "CH7 nuotėkio jutiklio baterijos būsena"
+      },
+      "t6c7cn": {
+        "name": "CH7 nuotėkio jutiklio ryšio būsena"
+      },
+      "t6c7wls": {
+        "name": "CH7 vandens nuotėkio būsena"
+      },
+      "t8cn": {
+        "name": "Dalelių jutiklio ryšio būsena"
+      },
+      "t9cn": {
+        "name": "HCHO/LOJ jutiklio ryšio būsena"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Vėjo krypties poslinkis"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Atstatyti poslinkį"
+      },
+      "set_north": {
+        "name": "Nustatyti šiaurę pagal dabartinę vertę"
+      }
+    }
+  }
+}

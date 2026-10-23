@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Persoanlik waarstasjon",
+        "description": "Stel hjir in stasjonskaai yn dy't jo waarstasjons stjoere moatte sadat harren gegevens net wegere wurde. Litte jo it fjild leech, dan wurde alle fersiken akseptearre.",
+        "data": {
+          "password": "Stasjonskaai"
+        }
+      },
+      "station": {
+        "title": "Stap 1 fan 5 — jo stasjon",
+        "description": "{image}\n\nJo waarstasjon makket sels syn apparaten en sensoren oan, dus hjir is neat ta te foegjen. Wat folget is wat jo yn de app fan it stasjon ynfolje moatte.\n\nIepenje de app, kontrolearje oft de firmware fan it stasjon by de tiid is, en iepenje dan de ynstellings."
+      },
+      "settings": {
+        "title": "Stap 2 fan 5 — waartsjinst",
+        "description": "{image}\n\nKies **Weather server**."
+      },
+      "server": {
+        "title": "Stap 3 fan 5 — oare server",
+        "description": "{image}\n\nKies **Other Server**."
+      },
+      "form": {
+        "title": "Stap 4 fan 5 — serverynstellings",
+        "description": "{image}\n\nFolje it formulier yn en druk dan op **Save**.\n\n**URL**\n{urls}\nSûnder `http://` of `https://`. Brûk in adres dat jo stasjon op jo eigen netwurk berikke kin — der is gjin inkelde reden om Home Assistant dêrfoar oan it ynternet bleat te stellen. Kin jo stasjon gjin nammen omsette, brûk dan it IP-adres.\n\n**Station ID** — wat jo wolle. Dit wurdt de apparaatnamme yn Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minút is in goede wearde.\n\n**API type** — *WSLink API*. Kies allinnich *WUnderground API* as jo stasjon WSLink net oanbiedt: it draacht de helte fan de mjittingen en mar fjouwer kanalen.\n\n**Upload** — lit it oanstean.\n\n> ⏱️ Guon stasjons ferlieze de wifi as jo op dit skerm hingjen bliuwe. Hâld it adres by de hân, folje it yn, en bewarje."
+      },
+      "confirm": {
+        "title": "Stap 5 fan 5 — confirm & exit",
+        "description": "{image}\n\nGean werom en druk dan op **Confirm & Exit**.\n\n> ⚠️ **Confirm & Exit is wat de ynstellings nei it stasjon skriuwt.** Allinnich bewarje feroaret neat.\n\nDruk op Folgjende sa gau't jo dat dien hawwe."
+      },
+      "received": {
+        "title": "Jo stasjon praat mei Home Assistant",
+        "description": "**{station}** hat krekt syn earste gegevens ferstjoerd.\n\nDe sensoren ferskine by de folgjende, en wurde makke út wat it stasjon werklik stjoert — hjir falt neat te kiezen."
+      },
+      "timeout": {
+        "title": "Der is noch neat binnenkommen",
+        "description": "De ôfrûne {minutes} minuten hat gjin inkeld stasjon wat stjoerd.{key_hint_extra}\n\nDe gewoane oarsaken binne in adres dat it stasjon net berikke kin, in net yndrukte **Confirm & Exit**, of firmware fan 3.02 ôf, dy't HTTPS ferget.\n\nDe adressen om it op te rjochtsjen binne:\n{urls}\nDe einpunten dy't op ferstjoeringen wachtsje binne:\n{endpoints}\n\nDruk op Folgjende om dochs ôf te ronde — de ynstellings bliuwe bewarre, de einpunten begjinne echt te harkjen, en in reparaasje bringt jo hjir werom oant der in stasjon opdûkt."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Al konfigurearre. Ien inkelde ynstânsje betsjinnet alle waarstasjons."
+    },
+    "progress": {
+      "waiting_for_station": "Wachtsje op de earste gegevens fan jo stasjon…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Persoanlik waarstasjon",
+        "menu_options": {
+          "options": "Ynstellings",
+          "instructions": "Hoe't jo in stasjon nei Home Assistant rjochtsje"
+        }
+      },
+      "options": {
+        "title": "Persoanlik waarstasjon",
+        "description": "Stel hjir in stasjonskaai yn dy't jo waarstasjons stjoere moatte sadat harren gegevens net wegere wurde. Litte jo it fjild leech, dan wurde alle fersiken akseptearre.",
+        "data": {
+          "password": "Stasjonskaai",
+          "availability_timeout": "Markearje as net beskikber nei (minuten)",
+          "debug": "Log elk ynkommend fersyk"
+        },
+        "data_description": {
+          "availability_timeout": "Hoe lang in stasjon stil bliuwe mei foardat syn sensoren as net beskikber markearre wurde. 0 betsjut nea markearje.",
+          "debug": "Skriuwt de folsleine ynhâld fan elk fersyk nei it Home Assistant-loch. Nuttich by it ynstellen fan in stasjon, steurend dêrnei."
+        }
+      },
+      "station": {
+        "title": "Stap 1 fan 5 — jo stasjon",
+        "description": "{image}\n\nJo waarstasjon makket sels syn apparaten en sensoren oan, dus hjir is neat ta te foegjen. Wat folget is wat jo yn de app fan it stasjon ynfolje moatte.\n\nIepenje de app, kontrolearje oft de firmware fan it stasjon by de tiid is, en iepenje dan de ynstellings."
+      },
+      "settings": {
+        "title": "Stap 2 fan 5 — waartsjinst",
+        "description": "{image}\n\nKies **Weather server**."
+      },
+      "server": {
+        "title": "Stap 3 fan 5 — oare server",
+        "description": "{image}\n\nKies **Other Server**."
+      },
+      "form": {
+        "title": "Stap 4 fan 5 — serverynstellings",
+        "description": "{image}\n\nFolje it formulier yn en druk dan op **Save**.\n\n**URL**\n{urls}\nSûnder `http://` of `https://`. Brûk in adres dat jo stasjon op jo eigen netwurk berikke kin — der is gjin inkelde reden om Home Assistant dêrfoar oan it ynternet bleat te stellen. Kin jo stasjon gjin nammen omsette, brûk dan it IP-adres.\n\n**Station ID** — wat jo wolle. Dit wurdt de apparaatnamme yn Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minút is in goede wearde.\n\n**API type** — *WSLink API*. Kies allinnich *WUnderground API* as jo stasjon WSLink net oanbiedt: it draacht de helte fan de mjittingen en mar fjouwer kanalen.\n\n**Upload** — lit it oanstean.\n\n> ⏱️ Guon stasjons ferlieze de wifi as jo op dit skerm hingjen bliuwe. Hâld it adres by de hân, folje it yn, en bewarje."
+      },
+      "confirm": {
+        "title": "Stap 5 fan 5 — confirm & exit",
+        "description": "{image}\n\nGean werom en druk dan op **Confirm & Exit**.\n\n> ⚠️ **Confirm & Exit is wat de ynstellings nei it stasjon skriuwt.** Allinnich bewarje feroaret neat.\n\nDruk op Folgjende sa gau't jo dat dien hawwe."
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "Waarstasjon wegere: ferkearde stasjonskaai",
+      "description": "In waarstasjon op {ip} besocht gegevens te stjoeren as `{station_id}` sûnder de ferwachte stasjonskaai mei te stjoeren.\n\nKontrolearje oft de kaai dy't yn it stasjon of yn de WSLink-app ynsteld is, oerienkomt mei dyjinge yn dizze yntegraasje. Dit berjocht ferdwynt fansels sadree't in fersyk fan {ip} akseptearre wurdt."
+    },
+    "missing_device_id": {
+      "title": "Waarstasjon wegere: gjin stasjonsidentifikaasje",
+      "description": "In waarstasjon op {ip} stjoerde gegevens sûnder stasjonsidentifikaasje.\n\nStel in Sender ID yn de WSLink-app yn, of in ID-parameter yn de konfiguraasje fan it stasjon. Dit berjocht ferdwynt fansels sadree't in fersyk fan {ip} akseptearre wurdt."
+    },
+    "legacy_entity_ids": {
+      "title": "Entiteits-ID's werhelje de stasjonsnamme",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Koartsje de entiteits-ID's yn",
+            "description": "Oant ferzje 1.0.8 boude dizze yntegraasje entiteits-ID's dy't de stasjonsnamme twaris drage, lykas `{example_old}`. Nije stasjons dogge dat net mear.\n\n**{count} entiteiten** kinne omneamd wurde, bygelyks nei `{example_new}`.\n\nSkiednis en lange-termynstatistiken folgje it omneamen automatysk. **Automatisearrings, skripts, sênes en dashboards net** — alles dat nei de âlde ID's ferwiist moatte jo sels bywurkje.\n\nWolle jo se leaver sa litte, negearje dan dizze reparaasje."
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "Ferbinings-, lek- en batterijwearden binne noch sifers",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Omsette nei binêre sensoren",
+            "description": "Ferbinings-, wetterlek- en batterijwearden wurde as 1 of 0 trochjûn. Oant ferzje 1.0.8 waarden se as numerike sensoren toand, lykas `{example}`, dy't net brûkber binne mei de standertkaarten foar lekkaazje, ferbining en lege batterij fan Home Assistant. Nije stasjons krije binêre sensoren dy't **Wiet / Droech**, **Ferbûn / Net ferbûn** en **Oan / Út** sjen litte.\n\n**{count} entiteiten** kinne omset wurde. De 0~5-batterijnivo's fan de loftkwaliteitssensoren hâlde har persintaazje: seis stappen binne mear as in oan/út drage kin.\n\nFan platfoarm wikselje is gjin omneaming: de âlde entiteiten wurde fuorthelle en op 'e nij oanmakke as `binary_sensor`. **Har opnommen skiednis giet ferlern** — dizze wearden hawwe gjin langetermynstatistyk, dus allinnich de rûge skiednis wurdt rekke — en **automatisearrings, skripts, sênes en dashboards dy't dernei ferwize moatte bywurke wurde**. De nije entiteiten ferskine by de folgjende oplaad fan it stasjon.\n\nWolle jo se leaver litte sa't se binne, negearje dizze reparaasje dan."
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "Noch gjin waarstasjon hat wat stjoerd",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Stel jo waarstasjon yn",
+            "description": "Jo waarstasjon makket de apparaten en sensoren oan — hjir is neat ta te foegjen.\n\nIepenje yn de app fan it stasjon jo stasjon, dan **Settings → Weather server → Other Server**, en folje yn:\n\n**URL**\n{urls}\nSûnder `http://` of `https://`. Brûk in adres dat jo stasjon op jo eigen netwurk berikke kin — der is gjin inkelde reden om Home Assistant dêrfoar oan it ynternet bleat te stellen. Kin jo stasjon gjin nammen oplosse, brûk dan it IP-adres.\n\n**Station ID** — wat jo wolle. It wurdt de apparaatnamme yn Home Assistant.\n\n**Station key** — {key_hint}.\n\n**Upload interval** — 1 minút is in goede wearde.\n\n**API type** — *WSLink API*.\n\n**Upload** — lit it oanstean.\n\nDruk op **Save**, gean werom en druk dan op **Confirm & Exit**.\n\n> ⚠️ **It is Confirm & Exit dat de ynstellings nei it stasjon skriuwt.** Allinnich bewarje feroaret neat. Jo sensoren ferskine in sekonde letter.\n\nDe harkjende einpunten binne:\n{endpoints}"
+          },
+          "received": {
+            "title": "Jo stasjon is trochkommen",
+            "description": "**{station}** hat syn earste upload stjoerd. De sensoren wurde no oanmakke, en der komme mear by sa't it stasjon se meldt.\n\nDit berjocht komt net werom."
+          },
+          "timeout": {
+            "title": "Noch neat ûntfongen",
+            "description": "Der kaam gjin upload yn {minutes} minuten.\n\nOp folchoarder fan wierskynlikheid:\n\n  - **Hawwe jo op Confirm & Exit drukt?** Allinnich it serverskerm bewarje skriuwt neat nei it stasjon.\n  - De **URL** moat {urls_inline} wêze, sûnder `http://`, en berikber foar it stasjon op jo netwurk.\n  - **Upload** moat op dat skerm oanstean.\n  - Guon Bresser-firmwares fan **3.02** ôf wegerje gewoan HTTP en hawwe in adres mei HTTPS nedich.\n  - It uploadynterval is faaks gewoan langer as de wachttiid.\n  - **Stasjonskaai**: {key_hint}.\n\nAs it stasjon Home Assistant berikt hat mar wegere waard, wurdt dat apart meld by **Ynstellings → Systeem → Reparaasjes**.\n\nJo kinne dit slute. It bliuwt hjir oant der in stasjon opdûkt, en it opnij iepenjen begjint de wachttiid fan foaren ôf."
+          }
+        },
+        "progress": {
+          "waiting_for_station": "Wachtsje op de earste upload fan jo stasjon…"
+        },
+        "abort": {
+          "not_received": "Der is noch neat kommen, dus dit bliuwt iepen. It bliuwt yn Reparaasjes oant der in stasjon opdûkt, en jo kinne it opnij iepenje om wer te wachtsjen."
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "Stasjon {station} stjoert mjittingen dy't fuortsmiten wurde",
+      "description": "**{count} parameters** fan **{station}** wurde net werkend, dus har wearden wurde by elke oplaad fuortsmiten:\n\n{parameters}\n\nDe gewoane oarsaak is in stasjon dat mear meldt as syn protokol drage kin. Weather Underground hat mar **4 plakken** foar ekstra sensoren; as jo stasjon **WSLink** as *API type* oanbiedt, jout oerstappen dêrop sân kanalen en sawat twa kear safolle mjittingen.\n\nIs dat it net, dan binne dizze parameternammen krekt wat in flaterrapport nedich hat: iepenje der ien op de [issue tracker]({issue_tracker}) en dan kinne se tafoege wurde.\n\nJo kinne dit ek negearje — der is neat stikken, dizze bepaalde wearden komme gewoan net oan."
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "Stasjon {device} hat noch gjin wynrjochting stjoerd, dus der is neat om op te kalibrearjen. Wachtsje op de folgjende upload en besykje it nochris."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "Absolute loftdruk"
+      },
+      "apiver": {
+        "name": "API-ferzje"
+      },
+      "aqbc": {
+        "name": "Swart koalstof"
+      },
+      "aqco": {
+        "name": "Koalstofmonokside"
+      },
+      "aqcot": {
+        "name": "Koalstofmonokside yn spoaren"
+      },
+      "aqec": {
+        "name": "Elemintêr koalstof"
+      },
+      "aqno": {
+        "name": "Stikstofmonokside"
+      },
+      "aqno2": {
+        "name": "NO2 X berekkene"
+      },
+      "aqno2t": {
+        "name": "Stikstofdiokside"
+      },
+      "aqno2y": {
+        "name": "NO2 Y berekkene"
+      },
+      "aqno3": {
+        "name": "NO3-ion"
+      },
+      "aqnox": {
+        "name": "Stikstofoksiden"
+      },
+      "aqnoy": {
+        "name": "Totaal reaktyf stikstof"
+      },
+      "aqoc": {
+        "name": "Organysk koalstof"
+      },
+      "aqozone": {
+        "name": "Ozon"
+      },
+      "aqpm10": {
+        "name": "PM10-massa"
+      },
+      "aqpm2_5": {
+        "name": "PM2.5-massa"
+      },
+      "aqso2": {
+        "name": "Swevelsdiokside"
+      },
+      "aqso2t": {
+        "name": "Swevelsdiokside yn spoaren"
+      },
+      "aqso4": {
+        "name": "SO4-ion"
+      },
+      "aquv_aeth": {
+        "name": "Aethalometer kanaal 2"
+      },
+      "baromin": {
+        "name": "Druk"
+      },
+      "clouds": {
+        "name": "Wolkedek"
+      },
+      "dailyrainin": {
+        "name": "Deiske rein"
+      },
+      "dewptf": {
+        "name": "Dizzepunt"
+      },
+      "humidity": {
+        "name": "Bûtenlochtfochtigens"
+      },
+      "inbat": {
+        "name": "Batterijnivo fan konsole"
+      },
+      "indoorhumidity": {
+        "name": "Binnenlochtfochtigens"
+      },
+      "indoortempf": {
+        "name": "Binnentemperatuer"
+      },
+      "inhum": {
+        "name": "Binnenlochtfochtigens"
+      },
+      "intem": {
+        "name": "Binnentemperatuer"
+      },
+      "last_update": {
+        "name": "Lêste ûntfangst"
+      },
+      "leafwetness": {
+        "name": "Blêdwiette"
+      },
+      "leafwetness2": {
+        "name": "CH2 blêdwiette"
+      },
+      "lowbatt": {
+        "name": "Lege batterij"
+      },
+      "monthlyrainin": {
+        "name": "Moanliks rein"
+      },
+      "rainin": {
+        "name": "Rein de oere"
+      },
+      "rbar": {
+        "name": "Relative loftdruk"
+      },
+      "rtfreq": {
+        "name": "Bywurkingsfrekwinsje"
+      },
+      "soilmoisture": {
+        "name": "Groundfochtigens"
+      },
+      "soilmoisture2": {
+        "name": "CH2 groundfochtigens"
+      },
+      "soilmoisture3": {
+        "name": "CH3 groundfochtigens"
+      },
+      "soilmoisture4": {
+        "name": "CH4 groundfochtigens"
+      },
+      "soiltemp2f": {
+        "name": "CH2 groundtemperatuer"
+      },
+      "soiltemp3f": {
+        "name": "CH3 groundtemperatuer"
+      },
+      "soiltemp4f": {
+        "name": "CH4 groundtemperatuer"
+      },
+      "soiltempf": {
+        "name": "Groundtemperatuer"
+      },
+      "solarradiation": {
+        "name": "Sinnestrieling"
+      },
+      "t10bat": {
+        "name": "Batterijnivo fan CO2-sensor"
+      },
+      "t10cn": {
+        "name": "Ferbiningssteat fan CO2-sensor"
+      },
+      "t10co2": {
+        "name": "CO2-konsintraasje"
+      },
+      "t11bat": {
+        "name": "Batterijnivo fan CO-sensor"
+      },
+      "t11cn": {
+        "name": "Ferbiningssteat fan CO-sensor"
+      },
+      "t11co": {
+        "name": "CO-konsintraasje"
+      },
+      "t1bat": {
+        "name": "Batterijsteat fan bûtensensor"
+      },
+      "t1chill": {
+        "name": "Wynkjeldtemperatuer"
+      },
+      "t1cn": {
+        "name": "Ferbiningssteat fan bûtensensor"
+      },
+      "t1dew": {
+        "name": "Dizzepunttemperatuer"
+      },
+      "t1feels": {
+        "name": "Fielde temperatuer"
+      },
+      "t1heat": {
+        "name": "Hjitte-yndeks"
+      },
+      "t1hum": {
+        "name": "Bûtenlochtfochtigens"
+      },
+      "t1raindy": {
+        "name": "Deiske delslach"
+      },
+      "t1rainhr": {
+        "name": "Delslach de oere"
+      },
+      "t1rainmth": {
+        "name": "Moanlikse delslach"
+      },
+      "t1rainra": {
+        "name": "Reinyntensiteit"
+      },
+      "t1rainwy": {
+        "name": "Wyklikse delslach"
+      },
+      "t1rainyr": {
+        "name": "Jierlikse delslach"
+      },
+      "t1solrad": {
+        "name": "Ljochtyntensiteit"
+      },
+      "t1tem": {
+        "name": "Bûtentemperatuer"
+      },
+      "t1uvi": {
+        "name": "UV-yndeks"
+      },
+      "t1wbgt": {
+        "name": "WBGT-temperatuer"
+      },
+      "t1wdir": {
+        "name": "Wynrjochting"
+      },
+      "t1wgust": {
+        "name": "Wynflaach"
+      },
+      "t1ws": {
+        "name": "Wynsnelheid"
+      },
+      "t1ws10mav": {
+        "name": "Wynsnelheid gem. 10 min"
+      },
+      "t234c1bat": {
+        "name": "CH1 batterijsteat"
+      },
+      "t234c1cn": {
+        "name": "CH1 ferbiningssteat"
+      },
+      "t234c1hum": {
+        "name": "CH1 lochtfochtigens"
+      },
+      "t234c1tem": {
+        "name": "CH1 temperatuer"
+      },
+      "t234c1tp": {
+        "name": "CH1 sensortype"
+      },
+      "t234c2bat": {
+        "name": "CH2 batterijsteat"
+      },
+      "t234c2cn": {
+        "name": "CH2 ferbiningssteat"
+      },
+      "t234c2hum": {
+        "name": "CH2 lochtfochtigens"
+      },
+      "t234c2tem": {
+        "name": "CH2 temperatuer"
+      },
+      "t234c2tp": {
+        "name": "CH2 sensortype"
+      },
+      "t234c3bat": {
+        "name": "CH3 batterijsteat"
+      },
+      "t234c3cn": {
+        "name": "CH3 ferbiningssteat"
+      },
+      "t234c3hum": {
+        "name": "CH3 lochtfochtigens"
+      },
+      "t234c3tem": {
+        "name": "CH3 temperatuer"
+      },
+      "t234c3tp": {
+        "name": "CH3 sensortype"
+      },
+      "t234c4bat": {
+        "name": "CH4 batterijsteat"
+      },
+      "t234c4cn": {
+        "name": "CH4 ferbiningssteat"
+      },
+      "t234c4hum": {
+        "name": "CH4 lochtfochtigens"
+      },
+      "t234c4tem": {
+        "name": "CH4 temperatuer"
+      },
+      "t234c4tp": {
+        "name": "CH4 sensortype"
+      },
+      "t234c5bat": {
+        "name": "CH5 batterijsteat"
+      },
+      "t234c5cn": {
+        "name": "CH5 ferbiningssteat"
+      },
+      "t234c5hum": {
+        "name": "CH5 lochtfochtigens"
+      },
+      "t234c5tem": {
+        "name": "CH5 temperatuer"
+      },
+      "t234c5tp": {
+        "name": "CH5 sensortype"
+      },
+      "t234c6bat": {
+        "name": "CH6 batterijsteat"
+      },
+      "t234c6cn": {
+        "name": "CH6 ferbiningssteat"
+      },
+      "t234c6hum": {
+        "name": "CH6 lochtfochtigens"
+      },
+      "t234c6tem": {
+        "name": "CH6 temperatuer"
+      },
+      "t234c6tp": {
+        "name": "CH6 sensortype"
+      },
+      "t234c7bat": {
+        "name": "CH7 batterijsteat"
+      },
+      "t234c7cn": {
+        "name": "CH7 ferbiningssteat"
+      },
+      "t234c7hum": {
+        "name": "CH7 lochtfochtigens"
+      },
+      "t234c7tem": {
+        "name": "CH7 temperatuer"
+      },
+      "t234c7tp": {
+        "name": "CH7 sensortype"
+      },
+      "t5ls1dtc": {
+        "name": "Bliksemslaggen yn totaal yn 1 dei"
+      },
+      "t5ls1htc": {
+        "name": "Bliksemslaggen yn totaal yn 1 oere"
+      },
+      "t5ls30mtc": {
+        "name": "Bliksemslaggen de lêste 30 minuten"
+      },
+      "t5ls5mtc": {
+        "name": "Bliksemslaggen de lêste 5 minuten"
+      },
+      "t5lsbat": {
+        "name": "Batterijsteat fan blikseemsensor"
+      },
+      "t5lscn": {
+        "name": "Ferbiningssteat fan blikseemsensor"
+      },
+      "t5lsf": {
+        "name": "Bliksemslaggen it lêste oere"
+      },
+      "t5lskm": {
+        "name": "Bliksemôfstân"
+      },
+      "t5lst": {
+        "name": "Tiid fan lêste bliksemslach"
+      },
+      "t6c1bat": {
+        "name": "CH1 batterijsteat fan lekaazjesensor"
+      },
+      "t6c1cn": {
+        "name": "CH1 ferbiningssteat fan lekaazjesensor"
+      },
+      "t6c1wls": {
+        "name": "CH1 wetterlekaazjesteat"
+      },
+      "t6c2bat": {
+        "name": "CH2 batterijsteat fan lekaazjesensor"
+      },
+      "t6c2cn": {
+        "name": "CH2 ferbiningssteat fan lekaazjesensor"
+      },
+      "t6c2wls": {
+        "name": "CH2 wetterlekaazjesteat"
+      },
+      "t6c3bat": {
+        "name": "CH3 batterijsteat fan lekaazjesensor"
+      },
+      "t6c3cn": {
+        "name": "CH3 ferbiningssteat fan lekaazjesensor"
+      },
+      "t6c3wls": {
+        "name": "CH3 wetterlekaazjesteat"
+      },
+      "t6c4bat": {
+        "name": "CH4 batterijsteat fan lekaazjesensor"
+      },
+      "t6c4cn": {
+        "name": "CH4 ferbiningssteat fan lekaazjesensor"
+      },
+      "t6c4wls": {
+        "name": "CH4 wetterlekaazjesteat"
+      },
+      "t6c5bat": {
+        "name": "CH5 batterijsteat fan lekaazjesensor"
+      },
+      "t6c5cn": {
+        "name": "CH5 ferbiningssteat fan lekaazjesensor"
+      },
+      "t6c5wls": {
+        "name": "CH5 wetterlekaazjesteat"
+      },
+      "t6c6bat": {
+        "name": "CH6 batterijsteat fan lekaazjesensor"
+      },
+      "t6c6cn": {
+        "name": "CH6 ferbiningssteat fan lekaazjesensor"
+      },
+      "t6c6wls": {
+        "name": "CH6 wetterlekaazjesteat"
+      },
+      "t6c7bat": {
+        "name": "CH7 batterijsteat fan lekaazjesensor"
+      },
+      "t6c7cn": {
+        "name": "CH7 ferbiningssteat fan lekaazjesensor"
+      },
+      "t6c7wls": {
+        "name": "CH7 wetterlekaazjesteat"
+      },
+      "t8bat": {
+        "name": "Batterijnivo fan dieltsjesensor"
+      },
+      "t8cn": {
+        "name": "Ferbiningssteat fan dieltsjesensor"
+      },
+      "t8pm10": {
+        "name": "PM10-konsintraasje"
+      },
+      "t8pm10ai": {
+        "name": "PM10 AQI"
+      },
+      "t8pm25": {
+        "name": "PM2.5-konsintraasje"
+      },
+      "t8pm25ai": {
+        "name": "PM2.5 AQI"
+      },
+      "t9bat": {
+        "name": "Batterijnivo fan HCHO/VOC-sensor"
+      },
+      "t9cn": {
+        "name": "Ferbiningssteat fan HCHO/VOC-sensor"
+      },
+      "t9hcho": {
+        "name": "HCHO-konsintraasje"
+      },
+      "t9voclv": {
+        "name": "VOC-nivo",
+        "state": {
+          "very_low": "Tige leech",
+          "low": "Leech",
+          "moderate": "Matich",
+          "high": "Heech",
+          "very_high": "Tige heech"
+        }
+      },
+      "tempf": {
+        "name": "Bûtentemperatuer"
+      },
+      "uv": {
+        "name": "UV-yndeks"
+      },
+      "visibility": {
+        "name": "Sicht"
+      },
+      "weeklyrainin": {
+        "name": "Wykliks rein"
+      },
+      "wind_direction_raw": {
+        "name": "Wynrjochting (rau)"
+      },
+      "windchillf": {
+        "name": "Wynkjeld"
+      },
+      "winddir": {
+        "name": "Wynrjochting"
+      },
+      "winddir_avg2m": {
+        "name": "Wynrjochting gem. 2 min"
+      },
+      "windgustdir": {
+        "name": "Flaachrjochting"
+      },
+      "windgustdir_10m": {
+        "name": "Flaachrjochting gem. 10 min"
+      },
+      "windgustmph": {
+        "name": "Wynflaach"
+      },
+      "windgustmph_10m": {
+        "name": "Flaachsnelheid gem. 10 min"
+      },
+      "windspdmph_avg2m": {
+        "name": "Wynsnelheid gem. 2 min"
+      },
+      "windspeedmph": {
+        "name": "Wynsnelheid"
+      },
+      "yearlyrainin": {
+        "name": "Jierliks rein"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "Batterijnivo fan konsole"
+      },
+      "station_online": {
+        "name": "Stasjon online"
+      },
+      "t10cn": {
+        "name": "Ferbiningssteat fan CO2-sensor"
+      },
+      "t11cn": {
+        "name": "Ferbiningssteat fan CO-sensor"
+      },
+      "t1bat": {
+        "name": "Batterijsteat fan bûtensensor"
+      },
+      "t1cn": {
+        "name": "Ferbiningssteat fan bûtensensor"
+      },
+      "t234c1bat": {
+        "name": "CH1 batterijsteat"
+      },
+      "t234c1cn": {
+        "name": "CH1 ferbiningssteat"
+      },
+      "t234c2bat": {
+        "name": "CH2 batterijsteat"
+      },
+      "t234c2cn": {
+        "name": "CH2 ferbiningssteat"
+      },
+      "t234c3bat": {
+        "name": "CH3 batterijsteat"
+      },
+      "t234c3cn": {
+        "name": "CH3 ferbiningssteat"
+      },
+      "t234c4bat": {
+        "name": "CH4 batterijsteat"
+      },
+      "t234c4cn": {
+        "name": "CH4 ferbiningssteat"
+      },
+      "t234c5bat": {
+        "name": "CH5 batterijsteat"
+      },
+      "t234c5cn": {
+        "name": "CH5 ferbiningssteat"
+      },
+      "t234c6bat": {
+        "name": "CH6 batterijsteat"
+      },
+      "t234c6cn": {
+        "name": "CH6 ferbiningssteat"
+      },
+      "t234c7bat": {
+        "name": "CH7 batterijsteat"
+      },
+      "t234c7cn": {
+        "name": "CH7 ferbiningssteat"
+      },
+      "t5lsbat": {
+        "name": "Batterijsteat fan blikseemsensor"
+      },
+      "t5lscn": {
+        "name": "Ferbiningssteat fan blikseemsensor"
+      },
+      "t6c1bat": {
+        "name": "CH1 batterijsteat fan lekaazjesensor"
+      },
+      "t6c1cn": {
+        "name": "CH1 ferbiningssteat fan lekaazjesensor"
+      },
+      "t6c1wls": {
+        "name": "CH1 wetterlekaazjesteat"
+      },
+      "t6c2bat": {
+        "name": "CH2 batterijsteat fan lekaazjesensor"
+      },
+      "t6c2cn": {
+        "name": "CH2 ferbiningssteat fan lekaazjesensor"
+      },
+      "t6c2wls": {
+        "name": "CH2 wetterlekaazjesteat"
+      },
+      "t6c3bat": {
+        "name": "CH3 batterijsteat fan lekaazjesensor"
+      },
+      "t6c3cn": {
+        "name": "CH3 ferbiningssteat fan lekaazjesensor"
+      },
+      "t6c3wls": {
+        "name": "CH3 wetterlekaazjesteat"
+      },
+      "t6c4bat": {
+        "name": "CH4 batterijsteat fan lekaazjesensor"
+      },
+      "t6c4cn": {
+        "name": "CH4 ferbiningssteat fan lekaazjesensor"
+      },
+      "t6c4wls": {
+        "name": "CH4 wetterlekaazjesteat"
+      },
+      "t6c5bat": {
+        "name": "CH5 batterijsteat fan lekaazjesensor"
+      },
+      "t6c5cn": {
+        "name": "CH5 ferbiningssteat fan lekaazjesensor"
+      },
+      "t6c5wls": {
+        "name": "CH5 wetterlekaazjesteat"
+      },
+      "t6c6bat": {
+        "name": "CH6 batterijsteat fan lekaazjesensor"
+      },
+      "t6c6cn": {
+        "name": "CH6 ferbiningssteat fan lekaazjesensor"
+      },
+      "t6c6wls": {
+        "name": "CH6 wetterlekaazjesteat"
+      },
+      "t6c7bat": {
+        "name": "CH7 batterijsteat fan lekaazjesensor"
+      },
+      "t6c7cn": {
+        "name": "CH7 ferbiningssteat fan lekaazjesensor"
+      },
+      "t6c7wls": {
+        "name": "CH7 wetterlekaazjesteat"
+      },
+      "t8cn": {
+        "name": "Ferbiningssteat fan dieltsjesensor"
+      },
+      "t9cn": {
+        "name": "Ferbiningssteat fan HCHO/VOC-sensor"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "Ferskowing fan wynrjochting"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "Ferskowing weromsette"
+      },
+      "set_north": {
+        "name": "Stel it noarden yn op de hjoeddeistige wearde"
+      }
+    }
+  }
+}

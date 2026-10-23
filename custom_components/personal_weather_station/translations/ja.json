@@ -1,0 +1,813 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "パーソナル気象観測所",
+        "description": "気象観測所のデータが拒否されないように、観測所が送信する必要のあるステーションキーをここで設定します。空欄のままにすると、すべてのリクエストが受け入れられます。",
+        "data": {
+          "password": "ステーションキー"
+        }
+      },
+      "station": {
+        "title": "ステップ 1/5 — お使いのステーション",
+        "description": "{image}\n\n気象ステーションが自分で機器とセンサーを作成するため、こちら側で追加するものはありません。以下は、ステーションのアプリに入力する内容です。\n\nアプリを開き、ステーションのファームウェアが最新であることを確認してから、その設定を開いてください。"
+      },
+      "settings": {
+        "title": "ステップ 2/5 — 気象サービス",
+        "description": "{image}\n\n**Weather server** を選びます。"
+      },
+      "server": {
+        "title": "ステップ 3/5 — その他のサーバー",
+        "description": "{image}\n\n**Other Server** を選びます。"
+      },
+      "form": {
+        "title": "ステップ 4/5 — サーバー設定",
+        "description": "{image}\n\nフォームに入力し、**Save** を押します。\n\n**URL**\n{urls}\n`http://` も `https://` も付けません。ご自宅のネットワーク内でステーションから到達できるアドレスを使ってください。このために Home Assistant をインターネットへ公開する理由はありません。ステーションが名前を解決できない場合は IP アドレスを入れてください。\n\n**Station ID** — お好きなもので構いません。これが Home Assistant での機器名になります。\n\n**Station key** — {key_hint}。\n\n**Upload interval** — 1 分が手頃な値です。\n\n**API type** — *WSLink API*。*WUnderground API* は、お使いのステーションが WSLink を提供していない場合にのみ選んでください。測定値は半分、チャンネルは 4 つだけです。\n\n**Upload** — 有効のままにします。\n\n> ⏱️ この画面に長く留まると Wi-Fi が切れるステーションがあります。アドレスを手元に用意し、一気に入力して保存してください。"
+      },
+      "confirm": {
+        "title": "ステップ 5/5 — confirm & exit",
+        "description": "{image}\n\n戻ってから **Confirm & Exit** を押します。\n\n> ⚠️ **設定をステーションに書き込むのは Confirm & Exit です。** 保存だけでは何も変わりません。\n\n押し終えたら「次へ」を押してください。"
+      },
+      "received": {
+        "title": "ステーションが Home Assistant と通信しています",
+        "description": "**{station}** が最初の送信を行いました。\n\nセンサーは次の送信で現れ、ステーションが実際に送ってくる内容から作成されます。ここで選ぶものはありません。"
+      },
+      "timeout": {
+        "title": "まだ何も届いていません",
+        "description": "この {minutes} 分の間、どのステーションからも送信がありません。{key_hint_extra}\n\nよくある原因は、ステーションから届かないアドレス、**Confirm & Exit** の押し忘れ、または HTTPS を要求する 3.02 以降のファームウェアです。\n\n向ける先のアドレス:\n{urls}\n送信を待ち受けているエンドポイント:\n{endpoints}\n\n「次へ」を押せばこのまま完了できます。設定は保持され、エンドポイントが実際に待ち受けを始め、ステーションが現れるまで修復項目がここへ連れ戻します。"
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "すでに設定済みです。1つのインスタンスですべての気象観測所に対応します。"
+    },
+    "progress": {
+      "waiting_for_station": "ステーションからの最初の送信を待っています…"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "パーソナル気象観測所",
+        "menu_options": {
+          "options": "設定",
+          "instructions": "観測所を Home Assistant に向ける方法"
+        }
+      },
+      "options": {
+        "title": "パーソナル気象観測所",
+        "description": "気象観測所のデータが拒否されないように、観測所が送信する必要のあるステーションキーをここで設定します。空欄のままにすると、すべてのリクエストが受け入れられます。",
+        "data": {
+          "password": "ステーションキー",
+          "availability_timeout": "利用不可とするまでの時間（分）",
+          "debug": "受信したリクエストをすべてログに記録"
+        },
+        "data_description": {
+          "availability_timeout": "センサーが利用不可と表示されるまでに観測所が無通信でいられる時間。0 にすると利用不可にしません。",
+          "debug": "各リクエストの全内容を Home Assistant のログに書き込みます。観測所の設定中は便利ですが、その後は煩雑になります。"
+        }
+      },
+      "station": {
+        "title": "ステップ 1/5 — お使いのステーション",
+        "description": "{image}\n\n気象ステーションが自分で機器とセンサーを作成するため、こちら側で追加するものはありません。以下は、ステーションのアプリに入力する内容です。\n\nアプリを開き、ステーションのファームウェアが最新であることを確認してから、その設定を開いてください。"
+      },
+      "settings": {
+        "title": "ステップ 2/5 — 気象サービス",
+        "description": "{image}\n\n**Weather server** を選びます。"
+      },
+      "server": {
+        "title": "ステップ 3/5 — その他のサーバー",
+        "description": "{image}\n\n**Other Server** を選びます。"
+      },
+      "form": {
+        "title": "ステップ 4/5 — サーバー設定",
+        "description": "{image}\n\nフォームに入力し、**Save** を押します。\n\n**URL**\n{urls}\n`http://` も `https://` も付けません。ご自宅のネットワーク内でステーションから到達できるアドレスを使ってください。このために Home Assistant をインターネットへ公開する理由はありません。ステーションが名前を解決できない場合は IP アドレスを入れてください。\n\n**Station ID** — お好きなもので構いません。これが Home Assistant での機器名になります。\n\n**Station key** — {key_hint}。\n\n**Upload interval** — 1 分が手頃な値です。\n\n**API type** — *WSLink API*。*WUnderground API* は、お使いのステーションが WSLink を提供していない場合にのみ選んでください。測定値は半分、チャンネルは 4 つだけです。\n\n**Upload** — 有効のままにします。\n\n> ⏱️ この画面に長く留まると Wi-Fi が切れるステーションがあります。アドレスを手元に用意し、一気に入力して保存してください。"
+      },
+      "confirm": {
+        "title": "ステップ 5/5 — confirm & exit",
+        "description": "{image}\n\n戻ってから **Confirm & Exit** を押します。\n\n> ⚠️ **設定をステーションに書き込むのは Confirm & Exit です。** 保存だけでは何も変わりません。\n\n押し終えたら「次へ」を押してください。"
+      }
+    }
+  },
+  "issues": {
+    "invalid_station_key": {
+      "title": "気象観測所を拒否しました: ステーションキーが違います",
+      "description": "{ip} の気象観測所が、期待されるステーションキーを送信せずに `{station_id}` としてデータを送信しようとしました。\n\n観測所または WSLink アプリで設定されたキーが、この統合で設定したものと一致しているか確認してください。このメッセージは、{ip} からのリクエストが受け入れられ次第、自動的に消えます。"
+    },
+    "missing_device_id": {
+      "title": "気象観測所を拒否しました: ステーション識別子がありません",
+      "description": "{ip} の気象観測所が、ステーション識別子なしでデータを送信しました。\n\nWSLink アプリで Sender ID を、または観測所の設定で ID パラメーターを設定してください。このメッセージは、{ip} からのリクエストが受け入れられ次第、自動的に消えます。"
+    },
+    "legacy_entity_ids": {
+      "title": "エンティティ ID に観測所名が二重に入っています",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "エンティティ ID を短くする",
+            "description": "バージョン 1.0.8 までは、この統合は観測所名を二度含むエンティティ ID を作っていました（例：`{example_old}`）。新しい観測所ではもう発生しません。\n\n**{count} 個のエンティティ**の名前を変更できます。たとえば `{example_new}` に。\n\n履歴と長期統計は名前の変更に自動的に追従します。**オートメーション、スクリプト、シーン、ダッシュボードは追従しません。** 古い ID を参照しているものはご自身で更新する必要があります。\n\nそのままにしておきたい場合は、この修復を無視してください。"
+          }
+        }
+      }
+    },
+    "legacy_status_sensors": {
+      "title": "接続・漏水・電池の値がまだ数値です",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "バイナリセンサーに変換する",
+            "description": "接続、漏水、電池の値は 1 か 0 で送られてきます。バージョン 1.0.8 までは `{example}` のような数値センサーとして公開されており、Home Assistant の標準の漏水・接続・電池残量カードでは使えませんでした。新しいステーションには、**濡れ / 乾き**、**接続済み / 切断**、**オン / オフ** を示すバイナリセンサーが作成されます。\n\n**{count} 個のエンティティ** を変換できます。空気質センサーの 0~5 の電池レベルは百分率のままです。6 段階は、オン/オフでは表しきれません。\n\nプラットフォームの変更は名前の変更ではありません。古いエンティティは削除され、`binary_sensor` として作り直されます。**記録された履歴は失われます** — これらの値には長期統計がないため、影響を受けるのは生の履歴だけです — そして **それらを参照しているオートメーション、スクリプト、シーン、ダッシュボードは更新が必要です**。新しいエンティティはステーションの次の送信時に現れます。\n\nそのままにしておきたい場合は、この修復を無視してください。"
+          }
+        }
+      }
+    },
+    "no_station_yet": {
+      "title": "まだどの気象観測所からも送信がありません",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "気象観測所を設定する",
+            "description": "デバイスとセンサーを作るのは気象観測所です。ここで追加するものはありません。\n\n観測所のアプリで観測所を開き、**Settings → Weather server → Other Server** に進んで入力します。\n\n**URL**\n{urls}\n`http://` や `https://` は付けません。観測所が同じネットワーク上で到達できるアドレスを使ってください。このために Home Assistant をインターネットへ公開する理由はありません。観測所が名前を解決できない場合は IP アドレスを入れてください。\n\n**Station ID** — 任意の名前。Home Assistant でのデバイス名になります。\n\n**Station key** — {key_hint}。\n\n**Upload interval** — 1 分が適切です。\n\n**API type** — *WSLink API*。\n\n**Upload** — 有効のままにします。\n\n**Save** を押し、戻ってから **Confirm & Exit** を押します。\n\n> ⚠️ **設定を観測所に書き込むのは Confirm & Exit です。** 保存だけでは何も変わりません。センサーはその 1 秒後に現れます。\n\n受信を待ち受けているエンドポイント：\n{endpoints}"
+          },
+          "received": {
+            "title": "観測所からの送信を受け取りました",
+            "description": "**{station}** が最初の送信を行いました。センサーを作成中で、観測所が報告するにつれて増えていきます。\n\nこのメッセージは二度と表示されません。"
+          },
+          "timeout": {
+            "title": "まだ何も受信していません",
+            "description": "{minutes} 分間、送信がありませんでした。\n\n可能性の高い順に：\n\n  - **Confirm & Exit を押しましたか。** サーバー画面を保存しただけでは観測所に何も書き込まれません。\n  - **URL** は {urls_inline} である必要があります。`http://` は付けず、ネットワーク上で観測所から到達できること。\n  - その画面で **Upload** が有効になっている必要があります。\n  - **3.02** 以降の一部の Bresser ファームウェアは平文 HTTP を拒否し、HTTPS を提供するアドレスを必要とします。\n  - 送信間隔が単に待ち時間より長いだけかもしれません。\n  - **ステーションキー**：{key_hint}。\n\n観測所が Home Assistant に到達したものの拒否された場合は、**設定 → システム → 修復** に別途報告されます。\n\n閉じても構いません。観測所が現れるまでここに残り、開き直すと待機がやり直されます。"
+          }
+        },
+        "progress": {
+          "waiting_for_station": "観測所からの最初の送信を待っています…"
+        },
+        "abort": {
+          "not_received": "まだ何も届いていないため、この項目は開いたままにします。観測所が現れるまで修復に残り、開き直せば再び待機できます。"
+        }
+      }
+    },
+    "unknown_parameters": {
+      "title": "ステーション {station} が破棄されている測定値を送信しています",
+      "description": "**{station}** からの **{count} 個のパラメーター** は認識できないため、送信のたびにその値は破棄されています:\n\n{parameters}\n\nよくある原因は、ステーションがプロトコルの運べる量を超えて報告していることです。Weather Underground には追加センサー用の枠が **4 つ** しかありません。お使いのステーションが *API type* として **WSLink** を提供している場合、そちらに切り替えると 7 チャンネルと、およそ 2 倍の測定値が利用できるようになります。\n\n原因がそれでない場合、これらのパラメーター名こそが不具合報告に必要なものです。[イシュートラッカー]({issue_tracker}) で報告していただければ、追加できます。\n\n無視してもかまいません。壊れているものはなく、これらの値が届かないというだけです。"
+    }
+  },
+  "exceptions": {
+    "no_wind_direction": {
+      "message": "観測所 {device} はまだ風向を送信していないため、基準にするものがありません。次の送信を待ってから再度お試しください。"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "abar": {
+        "name": "絶対気圧"
+      },
+      "apiver": {
+        "name": "APIバージョン"
+      },
+      "aqbc": {
+        "name": "ブラックカーボン"
+      },
+      "aqco": {
+        "name": "一酸化炭素"
+      },
+      "aqcot": {
+        "name": "微量一酸化炭素"
+      },
+      "aqec": {
+        "name": "元素状炭素"
+      },
+      "aqno": {
+        "name": "一酸化窒素"
+      },
+      "aqno2": {
+        "name": "NO2 X 計算値"
+      },
+      "aqno2t": {
+        "name": "二酸化窒素"
+      },
+      "aqno2y": {
+        "name": "NO2 Y 計算値"
+      },
+      "aqno3": {
+        "name": "NO3イオン"
+      },
+      "aqnox": {
+        "name": "窒素酸化物"
+      },
+      "aqnoy": {
+        "name": "全反応性窒素"
+      },
+      "aqoc": {
+        "name": "有機炭素"
+      },
+      "aqozone": {
+        "name": "オゾン"
+      },
+      "aqpm10": {
+        "name": "PM10質量"
+      },
+      "aqpm2_5": {
+        "name": "PM2.5質量"
+      },
+      "aqso2": {
+        "name": "二酸化硫黄"
+      },
+      "aqso2t": {
+        "name": "微量二酸化硫黄"
+      },
+      "aqso4": {
+        "name": "SO4イオン"
+      },
+      "aquv_aeth": {
+        "name": "エサロメーター チャンネル2"
+      },
+      "baromin": {
+        "name": "気圧"
+      },
+      "clouds": {
+        "name": "雲量"
+      },
+      "dailyrainin": {
+        "name": "日雨量"
+      },
+      "dewptf": {
+        "name": "露点"
+      },
+      "humidity": {
+        "name": "屋外湿度"
+      },
+      "inbat": {
+        "name": "コンソールの電池残量"
+      },
+      "indoorhumidity": {
+        "name": "室内湿度"
+      },
+      "indoortempf": {
+        "name": "室内温度"
+      },
+      "inhum": {
+        "name": "室内湿度"
+      },
+      "intem": {
+        "name": "室内温度"
+      },
+      "last_update": {
+        "name": "最終受信"
+      },
+      "leafwetness": {
+        "name": "葉面濡れ"
+      },
+      "leafwetness2": {
+        "name": "CH2 葉面濡れ"
+      },
+      "lowbatt": {
+        "name": "電池残量低下"
+      },
+      "monthlyrainin": {
+        "name": "月雨量"
+      },
+      "rainin": {
+        "name": "時間雨量"
+      },
+      "rbar": {
+        "name": "相対気圧"
+      },
+      "rtfreq": {
+        "name": "更新頻度"
+      },
+      "soilmoisture": {
+        "name": "土壌水分"
+      },
+      "soilmoisture2": {
+        "name": "CH2 土壌水分"
+      },
+      "soilmoisture3": {
+        "name": "CH3 土壌水分"
+      },
+      "soilmoisture4": {
+        "name": "CH4 土壌水分"
+      },
+      "soiltemp2f": {
+        "name": "CH2 地温"
+      },
+      "soiltemp3f": {
+        "name": "CH3 地温"
+      },
+      "soiltemp4f": {
+        "name": "CH4 地温"
+      },
+      "soiltempf": {
+        "name": "地温"
+      },
+      "solarradiation": {
+        "name": "日射量"
+      },
+      "t10bat": {
+        "name": "CO2センサーの電池残量"
+      },
+      "t10cn": {
+        "name": "CO2センサーの接続状態"
+      },
+      "t10co2": {
+        "name": "CO2濃度"
+      },
+      "t11bat": {
+        "name": "COセンサーの電池残量"
+      },
+      "t11cn": {
+        "name": "COセンサーの接続状態"
+      },
+      "t11co": {
+        "name": "CO濃度"
+      },
+      "t1bat": {
+        "name": "屋外センサーの電池状態"
+      },
+      "t1chill": {
+        "name": "風冷温度"
+      },
+      "t1cn": {
+        "name": "屋外センサーの接続状態"
+      },
+      "t1dew": {
+        "name": "露点温度"
+      },
+      "t1feels": {
+        "name": "体感温度"
+      },
+      "t1heat": {
+        "name": "ヒートインデックス"
+      },
+      "t1hum": {
+        "name": "屋外湿度"
+      },
+      "t1raindy": {
+        "name": "日降水量"
+      },
+      "t1rainhr": {
+        "name": "時間降水量"
+      },
+      "t1rainmth": {
+        "name": "月降水量"
+      },
+      "t1rainra": {
+        "name": "降雨強度"
+      },
+      "t1rainwy": {
+        "name": "週降水量"
+      },
+      "t1rainyr": {
+        "name": "年降水量"
+      },
+      "t1solrad": {
+        "name": "照度"
+      },
+      "t1tem": {
+        "name": "外気温"
+      },
+      "t1uvi": {
+        "name": "UV指数"
+      },
+      "t1wbgt": {
+        "name": "WBGT温度"
+      },
+      "t1wdir": {
+        "name": "風向"
+      },
+      "t1wgust": {
+        "name": "突風"
+      },
+      "t1ws": {
+        "name": "風速"
+      },
+      "t1ws10mav": {
+        "name": "風速 10分平均"
+      },
+      "t234c1bat": {
+        "name": "CH1 電池状態"
+      },
+      "t234c1cn": {
+        "name": "CH1 接続状態"
+      },
+      "t234c1hum": {
+        "name": "CH1 湿度"
+      },
+      "t234c1tem": {
+        "name": "CH1 温度"
+      },
+      "t234c1tp": {
+        "name": "CH1 センサーの種類"
+      },
+      "t234c2bat": {
+        "name": "CH2 電池状態"
+      },
+      "t234c2cn": {
+        "name": "CH2 接続状態"
+      },
+      "t234c2hum": {
+        "name": "CH2 湿度"
+      },
+      "t234c2tem": {
+        "name": "CH2 温度"
+      },
+      "t234c2tp": {
+        "name": "CH2 センサーの種類"
+      },
+      "t234c3bat": {
+        "name": "CH3 電池状態"
+      },
+      "t234c3cn": {
+        "name": "CH3 接続状態"
+      },
+      "t234c3hum": {
+        "name": "CH3 湿度"
+      },
+      "t234c3tem": {
+        "name": "CH3 温度"
+      },
+      "t234c3tp": {
+        "name": "CH3 センサーの種類"
+      },
+      "t234c4bat": {
+        "name": "CH4 電池状態"
+      },
+      "t234c4cn": {
+        "name": "CH4 接続状態"
+      },
+      "t234c4hum": {
+        "name": "CH4 湿度"
+      },
+      "t234c4tem": {
+        "name": "CH4 温度"
+      },
+      "t234c4tp": {
+        "name": "CH4 センサーの種類"
+      },
+      "t234c5bat": {
+        "name": "CH5 電池状態"
+      },
+      "t234c5cn": {
+        "name": "CH5 接続状態"
+      },
+      "t234c5hum": {
+        "name": "CH5 湿度"
+      },
+      "t234c5tem": {
+        "name": "CH5 温度"
+      },
+      "t234c5tp": {
+        "name": "CH5 センサーの種類"
+      },
+      "t234c6bat": {
+        "name": "CH6 電池状態"
+      },
+      "t234c6cn": {
+        "name": "CH6 接続状態"
+      },
+      "t234c6hum": {
+        "name": "CH6 湿度"
+      },
+      "t234c6tem": {
+        "name": "CH6 温度"
+      },
+      "t234c6tp": {
+        "name": "CH6 センサーの種類"
+      },
+      "t234c7bat": {
+        "name": "CH7 電池状態"
+      },
+      "t234c7cn": {
+        "name": "CH7 接続状態"
+      },
+      "t234c7hum": {
+        "name": "CH7 湿度"
+      },
+      "t234c7tem": {
+        "name": "CH7 温度"
+      },
+      "t234c7tp": {
+        "name": "CH7 センサーの種類"
+      },
+      "t5ls1dtc": {
+        "name": "1日の落雷合計"
+      },
+      "t5ls1htc": {
+        "name": "1時間の落雷合計"
+      },
+      "t5ls30mtc": {
+        "name": "直近30分間の落雷"
+      },
+      "t5ls5mtc": {
+        "name": "直近5分間の落雷"
+      },
+      "t5lsbat": {
+        "name": "落雷センサーの電池状態"
+      },
+      "t5lscn": {
+        "name": "落雷センサーの接続状態"
+      },
+      "t5lsf": {
+        "name": "直近1時間の落雷"
+      },
+      "t5lskm": {
+        "name": "落雷までの距離"
+      },
+      "t5lst": {
+        "name": "最後の落雷時刻"
+      },
+      "t6c1bat": {
+        "name": "CH1 漏水センサーの電池状態"
+      },
+      "t6c1cn": {
+        "name": "CH1 漏水センサーの接続状態"
+      },
+      "t6c1wls": {
+        "name": "CH1 漏水の状態"
+      },
+      "t6c2bat": {
+        "name": "CH2 漏水センサーの電池状態"
+      },
+      "t6c2cn": {
+        "name": "CH2 漏水センサーの接続状態"
+      },
+      "t6c2wls": {
+        "name": "CH2 漏水の状態"
+      },
+      "t6c3bat": {
+        "name": "CH3 漏水センサーの電池状態"
+      },
+      "t6c3cn": {
+        "name": "CH3 漏水センサーの接続状態"
+      },
+      "t6c3wls": {
+        "name": "CH3 漏水の状態"
+      },
+      "t6c4bat": {
+        "name": "CH4 漏水センサーの電池状態"
+      },
+      "t6c4cn": {
+        "name": "CH4 漏水センサーの接続状態"
+      },
+      "t6c4wls": {
+        "name": "CH4 漏水の状態"
+      },
+      "t6c5bat": {
+        "name": "CH5 漏水センサーの電池状態"
+      },
+      "t6c5cn": {
+        "name": "CH5 漏水センサーの接続状態"
+      },
+      "t6c5wls": {
+        "name": "CH5 漏水の状態"
+      },
+      "t6c6bat": {
+        "name": "CH6 漏水センサーの電池状態"
+      },
+      "t6c6cn": {
+        "name": "CH6 漏水センサーの接続状態"
+      },
+      "t6c6wls": {
+        "name": "CH6 漏水の状態"
+      },
+      "t6c7bat": {
+        "name": "CH7 漏水センサーの電池状態"
+      },
+      "t6c7cn": {
+        "name": "CH7 漏水センサーの接続状態"
+      },
+      "t6c7wls": {
+        "name": "CH7 漏水の状態"
+      },
+      "t8bat": {
+        "name": "粒子センサーの電池残量"
+      },
+      "t8cn": {
+        "name": "粒子センサーの接続状態"
+      },
+      "t8pm10": {
+        "name": "PM10濃度"
+      },
+      "t8pm10ai": {
+        "name": "PM10 AQI"
+      },
+      "t8pm25": {
+        "name": "PM2.5濃度"
+      },
+      "t8pm25ai": {
+        "name": "PM2.5 AQI"
+      },
+      "t9bat": {
+        "name": "HCHO/VOCセンサーの電池残量"
+      },
+      "t9cn": {
+        "name": "HCHO/VOCセンサーの接続状態"
+      },
+      "t9hcho": {
+        "name": "HCHO濃度"
+      },
+      "t9voclv": {
+        "name": "VOCレベル",
+        "state": {
+          "very_low": "非常に低い",
+          "low": "低い",
+          "moderate": "中程度",
+          "high": "高い",
+          "very_high": "非常に高い"
+        }
+      },
+      "tempf": {
+        "name": "外気温"
+      },
+      "uv": {
+        "name": "UV指数"
+      },
+      "visibility": {
+        "name": "視程"
+      },
+      "weeklyrainin": {
+        "name": "週雨量"
+      },
+      "wind_direction_raw": {
+        "name": "風向（生値）"
+      },
+      "windchillf": {
+        "name": "風冷指数"
+      },
+      "winddir": {
+        "name": "風向"
+      },
+      "winddir_avg2m": {
+        "name": "風向 2分平均"
+      },
+      "windgustdir": {
+        "name": "突風の風向"
+      },
+      "windgustdir_10m": {
+        "name": "突風の風向 10分平均"
+      },
+      "windgustmph": {
+        "name": "突風"
+      },
+      "windgustmph_10m": {
+        "name": "突風の風速 10分平均"
+      },
+      "windspdmph_avg2m": {
+        "name": "風速 2分平均"
+      },
+      "windspeedmph": {
+        "name": "風速"
+      },
+      "yearlyrainin": {
+        "name": "年雨量"
+      }
+    },
+    "binary_sensor": {
+      "inbat": {
+        "name": "コンソールの電池残量"
+      },
+      "station_online": {
+        "name": "ステーション接続"
+      },
+      "t10cn": {
+        "name": "CO2センサーの接続状態"
+      },
+      "t11cn": {
+        "name": "COセンサーの接続状態"
+      },
+      "t1bat": {
+        "name": "屋外センサーの電池状態"
+      },
+      "t1cn": {
+        "name": "屋外センサーの接続状態"
+      },
+      "t234c1bat": {
+        "name": "CH1 電池状態"
+      },
+      "t234c1cn": {
+        "name": "CH1 接続状態"
+      },
+      "t234c2bat": {
+        "name": "CH2 電池状態"
+      },
+      "t234c2cn": {
+        "name": "CH2 接続状態"
+      },
+      "t234c3bat": {
+        "name": "CH3 電池状態"
+      },
+      "t234c3cn": {
+        "name": "CH3 接続状態"
+      },
+      "t234c4bat": {
+        "name": "CH4 電池状態"
+      },
+      "t234c4cn": {
+        "name": "CH4 接続状態"
+      },
+      "t234c5bat": {
+        "name": "CH5 電池状態"
+      },
+      "t234c5cn": {
+        "name": "CH5 接続状態"
+      },
+      "t234c6bat": {
+        "name": "CH6 電池状態"
+      },
+      "t234c6cn": {
+        "name": "CH6 接続状態"
+      },
+      "t234c7bat": {
+        "name": "CH7 電池状態"
+      },
+      "t234c7cn": {
+        "name": "CH7 接続状態"
+      },
+      "t5lsbat": {
+        "name": "落雷センサーの電池状態"
+      },
+      "t5lscn": {
+        "name": "落雷センサーの接続状態"
+      },
+      "t6c1bat": {
+        "name": "CH1 漏水センサーの電池状態"
+      },
+      "t6c1cn": {
+        "name": "CH1 漏水センサーの接続状態"
+      },
+      "t6c1wls": {
+        "name": "CH1 漏水の状態"
+      },
+      "t6c2bat": {
+        "name": "CH2 漏水センサーの電池状態"
+      },
+      "t6c2cn": {
+        "name": "CH2 漏水センサーの接続状態"
+      },
+      "t6c2wls": {
+        "name": "CH2 漏水の状態"
+      },
+      "t6c3bat": {
+        "name": "CH3 漏水センサーの電池状態"
+      },
+      "t6c3cn": {
+        "name": "CH3 漏水センサーの接続状態"
+      },
+      "t6c3wls": {
+        "name": "CH3 漏水の状態"
+      },
+      "t6c4bat": {
+        "name": "CH4 漏水センサーの電池状態"
+      },
+      "t6c4cn": {
+        "name": "CH4 漏水センサーの接続状態"
+      },
+      "t6c4wls": {
+        "name": "CH4 漏水の状態"
+      },
+      "t6c5bat": {
+        "name": "CH5 漏水センサーの電池状態"
+      },
+      "t6c5cn": {
+        "name": "CH5 漏水センサーの接続状態"
+      },
+      "t6c5wls": {
+        "name": "CH5 漏水の状態"
+      },
+      "t6c6bat": {
+        "name": "CH6 漏水センサーの電池状態"
+      },
+      "t6c6cn": {
+        "name": "CH6 漏水センサーの接続状態"
+      },
+      "t6c6wls": {
+        "name": "CH6 漏水の状態"
+      },
+      "t6c7bat": {
+        "name": "CH7 漏水センサーの電池状態"
+      },
+      "t6c7cn": {
+        "name": "CH7 漏水センサーの接続状態"
+      },
+      "t6c7wls": {
+        "name": "CH7 漏水の状態"
+      },
+      "t8cn": {
+        "name": "粒子センサーの接続状態"
+      },
+      "t9cn": {
+        "name": "HCHO/VOCセンサーの接続状態"
+      }
+    },
+    "number": {
+      "wind_offset": {
+        "name": "風向オフセット"
+      }
+    },
+    "button": {
+      "reset_wind_offset": {
+        "name": "オフセットをリセット"
+      },
+      "set_north": {
+        "name": "現在の値を北に設定"
+      }
+    }
+  }
+}
