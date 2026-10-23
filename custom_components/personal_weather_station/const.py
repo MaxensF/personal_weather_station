@@ -96,6 +96,12 @@ ISSUE_LEGACY_STATUS_SENSORS = "legacy_status_sensors"
 ISSUE_NO_STATION_YET = "no_station_yet"
 ISSUE_UNKNOWN_PARAMETERS = "unknown_parameters"
 
+# Rejections are reported per announced station ID, which is under the
+# requester's control until the key checks out. Past this many issues of one
+# kind, further rejections are filed under the caller's address instead of
+# minting a Repairs entry per forged ID.
+MAX_REJECTION_ISSUES = 10
+
 # How long the onboarding repair waits for a first upload before letting the
 # user go. Stations post every minute or so once they are configured.
 STATION_WAIT_TIMEOUT = 180

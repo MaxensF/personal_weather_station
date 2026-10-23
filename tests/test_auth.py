@@ -5,6 +5,7 @@ from homeassistant.helpers import issue_registry as ir
 from custom_components.personal_weather_station.const import (
     DOMAIN,
     ISSUE_NO_STATION_YET,
+    MAX_REJECTION_ISSUES,
 )
 
 from .conftest import WSLINK_ENDPOINT, state_of
@@ -163,3 +164,24 @@ async def test_rejection_without_an_id_is_cleared_on_success(hass, setup_pws):
     await hass.async_block_till_done()
 
     assert issues_for(hass) == []
+
+
+async def test_forged_station_ids_cannot_flood_repairs(hass, setup_pws):
+    """
+    The announced ID is under the client's control until the key checks out.
+
+    A client minting a fresh ID per request must not mint a Repairs issue for
+    each of them: past the cap, everything from that address collapses onto a
+    single issue keyed by the address.
+    """
+
+    _, client = await setup_pws(password=STATION_KEY)
+
+    for i in range(MAX_REJECTION_ISSUES + 3):
+        await client.get(f"{WSLINK_ENDPOINT}?wsid=forged{i}&wspw=wrong&t1tem=21")
+
+    issues = issues_for(hass)
+    assert all(
+        issue.translation_key == "invalid_station_key" for issue in issues
+    )
+    assert len(issues) == MAX_REJECTION_ISSUES + 1

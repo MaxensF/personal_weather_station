@@ -40,6 +40,7 @@ from .const import (
     KEY_LAST_UPDATE,
     KEY_STATION_ONLINE,
     KEY_WIND_DIR_RAW,
+    MAX_REJECTION_ISSUES,
     PLATFORMS,
     RATE_LIMIT_REQUESTS,
     RESERVED_PARAMS,
@@ -465,7 +466,7 @@ def _parse_timestamp(params):
 
 
 @callback
-def _async_report_rejection(hass, kind, issue_key, placeholders):
+def _async_report_rejection(hass, kind, issue_key, remote, placeholders):
     """
     Surface a rejected request in Repairs, where it is actually visible.
 
@@ -476,16 +477,35 @@ def _async_report_rejection(hass, kind, issue_key, placeholders):
             preferred over the address: behind a proxy such as the WSLink
             add-on, every station shares one address, and one of them getting
             through would clear a warning raised for another.
+        remote: Address the request came from, the fallback issue key.
         placeholders: Translation placeholders.
 
     Returns:
         None
     """
 
+    issue_id = f"{kind}_{slugify(issue_key)}"
+    registry = ir.async_get(hass)
+
+    if registry.async_get_issue(DOMAIN, issue_id) is None:
+        existing = sum(
+            domain == DOMAIN and existing_id.startswith(f"{kind}_")
+            for (domain, existing_id) in registry.issues
+        )
+
+        if existing >= MAX_REJECTION_ISSUES:
+            # The announced ID is under the requester's control until the key
+            # checks out, so one fresh ID per request must not mint one Repairs
+            # issue each. Past the cap everything collapses onto the address,
+            # which the requester cannot vary as freely. The count comes from
+            # the registry rather than memory so persisted issues keep
+            # counting across a restart.
+            issue_id = f"{kind}_{slugify(remote)}"
+
     ir.async_create_issue(
         hass,
         DOMAIN,
-        f"{kind}_{slugify(issue_key)}",
+        issue_id,
         is_fixable=False,
         severity=ir.IssueSeverity.WARNING,
         translation_key=kind,
@@ -684,6 +704,7 @@ class PwsView(HomeAssistantView):
                     hass,
                     "invalid_station_key",
                     announced_id or remote,
+                    remote,
                     {"ip": remote, "station_id": str(announced_id or "?")},
                 )
                 return web.json_response(
@@ -699,7 +720,7 @@ class PwsView(HomeAssistantView):
                 remote,
             )
             _async_report_rejection(
-                hass, "missing_device_id", remote, {"ip": remote}
+                hass, "missing_device_id", remote, remote, {"ip": remote}
             )
             return web.json_response(
                 {
