@@ -76,6 +76,27 @@ async def test_enum_sensor_keeps_its_state_across_a_reload(hass, setup_pws):
     assert state_of(hass, DEVICE_ID, "t9voclv").state == "moderate"
 
 
+async def test_binary_sensors_keep_their_state_across_a_reload(hass, setup_pws):
+    """
+    Same hole one platform over: the sensors repopulate device.data at
+    startup, the binary sensors did not and came back unknown until the
+    next upload. The recorder keeps on/off, the dictionary the 1/0 sent.
+    """
+
+    entry, client = await setup_pws()
+
+    await client.get(f"{WSLINK_ENDPOINT}?wsid={DEVICE_ID}&t1cn=1&t6c1wls=0")
+    await hass.async_block_till_done()
+    assert state_of(hass, DEVICE_ID, "t1cn", "binary_sensor").state == "on"
+    assert state_of(hass, DEVICE_ID, "t6c1wls", "binary_sensor").state == "off"
+
+    await hass.config_entries.async_reload(entry.entry_id)
+    await hass.async_block_till_done()
+
+    assert state_of(hass, DEVICE_ID, "t1cn", "binary_sensor").state == "on"
+    assert state_of(hass, DEVICE_ID, "t6c1wls", "binary_sensor").state == "off"
+
+
 async def test_payload_after_reload_still_works(hass, setup_pws):
     """The endpoint keeps serving across a reload, with the current options."""
 

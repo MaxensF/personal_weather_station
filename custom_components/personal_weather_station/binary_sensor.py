@@ -8,7 +8,8 @@ from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
     BinarySensorEntity,
 )
-from homeassistant.const import EntityCategory
+from homeassistant.const import STATE_OFF, STATE_ON, EntityCategory
+from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.util import slugify
 
 from .const import (
@@ -98,7 +99,7 @@ def build_new_entities(device, keys):
     return entities
 
 
-class PwsBinarySensor(PwsEntity, BinarySensorEntity):
+class PwsBinarySensor(PwsEntity, BinarySensorEntity, RestoreEntity):
     """A connection or water leak status reported by a PWS device."""
 
     _pws_platform = PLATFORM
@@ -150,6 +151,23 @@ class PwsBinarySensor(PwsEntity, BinarySensorEntity):
             return None
 
         return value == 1
+
+    async def async_added_to_hass(self):
+        """Restore the last known state so a restart does not blank it."""
+
+        await super().async_added_to_hass()
+
+        if self.device.data.get(self._key) is not None:
+            return
+
+        last_state = await self.async_get_last_state()
+
+        if last_state is None or last_state.state not in (STATE_ON, STATE_OFF):
+            return
+
+        # The recorder keeps on/off; the device dictionary holds the 1/0 the
+        # station sent.
+        self.device.data[self._key] = 1 if last_state.state == STATE_ON else 0
 
 
 class PwsStationOnlineBinarySensor(PwsAlwaysAvailableEntity, BinarySensorEntity):
