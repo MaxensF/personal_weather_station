@@ -159,6 +159,9 @@
       "abar": {
         "name": "Absolútny tlak vzduchu"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "Verzia API"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Rosný bod"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Vonkajšia vlhkosť"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Slabá batéria"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Mesačný dážď"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Frekvencia aktualizácie"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Vlhkosť pôdy"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Slnečné žiarenie"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "Úroveň batérie snímača CO2"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Vonkajšia teplota"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV index"

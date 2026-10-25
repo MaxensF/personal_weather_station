@@ -159,6 +159,9 @@
       "abar": {
         "name": "Абсолютний атмосферний тиск"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "Версія API"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Точка роси"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Вологість надворі"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Низький заряд батареї"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Опади за місяць"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Частота оновлення"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Вологість ґрунту"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Сонячна радіація"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "Рівень заряду датчика CO2"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Температура надворі"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "УФ-індекс"

@@ -159,6 +159,9 @@
       "abar": {
         "name": "Absoluta aerpremo"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API-versio"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Rospunkto"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Ekstera humideco"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Malalta baterio"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Monata pluvo"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Ĝisdatiga ofteco"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Grunda humideco"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Suna radiado"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "Bateria nivelo de CO2-sensilo"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Ekstera temperaturo"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV-indekso"

@@ -159,6 +159,9 @@
       "abar": {
         "name": "ความกดอากาศสัมบูรณ์"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "เวอร์ชัน API"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "จุดน้ำค้าง"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "ความชื้นภายนอก"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "แบตเตอรี่ต่ำ"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "ฝนรายเดือน"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "ความถี่การอัปเดต"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "ความชื้นในดิน"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "รังสีดวงอาทิตย์"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "ระดับแบตเตอรี่เซ็นเซอร์ CO2"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "อุณหภูมิภายนอก"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "ดัชนี UV"

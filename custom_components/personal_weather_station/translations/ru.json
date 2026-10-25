@@ -159,6 +159,9 @@
       "abar": {
         "name": "Абсолютное атмосферное давление"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "Версия API"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Точка росы"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Влажность снаружи"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Низкий заряд батареи"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Осадки за месяц"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Частота обновления"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Влажность почвы"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Солнечная радиация"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "Уровень заряда датчика CO2"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Температура снаружи"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "УФ-индекс"

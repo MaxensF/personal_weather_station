@@ -159,6 +159,9 @@
       "abar": {
         "name": "Absolute air pressure"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API version"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Dew point"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Outdoor humidity"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Low battery"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Monthly rain"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Update frequency"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Soil moisture"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Solar radiation"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "CO2 sensor battery level"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Outdoor temperature"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV index"

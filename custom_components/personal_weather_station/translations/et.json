@@ -159,6 +159,9 @@
       "abar": {
         "name": "Absoluutne õhurõhk"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API versioon"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Kastepunkt"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Välisõhu niiskus"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Aku tühjeneb"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Kuine vihm"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Uuendussagedus"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Mullaniiskus"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Päikesekiirgus"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "CO2 anduri aku tase"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Välistemperatuur"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV-indeks"

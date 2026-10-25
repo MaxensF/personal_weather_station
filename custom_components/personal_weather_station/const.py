@@ -75,7 +75,13 @@ AUTH_PARAMS = ("password", "wspw")
 # Parameters carrying the moment the payload was produced, most precise first.
 TIMESTAMP_PARAMS = ("datetime", "dateutc")
 
-RESERVED_PARAMS = ID_PARAMS + AUTH_PARAMS + TIMESTAMP_PARAMS
+# Protocol housekeeping every station of this family sends: what the upload
+# is, which channel it came through and how often it will repeat. These are
+# transport metadata, not readings, and flagging them as unknown would raise
+# a repair for every station on the protocol.
+PROTOCOL_PARAMS = ("action", "realtime", "rtfreq2.5")
+
+RESERVED_PARAMS = ID_PARAMS + AUTH_PARAMS + TIMESTAMP_PARAMS + PROTOCOL_PARAMS
 
 # Reference direction used by the "set north" calibration button, in order of
 # preference: WSLink first, then Weather Underground.
@@ -140,6 +146,7 @@ SENSOR_LIST = {
     "indoortempf": {"name": "Indoor Temperature", "icon": "mdi:thermometer", "unit": UnitOfTemperature.FAHRENHEIT, "device_class": SensorDeviceClass.TEMPERATURE, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
     "dewptf": {"name": "Dew Point", "icon": "mdi:thermometer", "unit": UnitOfTemperature.FAHRENHEIT, "device_class": SensorDeviceClass.TEMPERATURE, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
     "windchillf": {"name": "Wind Chill", "icon": "mdi:thermometer", "unit": UnitOfTemperature.FAHRENHEIT, "device_class": SensorDeviceClass.TEMPERATURE, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
+    "heatindexf": {"name": "Heat Index", "icon": "mdi:thermometer", "unit": UnitOfTemperature.FAHRENHEIT, "device_class": SensorDeviceClass.TEMPERATURE, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
     "soiltempf": {"name": "Soil Temperature", "icon": "mdi:thermometer", "unit": UnitOfTemperature.FAHRENHEIT, "device_class": SensorDeviceClass.TEMPERATURE, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
 
     # Humidity
@@ -150,6 +157,7 @@ SENSOR_LIST = {
 
     # Pressure
     "baromin": {"name": "Pressure", "icon": "mdi:gauge", "unit": UnitOfPressure.INHG, "device_class": SensorDeviceClass.PRESSURE, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
+    "absbaromin": {"name": "Absolute Pressure", "icon": "mdi:gauge", "unit": UnitOfPressure.INHG, "device_class": SensorDeviceClass.PRESSURE, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
 
     # Wind
     "winddir": {"name": "Wind Direction", "icon": "mdi:compass", "unit": DEGREE, "device_class": SensorDeviceClass.WIND_DIRECTION,"state_class": SensorStateClass.MEASUREMENT_ANGLE, "precision": 1, "wind_offset": True},
@@ -160,6 +168,7 @@ SENSOR_LIST = {
     "windspdmph_avg2m": {"name": "Wind Speed 2min Avg", "icon": "mdi:weather-windy", "unit": UnitOfSpeed.MILES_PER_HOUR, "device_class": SensorDeviceClass.WIND_SPEED, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
     "windgustmph_10m": {"name": "Gust Speed 10min Avg", "icon": "mdi:weather-windy", "unit": UnitOfSpeed.MILES_PER_HOUR, "device_class": SensorDeviceClass.WIND_SPEED, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
     "windgustdir_10m": {"name": "Gust Direction 10min Avg", "icon": "mdi:compass", "unit": DEGREE, "device_class": SensorDeviceClass.WIND_DIRECTION, "state_class": SensorStateClass.MEASUREMENT_ANGLE,"precision": 1, "wind_offset": True},
+    "maxdailygust": {"name": "Max Daily Gust", "icon": "mdi:weather-windy", "unit": UnitOfSpeed.MILES_PER_HOUR, "device_class": SensorDeviceClass.WIND_SPEED, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
     
     # Rain
     "rainin": {"name": "Hourly Rain", "icon": "mdi:weather-rainy", "unit": UnitOfVolumetricFlux.INCHES_PER_HOUR, "device_class": SensorDeviceClass.PRECIPITATION_INTENSITY, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
@@ -167,6 +176,7 @@ SENSOR_LIST = {
     "weeklyrainin": {"name": "Weekly Rain", "icon": "mdi:weather-rainy", "unit": UnitOfLength.INCHES, "device_class": SensorDeviceClass.PRECIPITATION, "state_class": SensorStateClass.TOTAL_INCREASING, "precision": 1},
     "monthlyrainin": {"name": "Monthly Rain", "icon": "mdi:weather-rainy", "unit": UnitOfLength.INCHES, "device_class": SensorDeviceClass.PRECIPITATION, "state_class": SensorStateClass.TOTAL_INCREASING, "precision": 1},
     "yearlyrainin": {"name": "Yearly Rain", "icon": "mdi:weather-rainy", "unit": UnitOfLength.INCHES, "device_class": SensorDeviceClass.PRECIPITATION, "state_class": SensorStateClass.TOTAL_INCREASING, "precision": 1},
+    "totalrainin": {"name": "Total Rain", "icon": "mdi:weather-rainy", "unit": UnitOfLength.INCHES, "device_class": SensorDeviceClass.PRECIPITATION, "state_class": SensorStateClass.TOTAL_INCREASING, "precision": 1},
     "t1rainra": {"name": "Rain Rate", "icon": "mdi:weather-rainy", "unit": UnitOfVolumetricFlux.MILLIMETERS_PER_HOUR, "device_class": SensorDeviceClass.PRECIPITATION_INTENSITY, "state_class": SensorStateClass.MEASUREMENT, "precision": 1},
     "t1rainhr": {"name": "Hourly Rainfall", "icon": "mdi:weather-rainy", "unit": UnitOfLength.MILLIMETERS, "device_class": SensorDeviceClass.PRECIPITATION, "state_class": SensorStateClass.TOTAL_INCREASING, "precision": 1},
     "t1raindy": {"name": "Daily Rainfall", "icon": "mdi:weather-rainy", "unit": UnitOfLength.MILLIMETERS, "device_class": SensorDeviceClass.PRECIPITATION, "state_class": SensorStateClass.TOTAL_INCREASING, "precision": 1},
@@ -339,7 +349,8 @@ SENSOR_LIST = {
 
     # Metadata
     #"dateutc": {"name": "Last Updated", "icon": "mdi:clock", "unit": "", "device_class": SensorDeviceClass.DATE},
-    #"softwaretype": {"name": "Software Type", "icon": "mdi:alpha-s-box", "unit": ""},
+    "softwaretype": {"name": "Software Type", "icon": "mdi:alpha-s-box", "unit": None, "device_class": None, "diagnostic": True},
+    "stationtype": {"name": "Station Type", "icon": "mdi:chip", "unit": None, "device_class": None, "diagnostic": True},
     "apiver": {"name": "API Version", "icon": "mdi:api", "unit": None, "device_class": None, "diagnostic": True},
     "rtfreq": {"name": "Update frequency", "icon": "mdi:timer", "unit": UnitOfTime.SECONDS , "device_class": SensorDeviceClass.DURATION, "precision": 0},
     "lowbatt": {"name": "Low Battery", "icon": "mdi:battery-alert"},

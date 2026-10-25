@@ -159,6 +159,9 @@
       "abar": {
         "name": "കേവല വായുമർദ്ദം"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API പതിപ്പ്"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "ഹിമാങ്കബിന്ദു"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "പുറത്തെ ആർദ്രത"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "ബാറ്ററി കുറവ്"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "മാസ മഴ"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "അപ്ഡേറ്റ് ആവൃത്തി"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "മണ്ണിന്റെ ഈർപ്പം"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "സൗരവികിരണം"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "CO2 സെൻസറിന്റെ ബാറ്ററി നില"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "പുറത്തെ താപനില"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV സൂചിക"

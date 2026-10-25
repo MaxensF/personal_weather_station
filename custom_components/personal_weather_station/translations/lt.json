@@ -159,6 +159,9 @@
       "abar": {
         "name": "Absoliutus oro slėgis"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API versija"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Rasos taškas"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Lauko oro drėgnis"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Senka baterija"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Mėnesio lietus"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Atnaujinimo dažnis"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Dirvožemio drėgnis"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Saulės spinduliuotė"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "CO2 jutiklio baterijos lygis"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Lauko temperatūra"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV indeksas"

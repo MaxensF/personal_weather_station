@@ -159,6 +159,9 @@
       "abar": {
         "name": "निरपेक्ष वायुदाब"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API संस्करण"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "ओसांक"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "बाहरी आर्द्रता"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "बैटरी कम"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "मासिक वर्षा"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "अद्यतन आवृत्ति"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "मृदा नमी"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "सौर विकिरण"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "CO2 सेंसर बैटरी स्तर"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "बाहरी तापमान"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV सूचकांक"

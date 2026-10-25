@@ -159,6 +159,9 @@
       "abar": {
         "name": "Mutlak hava basıncı"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API sürümü"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Çiy noktası"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Dış nem"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Düşük pil"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Aylık yağmur"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Güncelleme sıklığı"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Toprak nemi"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Güneş ışınımı"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "CO2 sensörü pil seviyesi"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Dış sıcaklık"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV indeksi"

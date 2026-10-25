@@ -159,6 +159,9 @@
       "abar": {
         "name": "აბსოლუტური ატმოსფერული წნევა"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API ვერსია"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "ნამის წერტილი"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "გარე ტენიანობა"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "დაბალი ბატარეა"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "თვიური წვიმა"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "განახლების სიხშირე"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "ნიადაგის ტენიანობა"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "მზის რადიაცია"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "CO2 სენსორის ბატარეის დონე"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "გარე ტემპერატურა"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV ინდექსი"

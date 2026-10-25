@@ -159,6 +159,9 @@
       "abar": {
         "name": "Áp suất không khí tuyệt đối"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "Phiên bản API"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Điểm sương"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Độ ẩm ngoài trời"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Pin yếu"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Mưa theo tháng"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Tần suất cập nhật"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Độ ẩm đất"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Bức xạ mặt trời"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "Mức pin cảm biến CO2"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Nhiệt độ ngoài trời"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "Chỉ số UV"

@@ -159,6 +159,9 @@
       "abar": {
         "name": "Pwysedd aer absoliwt"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "Fersiwn yr API"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Gwlithbwynt"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Lleithder allanol"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Batri isel"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Glaw misol"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Amlder diweddaru"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Lleithder y pridd"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Ymbelydredd solar"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "Lefel batri'r synhwyrydd CO2"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Tymheredd allanol"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "Mynegai UV"

@@ -159,6 +159,9 @@
       "abar": {
         "name": "পরম বায়ুচাপ"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API সংস্করণ"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "শিশিরাঙ্ক"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "বাইরের আর্দ্রতা"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "ব্যাটারি কম"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "মাসিক বৃষ্টি"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "হালনাগাদের কম্পাঙ্ক"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "মাটির আর্দ্রতা"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "সৌর বিকিরণ"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "CO2 সেন্সরের ব্যাটারির মাত্রা"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "বাইরের তাপমাত্রা"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV সূচক"

@@ -159,6 +159,9 @@
       "abar": {
         "name": "Presiune atmosferică absolută"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "Versiune API"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Punct de rouă"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Umiditate exterioară"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Baterie descărcată"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Ploaie lunară"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Frecvență de actualizare"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Umiditatea solului"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Radiație solară"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "Nivelul bateriei senzorului CO2"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Temperatură exterioară"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "Indice UV"

@@ -159,6 +159,9 @@
       "abar": {
         "name": "Algjör loftþrýstingur"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API-útgáfa"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Daggarmark"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Rakastig úti"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Lítil rafhlaða"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Úrkoma á mánuði"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Uppfærslutíðni"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Jarðvegsraki"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Sólgeislun"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "Rafhlöðustaða CO2-nema"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Útihiti"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV-stuðull"

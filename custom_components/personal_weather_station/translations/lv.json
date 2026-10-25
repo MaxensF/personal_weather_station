@@ -159,6 +159,9 @@
       "abar": {
         "name": "Absolūtais gaisa spiediens"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API versija"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Rasas punkts"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Āra gaisa mitrums"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Zems baterijas līmenis"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Mēneša lietus"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Atjaunināšanas biežums"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Augsnes mitrums"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Saules starojums"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "CO2 sensora baterijas līmenis"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Āra temperatūra"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV indekss"

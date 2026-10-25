@@ -159,6 +159,9 @@
       "abar": {
         "name": "Абсолютно атмосферно налягане"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "Версия на API"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Точка на оросяване"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Външна влажност"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Изтощена батерия"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Месечен валеж"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Честота на обновяване"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Влажност на почвата"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Слънчева радиация"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "Ниво на батерията на сензора CO2"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Външна температура"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV индекс"

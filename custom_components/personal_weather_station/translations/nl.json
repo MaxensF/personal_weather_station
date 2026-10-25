@@ -159,6 +159,9 @@
       "abar": {
         "name": "Absolute luchtdruk"
       },
+      "absbaromin": {
+        "name": "Absolute luchtdruk"
+      },
       "apiver": {
         "name": "API-versie"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Dauwpunt"
       },
+      "heatindexf": {
+        "name": "Hitte-index"
+      },
       "humidity": {
         "name": "Buitenluchtvochtigheid"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Batterij bijna leeg"
       },
+      "maxdailygust": {
+        "name": "Maximale dagelijkse windvlaag"
+      },
       "monthlyrainin": {
         "name": "Neerslag per maand"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Updatefrequentie"
+      },
+      "softwaretype": {
+        "name": "Softwaretype"
       },
       "soilmoisture": {
         "name": "Bodemvochtigheid"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Zonnestraling"
+      },
+      "stationtype": {
+        "name": "Stationtype"
       },
       "t10bat": {
         "name": "Batterijniveau CO2-sensor"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Buitentemperatuur"
+      },
+      "totalrainin": {
+        "name": "Totale neerslag"
       },
       "uv": {
         "name": "UV-index"

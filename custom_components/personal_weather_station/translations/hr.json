@@ -159,6 +159,9 @@
       "abar": {
         "name": "Apsolutni tlak zraka"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "Verzija API-ja"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Rosište"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Vanjska vlažnost"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Slaba baterija"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Mjesečna kiša"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Učestalost ažuriranja"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Vlažnost tla"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Sunčevo zračenje"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "Razina baterije senzora CO2"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Vanjska temperatura"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV indeks"

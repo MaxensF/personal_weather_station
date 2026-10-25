@@ -159,6 +159,9 @@
       "abar": {
         "name": "సంపూర్ణ గాలి పీడనం"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API వెర్షన్"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "మంచు బిందువు"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "బయటి తేమ"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "బ్యాటరీ తక్కువ"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "నెలవారీ వర్షం"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "నవీకరణ తరచుదనం"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "నేల తేమ"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "సౌర వికిరణం"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "CO2 సెన్సార్ బ్యాటరీ స్థాయి"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "బయటి ఉష్ణోగ్రత"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV సూచిక"

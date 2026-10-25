@@ -159,6 +159,9 @@
       "abar": {
         "name": "לחץ אוויר מוחלט"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "גרסת API"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "נקודת טל"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "לחות חיצונית"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "סוללה חלשה"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "גשם חודשי"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "תדירות עדכון"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "לחות הקרקע"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "קרינה סולארית"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "רמת הסוללה של חיישן CO2"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "טמפרטורה חיצונית"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "מדד UV"

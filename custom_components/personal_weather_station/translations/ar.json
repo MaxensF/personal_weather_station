@@ -159,6 +159,9 @@
       "abar": {
         "name": "الضغط الجوي المطلق"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "إصدار API"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "نقطة الندى"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "الرطوبة الخارجية"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "بطارية منخفضة"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "المطر الشهري"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "تواتر التحديث"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "رطوبة التربة"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "الإشعاع الشمسي"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "مستوى بطارية مستشعر CO2"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "درجة الحرارة الخارجية"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "مؤشر الأشعة فوق البنفسجية"

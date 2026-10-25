@@ -159,6 +159,9 @@
       "abar": {
         "name": "絕對氣壓"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API 版本"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "露點"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "室外濕度"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "電量不足"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "月雨量"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "更新頻率"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "土壤濕度"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "太陽輻射"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "CO2 感測器電池電量"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "室外溫度"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "紫外線指數"

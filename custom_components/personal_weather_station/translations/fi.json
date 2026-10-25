@@ -159,6 +159,9 @@
       "abar": {
         "name": "Absoluuttinen ilmanpaine"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API-versio"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Kastepiste"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Ulkoilman kosteus"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Akku vähissä"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Kuukauden sade"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Päivitystiheys"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Maankosteus"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Auringon säteily"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "CO2-anturin akun taso"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Ulkolämpötila"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV-indeksi"

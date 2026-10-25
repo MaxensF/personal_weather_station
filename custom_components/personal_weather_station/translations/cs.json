@@ -159,6 +159,9 @@
       "abar": {
         "name": "Absolutní tlak vzduchu"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "Verze API"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Rosný bod"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Venkovní vlhkost"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Slabá baterie"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Měsíční déšť"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Frekvence aktualizace"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Vlhkost půdy"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Sluneční záření"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "Úroveň baterie čidla CO2"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Venkovní teplota"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV index"

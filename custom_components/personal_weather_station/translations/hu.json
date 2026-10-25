@@ -159,6 +159,9 @@
       "abar": {
         "name": "Abszolút légnyomás"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API verzió"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Harmatpont"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Külső páratartalom"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Alacsony töltöttség"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Havi csapadék"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Frissítési gyakoriság"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Talajnedvesség"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Napsugárzás"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "CO2 érzékelő akkumulátorszintje"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Külső hőmérséklet"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV-index"

@@ -159,6 +159,9 @@
       "abar": {
         "name": "Presioni absolut i ajrit"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "Versioni i API-t"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Pika e vesës"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Lagështia e jashtme"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Bateri e ulët"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Shi mujor"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Frekuenca e përditësimit"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Lagështia e tokës"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Rrezatimi diellor"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "Niveli i baterisë së sensorit CO2"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Temperatura e jashtme"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "Indeksi UV"

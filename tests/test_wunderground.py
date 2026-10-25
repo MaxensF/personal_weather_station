@@ -93,3 +93,48 @@ async def test_dateutc_now_falls_back_to_server_time(hass, setup_pws):
     await hass.async_block_till_done()
 
     assert state_of(hass, DEVICE_ID, "last_update").state not in ("unknown", "")
+
+
+async def test_less_common_spec_fields_are_readings_too(hass, setup_pws):
+    """
+    absbaromin, heatindexf, maxdailygust and totalrainin are all in the
+    Weather Underground upload spec. Stations send them when they have the
+    data; they are readings, not protocol noise.
+    """
+
+    from homeassistant.helpers import issue_registry as ir
+
+    from custom_components.personal_weather_station.const import (
+        DOMAIN,
+        ISSUE_UNKNOWN_PARAMETERS,
+    )
+
+    _, client = await setup_pws()
+
+    response = await client.get(
+        f"{WU_ENDPOINT}?ID={DEVICE_ID}"
+        "&absbaromin=29.5&heatindexf=95&maxdailygust=44&totalrainin=120.4"
+    )
+
+    assert response.status == 200
+
+    await hass.async_block_till_done()
+
+    # Metric test system: inHg -> hPa, °F -> °C, mph -> km/h, in -> mm.
+    pressure = state_of(hass, DEVICE_ID, "absbaromin")
+    assert pressure.attributes["unit_of_measurement"] == "hPa"
+    assert float(pressure.state) == pytest.approx(999, abs=0.5)
+
+    heat = state_of(hass, DEVICE_ID, "heatindexf")
+    assert heat.attributes["unit_of_measurement"] == "°C"
+    assert float(heat.state) == pytest.approx(35.0, abs=0.1)
+
+    gust = state_of(hass, DEVICE_ID, "maxdailygust")
+    assert float(gust.state) == pytest.approx(70.8, abs=0.1)
+
+    rain = state_of(hass, DEVICE_ID, "totalrainin")
+    assert float(rain.state) == pytest.approx(3058, abs=1)
+
+    issues = [i for (d, _), i in ir.async_get(hass).issues.items() if d == DOMAIN]
+    unknown = [i for i in issues if i.translation_key == ISSUE_UNKNOWN_PARAMETERS]
+    assert unknown == []

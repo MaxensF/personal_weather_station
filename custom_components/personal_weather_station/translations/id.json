@@ -159,6 +159,9 @@
       "abar": {
         "name": "Tekanan udara absolut"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "Versi API"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Titik embun"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Kelembapan luar"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Baterai lemah"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Hujan bulanan"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Frekuensi pembaruan"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Kelembapan tanah"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Radiasi matahari"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "Level baterai sensor CO2"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Suhu luar"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "Indeks UV"

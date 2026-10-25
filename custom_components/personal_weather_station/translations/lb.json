@@ -159,6 +159,9 @@
       "abar": {
         "name": "Absoluten Loftdrock"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API-Versioun"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Taupunkt"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Baussefiichtegkeet"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Schwaach Batterie"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Monatleche Reen"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Aktualiséierungsfrequenz"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Buedemfiichtegkeet"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Sonnestralung"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "Batterieniveau vum CO2-Sensor"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Baussentemperatur"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV-Index"

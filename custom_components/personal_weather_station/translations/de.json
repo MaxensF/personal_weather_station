@@ -159,6 +159,9 @@
       "abar": {
         "name": "Absoluter Luftdruck"
       },
+      "absbaromin": {
+        "name": "Absoluter Luftdruck"
+      },
       "apiver": {
         "name": "API-Version"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Taupunkt"
       },
+      "heatindexf": {
+        "name": "Hitzeindex"
+      },
       "humidity": {
         "name": "Außenluftfeuchtigkeit"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Batterie schwach"
       },
+      "maxdailygust": {
+        "name": "Maximale Tagesböe"
+      },
       "monthlyrainin": {
         "name": "Monatlicher Regen"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Aktualisierungsintervall"
+      },
+      "softwaretype": {
+        "name": "Softwaretyp"
       },
       "soilmoisture": {
         "name": "Bodenfeuchte"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Sonneneinstrahlung"
+      },
+      "stationtype": {
+        "name": "Stationstyp"
       },
       "t10bat": {
         "name": "Batteriestand des CO2-Sensors"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Außentemperatur"
+      },
+      "totalrainin": {
+        "name": "Gesamter Regen"
       },
       "uv": {
         "name": "UV-Index"

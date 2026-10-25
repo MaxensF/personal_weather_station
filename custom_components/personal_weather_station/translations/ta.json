@@ -159,6 +159,9 @@
       "abar": {
         "name": "முழுமையான காற்றழுத்தம்"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API பதிப்பு"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "பனிப்புள்ளி"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "வெளிப்புற ஈரப்பதம்"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "பேட்டரி குறைவு"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "மாதாந்திர மழை"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "புதுப்பிப்பு அதிர்வெண்"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "மண் ஈரப்பதம்"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "சூரிய கதிர்வீச்சு"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "CO2 உணரியின் பேட்டரி அளவு"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "வெளிப்புற வெப்பநிலை"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV குறியீடு"

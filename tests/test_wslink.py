@@ -246,3 +246,68 @@ async def test_unknown_parameters_reported_once(hass, setup_pws):
     unknown = [i for i in issues if i.translation_key == ISSUE_UNKNOWN_PARAMETERS]
     assert len(unknown) == 1
     assert unknown[0].translation_placeholders["count"] == "1"
+
+
+async def test_protocol_housekeeping_is_not_reported(hass, setup_pws):
+    """
+    `action`, `realtime` and `rtfreq2.5` ride along on every upload.
+
+    They are transport metadata every station of this family sends, not
+    dropped readings — reporting them would flag every station on the
+    protocol instead of the ones actually sending something new.
+    """
+
+    from homeassistant.helpers import issue_registry as ir
+
+    from custom_components.personal_weather_station.const import (
+        DOMAIN,
+        ISSUE_UNKNOWN_PARAMETERS,
+    )
+
+    _, client = await setup_pws()
+
+    response = await client.get(
+        f"{WSLINK_ENDPOINT}?wsid={DEVICE_ID}&t1tem=21.5"
+        "&action=updateraww&realtime=1&rtfreq2.5=16"
+    )
+
+    assert response.status == 200
+
+    await hass.async_block_till_done()
+
+    issues = [i for (d, _), i in ir.async_get(hass).issues.items() if d == DOMAIN]
+    unknown = [i for i in issues if i.translation_key == ISSUE_UNKNOWN_PARAMETERS]
+    assert unknown == []
+
+    assert state_of(hass, DEVICE_ID, "t1tem").state == "21.5"
+
+
+async def test_firmware_metadata_are_diagnostics(hass, setup_pws):
+    """
+    softwaretype names the gateway firmware, stationtype the hardware.
+
+    Both describe the station itself rather than the weather, so they land
+    in the diagnostic category next to API version.
+    """
+
+    _, client = await setup_pws()
+
+    await client.get(
+        f"{WSLINK_ENDPOINT}?wsid={DEVICE_ID}"
+        "&softwaretype=EasyWeatherV1.6.6&stationtype=AMBWeatherV4.3.4"
+    )
+    await hass.async_block_till_done()
+
+    from homeassistant.const import EntityCategory
+    from homeassistant.helpers import entity_registry as er
+
+    for key, value in (
+        ("softwaretype", "EasyWeatherV1.6.6"),
+        ("stationtype", "AMBWeatherV4.3.4"),
+    ):
+        state = state_of(hass, DEVICE_ID, key)
+        assert state is not None
+        assert state.state == value
+
+        registered = er.async_get(hass).async_get(state.entity_id)
+        assert registered.entity_category is EntityCategory.DIAGNOSTIC

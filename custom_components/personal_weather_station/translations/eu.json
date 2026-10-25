@@ -159,6 +159,9 @@
       "abar": {
         "name": "Presio atmosferiko absolutua"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API bertsioa"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Ihintz-puntua"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Kanpoko hezetasuna"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Bateria baxua"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Hileko euria"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Eguneratze-maiztasuna"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Lurzoruaren hezetasuna"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Eguzki-erradiazioa"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "CO2 sentsorearen bateria-maila"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Kanpoko tenperatura"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV indizea"

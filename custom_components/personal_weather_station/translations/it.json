@@ -159,6 +159,9 @@
       "abar": {
         "name": "Pressione atmosferica assoluta"
       },
+      "absbaromin": {
+        "name": "Pressione assoluta"
+      },
       "apiver": {
         "name": "Versione API"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Punto di rugiada"
       },
+      "heatindexf": {
+        "name": "Indice di calore"
+      },
       "humidity": {
         "name": "Umidità esterna"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Batteria scarica"
       },
+      "maxdailygust": {
+        "name": "Raffica massima giornaliera"
+      },
       "monthlyrainin": {
         "name": "Pioggia mensile"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Frequenza di aggiornamento"
+      },
+      "softwaretype": {
+        "name": "Tipo di software"
       },
       "soilmoisture": {
         "name": "Umidità del suolo"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Radiazione solare"
+      },
+      "stationtype": {
+        "name": "Tipo di stazione"
       },
       "t10bat": {
         "name": "Livello batteria del sensore CO2"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Temperatura esterna"
+      },
+      "totalrainin": {
+        "name": "Pioggia totale"
       },
       "uv": {
         "name": "Indice UV"

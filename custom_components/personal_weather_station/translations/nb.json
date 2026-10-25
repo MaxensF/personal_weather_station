@@ -159,6 +159,9 @@
       "abar": {
         "name": "Absolutt lufttrykk"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API-versjon"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Duggpunkt"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Luftfuktighet ute"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Lavt batteri"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Nedbør per måned"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Oppdateringsfrekvens"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Jordfuktighet"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Solstråling"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "Batterinivå for CO2-sensor"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Utetemperatur"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV-indeks"

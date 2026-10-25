@@ -159,6 +159,9 @@
       "abar": {
         "name": "Բացարձակ օդային ճնշում"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API տարբերակ"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Ցողի կետ"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Արտաքին խոնավություն"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Ցածր մարտկոց"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Ամսական անձրև"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Թարմացման հաճախականություն"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Հողի խոնավություն"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Արեգակնային ճառագայթում"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "CO2 տվիչի մարտկոցի մակարդակ"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Արտաքին ջերմաստիճան"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "UV ինդեքս"

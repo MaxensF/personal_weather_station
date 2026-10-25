@@ -159,6 +159,9 @@
       "abar": {
         "name": "절대 기압"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "API 버전"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "이슬점"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "실외 습도"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "배터리 부족"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "월간 강우"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "업데이트 주기"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "토양 수분"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "일사량"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "CO2 센서 배터리 잔량"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "실외 온도"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "자외선 지수"

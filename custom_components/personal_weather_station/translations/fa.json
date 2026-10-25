@@ -159,6 +159,9 @@
       "abar": {
         "name": "فشار هوای مطلق"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "نسخه API"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "نقطه شبنم"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "رطوبت بیرون"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "باتری کم"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "باران ماهانه"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "دوره به‌روزرسانی"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "رطوبت خاک"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "تابش خورشیدی"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "سطح باتری حسگر CO2"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "دمای بیرون"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "شاخص UV"

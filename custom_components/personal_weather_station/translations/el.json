@@ -159,6 +159,9 @@
       "abar": {
         "name": "Απόλυτη ατμοσφαιρική πίεση"
       },
+      "absbaromin": {
+        "name": "Absolute pressure"
+      },
       "apiver": {
         "name": "Έκδοση API"
       },
@@ -231,6 +234,9 @@
       "dewptf": {
         "name": "Σημείο δρόσου"
       },
+      "heatindexf": {
+        "name": "Heat index"
+      },
       "humidity": {
         "name": "Εξωτερική υγρασία"
       },
@@ -261,6 +267,9 @@
       "lowbatt": {
         "name": "Χαμηλή μπαταρία"
       },
+      "maxdailygust": {
+        "name": "Max daily gust"
+      },
       "monthlyrainin": {
         "name": "Μηνιαία βροχή"
       },
@@ -272,6 +281,9 @@
       },
       "rtfreq": {
         "name": "Συχνότητα ενημέρωσης"
+      },
+      "softwaretype": {
+        "name": "Software type"
       },
       "soilmoisture": {
         "name": "Υγρασία εδάφους"
@@ -299,6 +311,9 @@
       },
       "solarradiation": {
         "name": "Ηλιακή ακτινοβολία"
+      },
+      "stationtype": {
+        "name": "Station type"
       },
       "t10bat": {
         "name": "Στάθμη μπαταρίας αισθητήρα CO2"
@@ -615,6 +630,9 @@
       },
       "tempf": {
         "name": "Εξωτερική θερμοκρασία"
+      },
+      "totalrainin": {
+        "name": "Total rain"
       },
       "uv": {
         "name": "Δείκτης UV"
