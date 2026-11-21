@@ -14,5 +14,5 @@
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/MaxensF/personal_weather_station/issues",
   "single_config_entry": true,
-  "version": "1.2.0"
+  "version": "1.2.1"
 }

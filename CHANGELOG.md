@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.2.1
+
+### Fixed
+
+- **Protocol housekeeping no longer raises a repair.** Every station on the
+  WSLink/Ecowitt protocol sends `action`, `realtime` and `rtfreq2.5` with each
+  upload — what the upload is, which channel it came through, how often it
+  will repeat. They describe the transport, not a reading, yet they landed in
+  the "unknown parameters" repair for every station of that family. They are
+  now reserved alongside the id, key and timestamp fields.
+
+### Added
+
+- **`softwaretype` and `stationtype` name the station itself** — the gateway
+  firmware and the hardware — as diagnostic entities next to API version.
+- **Four more Weather Underground fields are read instead of reported:**
+  `absbaromin` (absolute pressure), `heatindexf` (heat index), `maxdailygust`
+  and `totalrainin` are in the upload spec; stations send them when they have
+  the data.
+
 ## 1.2.0
 
 ### Fixed
