@@ -7,6 +7,7 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=flat-square)](https://github.com/hacs/integration)
 [![GH-downloads](https://img.shields.io/github/downloads/MaxensF/personal_weather_station/total?style=flat-square)](https://github.com/MaxensF/personal_weather_station/releases)
 [![Ouvrir votre instance Home Assistant et ouvrir un dépôt dans le Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=MaxensF&repository=personal_weather_station&category=integration)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-donate-FF5E5B?logo=ko-fi&logoColor=white&style=flat-square)](https://ko-fi.com/maxensf)
 
 Faites de Home Assistant le serveur vers lequel votre station météo envoie ses
 relevés. Pas de cloud, pas de compte, pas d'interrogation : la station poste
